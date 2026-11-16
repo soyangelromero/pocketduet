@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>melonds-wasm · Fase 6 (guardado y estados)</title>
+    <link rel="icon" href="data:," />
+    <style>
+      :root { color-scheme: dark; }
+      body { font-family: system-ui, sans-serif; margin: 0; background: #111; color: #eee; display: grid; grid-template-columns: 22rem 1fr; min-height: 100vh; }
+      aside { padding: 1rem; background: #181a1f; border-right: 1px solid #2b2f37; overflow-y: auto; font-size: .9rem; }
+      h1 { font-size: 1.05rem; margin: 0 0 .75rem; }
+      fieldset { border: 1px solid #2b2f37; border-radius: .4rem; margin: 0 0 .8rem; padding: .5rem .7rem; }
+      legend { color: #9da7b3; padding: 0 .3rem; }
+      label { display: block; margin: .35rem 0; }
+      button, input[type=file] { width: 100%; box-sizing: border-box; }
+      button { padding: .35rem; margin-top: .3rem; }
+      main { display: grid; grid-template-rows: 1fr auto; min-width: 0; }
+      #stage { display: grid; place-items: center; background: #050505; min-height: 60vh; overflow: hidden; }
+      #screen { image-rendering: pixelated; background: #000; outline: 1px solid #333; }
+      dl { display: grid; grid-template-columns: max-content 1fr; gap: .15rem .8rem; margin: 0; padding: .6rem 1rem; font: .8rem ui-monospace, monospace; border-top: 1px solid #2b2f37; }
+      dt { color: #9da7b3; } dd { margin: 0; }
+      #msg { padding: .4rem 1rem; color: #ffa657; white-space: pre-wrap; }
+      .err { color: #ff7b72; }
+    </style>
+  </head>
+  <body>
+    <aside>
+      <h1>melonDS WASM · guardado y estados</h1>
+      <fieldset>
+        <legend>ROM y guardado (nada se sube)</legend>
+        <label>ROM <input id="rom" type="file" accept=".nds,.srl" /></label>
+        <label>.sav inicial (opcional) <input id="sav" type="file" accept=".sav,.dsv,.bin" /></label>
+        <label><input id="persist" type="checkbox" checked /> Autoguardar en este navegador (IndexedDB) y usarlo al reabrir la misma ROM</label>
+        <label><input id="threaded" type="checkbox" checked /> Renderizador 3D con hilos</label>
+      </fieldset>
+      <fieldset>
+        <legend>Partida (SRAM)</legend>
+        <button id="dlSave" disabled>Descargar .sav (getSave)</button>
+        <label>Reemplazar y reiniciar (loadSave) <input id="loadSave" type="file" accept=".sav,.dsv,.bin" disabled /></label>
+        <button id="clearStore" disabled>Borrar el guardado almacenado de esta ROM</button>
+      </fieldset>
+      <fieldset>
+        <legend>Estados</legend>
+        <button id="qsave" disabled>Estado rápido: guardar</button>
+        <button id="qload" disabled>Estado rápido: cargar</button>
+        <button id="dlState" disabled>Descargar estado (.mdsstate)</button>
+        <label>Cargar estado desde archivo <input id="loadState" type="file" disabled /></label>
+      </fieldset>
+    </aside>
+    <main>
+      <div id="stage"><canvas id="screen" width="256" height="384"></canvas></div>
+      <div>
+        <div id="msg"></div>
+        <dl>
+          <dt>Aislamiento</dt><dd id="s-coi">?</dd>
+          <dt>Tipo de guardado</dt><dd id="s-type">—</dd>
+          <dt>Último onSave</dt><dd id="s-save">—</dd>
+          <dt>Origen del .sav</dt><dd id="s-origin">—</dd>
+          <dt>Fotogramas</dt><dd id="s-frames">—</dd>
+        </dl>
+      </div>
+    </main>
+    <script type="module" src="./saves.js"></script>
+  </body>
+</html>

@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>melonds-wasm · integración (fases 3-6, 8)</title>
+    <link rel="icon" href="data:," />
+    <style>
+      :root { color-scheme: dark; }
+      body { font-family: system-ui, sans-serif; margin: 0; background: #111; color: #eee; display: grid; grid-template-columns: 19rem 1fr; min-height: 100vh; }
+      /* sticky + own scroll: a tall control column must not stretch <main> (that pushed the canvas below the viewport and off-screen for pointer tests) */
+      aside { padding: 1rem; background: #181a1f; border-right: 1px solid #2b2f37; overflow-y: auto; font-size: .9rem; position: sticky; top: 0; height: 100vh; box-sizing: border-box; align-self: start; }
+      h1 { font-size: 1.05rem; margin: 0 0 .75rem; }
+      fieldset { border: 1px solid #2b2f37; border-radius: .4rem; margin: 0 0 .8rem; padding: .5rem .7rem; }
+      legend { color: #9da7b3; padding: 0 .3rem; }
+      label { display: block; margin: .35rem 0; }
+      select, input[type=range], button, textarea { width: 100%; box-sizing: border-box; }
+      textarea { height: 7rem; font: .75rem ui-monospace, monospace; background: #0d0f12; color: #cfd6e0; border: 1px solid #2b2f37; }
+      button { padding: .35rem; margin-top: .3rem; }
+      main { display: grid; grid-template-rows: 1fr auto; min-width: 0; }
+      /* canvas pinned to the top: with `center`, any change in the height of the stats list below (a wrapped audio line) moved the canvas by half that amount */
+      #stage { display: grid; place-items: start center; background: #050505; min-height: 60vh; overflow: hidden; }
+      #screen { image-rendering: pixelated; background: #000; outline: 1px solid #333; }
+      dl { display: grid; grid-template-columns: max-content 1fr; gap: .15rem .8rem; margin: 0; padding: .6rem 1rem; font: .8rem ui-monospace, monospace; border-top: 1px solid #2b2f37; }
+      dt { color: #9da7b3; } dd { margin: 0; }
+      #msg { padding: .4rem 1rem; color: #ffa657; white-space: pre-wrap; }
+      .err { color: #ff7b72; }
+    </style>
+    <script>
+      // Optional COOP/COEP helper for static hosts that cannot send custom headers (GitHub Pages, plain http.server...):
+      // add ?coi=1 to the URL to register coi-sw.js (root of the published folder) and reload once. It is opt-in on
+      // purpose: the demo must stay non-isolated when a test wants to show the "serve with COOP/COEP" message.
+      (async () => {
+        const requested = new URLSearchParams(location.search).get("coi") === "1";
+        if (!requested || self.crossOriginIsolated || !("serviceWorker" in navigator)) return;
+        if (sessionStorage.getItem("coi-sw-tried") === "1") return; // never enter a reload loop
+        sessionStorage.setItem("coi-sw-tried", "1");
+        try {
+          await navigator.serviceWorker.register(new URL("../coi-sw.js", location.href).href);
+          const registration = await navigator.serviceWorker.ready;
+          if (registration.active) location.reload();
+        } catch {
+          /* no service worker: the host must send the headers (see README "Requisitos") */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <aside>
+      <h1>melonDS WASM · demo integrada</h1>
+      <fieldset>
+        <legend>ROM (no se sube a ningún sitio)</legend>
+        <input id="rom" type="file" accept=".nds,.srl" />
+        <label><input id="threaded" type="checkbox" checked /> Renderizador 3D con hilos (al cargar)</label>
+        <label><input id="canvas2d" type="checkbox" /> Forzar Canvas2D (al cargar)</label>
+      </fieldset>
+      <fieldset>
+        <legend>Pantallas</legend>
+        <label>Layout <select id="layout"></select></label>
+        <label>Separación: <output id="gapOut">0</output> px <input id="gap" type="range" min="0" max="126" value="0" /></label>
+        <label>Híbrido, pantalla pequeña
+          <select id="hybrid"><option value="both">both (ambas)</option><option value="one">one (la opuesta)</option></select>
+        </label>
+      </fieldset>
+      <fieldset>
+        <legend>Imagen</legend>
+        <label>Filtro
+          <select id="filter"><option value="none">Nítido</option><option value="scanlines">scanlines</option><option value="custom">GLSL propio…</option></select>
+        </label>
+        <label><input id="integer" type="checkbox" checked /> Escala entera</label>
+        <label><input id="smooth" type="checkbox" /> Suavizado (CSS)</label>
+        <textarea id="glsl" hidden spellcheck="false">vec4 mds_post(vec2 uv) {
+  vec4 c = mds_fetch(uv);
+  float g = dot(c.rgb, vec3(0.299, 0.587, 0.114));
+  return vec4(vec3(g), 1.0);   // grayscale
+}</textarea>
+        <button id="applyGlsl" hidden>Aplicar GLSL</button>
+      </fieldset>
+      <fieldset>
+        <legend>Ejecución</legend>
+        <label>Velocidad
+          <select id="speed"><option value="1">1x (≈59,83 fps)</option><option value="1.5">1,5x</option><option value="2">2x</option><option value="0">Sin límite</option></select>
+        </label>
+        <button id="pause" disabled>Pausa</button>
+        <button id="shot" disabled>Captura PNG</button>
+        <label>Medir durante <select id="benchSecs"><option value="20">20 s</option><option value="30" selected>30 s</option><option value="60">60 s</option></select></label>
+        <button id="bench" disabled>Medir rendimiento</button>
+        <pre id="benchOut" hidden style="white-space:pre-wrap;font:12px/1.4 monospace;margin:6px 0"></pre>
+        <button id="benchCopy" hidden>Copiar resultado</button>
+      </fieldset>
+      <fieldset>
+        <legend>Audio</legend>
+        <label>Volumen: <output id="volOut">100</output> % <input id="volume" type="range" min="0" max="100" value="100" /></label>
+        <label><input id="mute" type="checkbox" /> Silenciar</label>
+        <label>Latencia objetivo: <output id="latOut">80</output> ms (al cargar)
+          <input id="latency" type="range" min="30" max="250" step="10" value="80" /></label>
+        <button id="audioBtn" type="button">Activar audio</button>
+        <p style="color:#9da7b3;margin:.4rem 0 0">Hasta 2x el audio suena acelerado (más agudo); en «Sin límite» se silencia. Si a 2x se corta, tu equipo no llega a ~120 fps: usa 1,5x.</p>
+      </fieldset>
+      <fieldset>
+        <legend>Controles</legend>
+        <small style="color:#9da7b3">Flechas = cruceta · Z=A · X=B · A=X · S=Y · Q=L · E=R · Enter=Start · V=Select. Mando estándar: botón derecho=A, inferior=B, superior=X, izquierdo=Y, LB/RB=L/R, Back/Start, cruceta o palanca izquierda. Ratón/táctil sobre la imagen = pantalla táctil.</small>
+      </fieldset>
+      <fieldset>
+        <legend>Guardado y estados</legend>
+        <label><input id="persist" type="checkbox" checked /> Autoguardar en este navegador (IndexedDB) y «Continuar» al reabrir la misma ROM</label>
+        <label>.sav inicial (opcional, antes de elegir la ROM) <input id="sav" type="file" accept=".sav,.dsv,.bin" /></label>
+        <button id="dlSave" type="button" disabled>Descargar .sav</button>
+        <label>Reemplazar .sav y reiniciar <input id="loadSave" type="file" accept=".sav,.dsv,.bin" disabled /></label>
+        <button id="clearStore" type="button" disabled>Borrar el guardado almacenado</button>
+        <p style="color:#9da7b3;margin:.6rem 0 .2rem"><b>.sav en el PC (File System Access API)</b>: <span id="fsaState">sin archivo vinculado</span></p>
+        <button id="fsaLink" type="button" disabled>Vincular .sav del PC</button>
+        <button id="fsaSave" type="button" disabled>Guardar ahora en el .sav del PC</button>
+        <label><input id="fsaAuto" type="checkbox" checked /> Escribir en el .sav del PC en cada guardado (Chrome/Edge; en otros navegadores usa Descargar/Importar)</label>
+        <small id="fsaHint" style="color:#9da7b3;display:block;margin-top:.2rem"></small>
+        <button id="qsave" type="button" disabled>Estado rápido: guardar</button>
+        <button id="qload" type="button" disabled>Estado rápido: cargar</button>
+        <button id="dlState" type="button" disabled>Descargar estado (.mdsstate)</button>
+        <label>Cargar estado desde archivo <input id="loadState" type="file" disabled /></label>
+      </fieldset>
+      <fieldset>
+        <legend>Trucos (Action Replay)</legend>
+        <label>Id <input id="cheatId" type="number" min="0" value="1" style="width:5rem" /></label>
+        <label>Código (palabras hex de 8 dígitos)<textarea id="cheatCode" rows="2" style="width:100%;box-sizing:border-box" placeholder="02000100 12345678"></textarea></label>
+        <button id="cheatOn" type="button" disabled>Activar</button>
+        <button id="cheatOff" type="button" disabled>Desactivar</button>
+        <button id="cheatClear" type="button" disabled>Quitar todos</button>
+      </fieldset>
+    </aside>
+    <main>
+      <div id="stage"><canvas id="screen" width="256" height="384"></canvas></div>
+      <div id="msg"></div>
+      <dl>
+        <dt>crossOriginIsolated</dt><dd id="s-coi">…</dd>
+        <dt>Backend de dibujo</dt><dd id="s-backend">—</dd>
+        <dt>Fotograma / rotación</dt><dd id="s-frame">—</dd>
+        <dt>Emulador</dt><dd id="s-emu">—</dd>
+        <dt>Dibujado</dt><dd id="s-draw">—</dd>
+        <dt>Buffer circular</dt><dd id="s-ring">—</dd>
+        <dt>Entrada</dt><dd id="s-input">—</dd>
+        <dt>Guardado</dt><dd id="s-savetype">—</dd>
+        <dt>Último onSave</dt><dd id="s-save">—</dd>
+        <dt>Origen del .sav</dt><dd id="s-origin">—</dd>
+        <dt>Trucos</dt><dd id="s-cheats">—</dd>
+        <dt>Hilos 3D (workers pthread)</dt><dd id="s-workers">—</dd>
+        <dt>AudioContext</dt><dd id="s-actx">—</dd>
+        <dt>Buffer de audio</dt><dd id="s-abuf">—</dd>
+        <dt>Underruns / overruns</dt><dd id="s-aerr">—</dd>
+        <dt>Nivel de salida (worklet)</dt><dd id="s-alevel">—</dd>
+      </dl>
+    </main>
+    <script type="module" src="./demo.js"></script>
+  </body>
+</html>

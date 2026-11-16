@@ -1,0 +1,35 @@
+{
+  "name": "emerald-web",
+  "version": "1.0.0",
+  "description": "Browser web app for Nintendo DS (melonDS-WASM) and Game Boy Advance (mGBA-WASM). Bring your own ROMs; no game files are included.",
+  "type": "module",
+  "private": false,
+  "license": "GPL-3.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node server.mjs",
+    "test": "node --test --test-force-exit tests/*.test.mjs",
+    "sync:port": "node scripts/sync-port.mjs"
+  },
+  "keywords": [
+    "nintendo-ds",
+    "game-boy-advance",
+    "emulator",
+    "wasm",
+    "webassembly",
+    "melonds",
+    "mgba",
+    "browser"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/soyangelromero/emerald-web.git"
+  },
+  "dependencies": {
+    "@thenick775/mgba-wasm": "^2.6.0",
+    "socket.io": "^4.8.4"
+  }
+}

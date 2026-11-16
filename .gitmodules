@@ -1,0 +1,3 @@
+[submodule "port-melonds"]
+	path = port-melonds
+	url = https://github.com/soyangelromero/melonds-wasm.git

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>melonds-wasm · anfitrión multijugador</title>
+    <link rel="icon" href="data:," />
+    <style>
+      :root { color-scheme: dark; }
+      body { font-family: system-ui, sans-serif; margin: 0 auto; max-width: 62rem; padding: 1rem; background: #111; color: #eee; }
+      h1 { font-size: 1.15rem; margin: 0 0 .5rem; }
+      p.note { color: #9da7b3; font-size: .88rem; }
+      .row { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin: .5rem 0; }
+      label { font-size: .85rem; color: #c9d2dc; }
+      input[type=text], input[type=file] { background: #0d0f12; color: #cfd6e0; border: 1px solid #2b2f37; padding: .35rem .45rem; border-radius: .35rem; }
+      input[type=text] { min-width: 20rem; }
+      button { padding: .4rem .8rem; border-radius: .4rem; border: 1px solid #3a4048; background: #1c2128; color: #e6edf3; cursor: pointer; }
+      button.primary { background: #2b6cb0; border-color: #2b6cb0; }
+      button:disabled { opacity: .5; cursor: default; }
+      #stage { background: #050505; border: 1px solid #2b2f37; border-radius: .4rem; padding: .5rem; display: grid; place-items: center; min-height: 420px; }
+      #screen { image-rendering: pixelated; background: #000; max-width: 100%; }
+      #invite { width: 100%; font: .8rem ui-monospace, monospace; }
+      #status { color: #9da7b3; min-height: 1.2em; }
+      #players { display: flex; flex-wrap: wrap; gap: .4rem; }
+      .chip { background: #1c2128; border: 1px solid #2b2f37; border-radius: 1rem; padding: .15rem .6rem; font-size: .8rem; }
+      #err { color: #ff7b72; white-space: pre-wrap; }
+    </style>
+  </head>
+  <body>
+    <h1>Anfitrión multijugador (melonDS-WASM)</h1>
+    <p class="note">
+      Carga una ROM propia de tu equipo, crea una sala y comparte el enlace: el invitado lo abre en otra pestaña o
+      dispositivo y ve la partida con <code>nds/join.html</code> del servidor de señalización. Es <b>control remoto</b>
+      (el invitado ve la imagen y envía botones/táctil), no Wi-Fi emulado. Sin TURN: redes muy restrictivas pueden no
+      conectar. Este archivo es la demo independiente de la Fase 12.
+    </p>
+
+    <div class="row">
+      <label>ROM NDS: <input id="rom" type="file" accept=".nds,.zip,.7z" /></label>
+      <label>Servidor (hub): <input id="hub" type="text" value="http://127.0.0.1:8080" /></label>
+      <label>Sala: <input id="room" type="text" value="Sala de melonDS" style="min-width: 12rem" /></label>
+      <label>Clave (opcional): <input id="key" type="text" style="min-width: 8rem" /></label>
+    </div>
+    <div class="row">
+      <button id="unlock" disabled>Activar audio</button>
+      <button id="create" class="primary" disabled>Crear sala</button>
+      <button id="leave" disabled>Salir de la sala</button>
+      <span id="status">Elige una ROM para empezar.</span>
+    </div>
+    <div id="stage"><canvas id="screen" width="256" height="384"></canvas></div>
+    <div class="row"><label>Enlace para el invitado: <input id="invite" type="text" readonly value="" /></label></div>
+    <div class="row" id="players"></div>
+    <div id="err"></div>
+
+    <script type="module" src="./host.js"></script>
+  </body>
+</html>

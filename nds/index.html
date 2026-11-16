@@ -1,0 +1,985 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#141317">
+<title>Nintendo DS · Web</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='5' y='2' width='22' height='28' rx='4' fill='%23f44336'/%3E%3Crect x='8' y='5' width='16' height='9' rx='1' fill='%23fff'/%3E%3Crect x='8' y='17' width='16' height='9' rx='1' fill='%23ffd2cd'/%3E%3C/svg%3E">
+<script src="/ui/ui.js"></script>
+<link rel="stylesheet" href="/ui/ui.css">
+<link rel="stylesheet" href="/ui/player.css">
+<style>
+  main { max-width: 1360px; margin: 0 auto; padding: 0 max(16px, var(--safe-r)) 32px max(16px, var(--safe-l)); }
+  .topbar { max-width: 1360px; }
+
+  /* ---------- biblioteca ---------- */
+  #library h2 { margin: 8px 0 4px; font-size: 1.3rem; }
+  .sub { color: var(--muted); margin: 0 0 18px; }
+  .locked { padding: 14px 16px; border-radius: var(--radius-sm); background: rgba(212,160,23,.1); border: 1px solid rgba(212,160,23,.3); margin-bottom: 14px; }
+  .drop { margin-top: 18px; border: 2px dashed var(--line2); border-radius: var(--radius); padding: 24px; text-align: center; color: var(--muted); transition: .15s; }
+  .drop.over { border-color: var(--accent); background: var(--panel); color: var(--fg); }
+  .drop .btn { margin-top: 10px; }
+  .engine-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; padding: 12px 14px; border-radius: var(--radius); background: var(--panel); border: 1px solid var(--line); }
+  .engine-row small { display: block; color: var(--muted); font-size: .78rem; }
+
+  .opt[hidden] { display: none; }
+  ol.steps { padding-left: 18px; margin: 8px 0; color: var(--muted); font-size: .86rem; }
+  ol.steps li { margin: 4px 0; }
+  .invite { display: flex; gap: 8px; margin-top: 8px; }
+  .invite .field { font-size: .8rem; }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="logo"><svg class="i lg" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-gamepad"/></svg></div>
+    <div><h1>Nintendo DS</h1><small>melonDS en tu navegador</small></div>
+  </div>
+  <div class="grow"></div>
+  <button class="btn" id="changeGame" hidden><i data-i="back" data-size="sm"></i>Biblioteca</button>
+  <a class="btn" href="/#gba" title="Biblioteca de GBA">GBA</a>
+  <div class="pill" id="status"><span class="dot"></span><span id="statusText">Listo</span></div>
+</header>
+
+<main>
+  <section id="library">
+    <h2>Tu biblioteca</h2>
+    <p class="sub">Elige un juego para empezar. Las ROM se leen desde tu PC y no salen de tu navegador.</p>
+    <div id="lockedMsg" class="locked" hidden></div>
+    <div class="engine-row"><div><b>Motor de emulación</b><small id="coreHint"></small></div>
+      <div class="seg" id="coreSeg"><button data-c="wasm">melonDS WASM</button><button data-c="melonds">melonDS</button><button data-c="desmume">DeSmuME</button></div></div>
+    <div class="grid" id="games"></div>
+    <div class="drop" id="drop">
+      <div><b>¿Otra ROM?</b> Arrastra aquí un archivo <kbd>.nds</kbd> o elígelo desde tu equipo.</div>
+      <label class="btn primary">Elegir ROM<input id="file" type="file" accept=".nds,.zip,.7z"></label>
+    </div>
+  </section>
+
+  <section id="stage">
+    <div>
+      <div class="console" id="consoleBox">
+        <div class="screen">
+          <div id="ejs"></div>
+          <div class="fps-badge" id="fpsBadge" hidden>FPS: 0</div>
+          <button class="screen-side side-l" id="selBtn" aria-label="Select">SELECT</button>
+          <button class="screen-side side-r" id="startBtn" aria-label="Start">START</button>
+        </div>
+
+        <div class="actions" id="actions" role="toolbar" aria-label="Acciones del juego">
+          <button class="iconbtn" id="pause" title="Pausa / reanudar" aria-label="Pausa"><i data-i="pause"></i><span class="lbl">Pausa</span></button>
+          <button class="iconbtn" id="ff" title="Velocidad 1x" aria-label="Velocidad 1x"><i data-i="ff"></i><span class="lbl">Velocidad</span><span class="tag-s" id="spdTag">1x</span></button>
+          <button class="iconbtn" id="shot" title="Captura de pantalla" aria-label="Captura"><i data-i="camera"></i><span class="lbl">Captura</span></button>
+          <button class="iconbtn" id="tpadBtn" title="Mostrar u ocultar botones" aria-label="Botones" hidden><i data-i="gamepad"></i><span class="lbl">Botones</span></button>
+          <button class="iconbtn" id="full" title="Pantalla completa" aria-label="Pantalla completa"><i data-i="expand"></i><span class="lbl">Pantalla completa</span></button>
+          <button class="iconbtn mobileOnly" id="panelBtn" title="Partida, trucos y opciones" aria-label="Menú"><i data-i="menu"></i><span class="lbl">Menú</span></button>
+        </div>
+
+        <div class="pad2" id="touchpad">
+          <div>
+            <div class="sh"><button class="key" data-b="L">L</button></div>
+            <div class="dpad">
+              <span></span><button class="key" data-b="UP" aria-label="Arriba">▲</button><span></span>
+              <button class="key" data-b="LEFT" aria-label="Izquierda">◀</button><span></span><button class="key" data-b="RIGHT" aria-label="Derecha">▶</button>
+              <span></span><button class="key" data-b="DOWN" aria-label="Abajo">▼</button><span></span>
+            </div>
+          </div>
+          <div class="mid"><button class="key" data-b="SELECT">SELECT</button><button class="key" data-b="START">START</button></div>
+          <div>
+            <div class="sh" style="justify-content:flex-end"><button class="key" data-b="R">R</button></div>
+            <div class="ab">
+              <button class="key kx" data-b="X">X</button>
+              <button class="key ky" data-b="Y">Y</button>
+              <button class="key ka" data-b="A">A</button>
+              <button class="key kb" data-b="B">B</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="boot" id="boot" hidden>
+          <div class="boot-bg" id="bootBg"></div>
+          <div class="boot-body">
+            <div class="boot-cover">
+              <img id="bootCover" alt="" hidden />
+              <div class="boot-noart" id="bootNoArt">DS</div>
+            </div>
+            <div class="boot-info">
+              <span class="boot-chip">Nintendo DS</span>
+              <h2 id="bootText">Cargando…</h2>
+              <div id="bootDev">melonDS · WASM</div>
+              <small id="bootSub"></small>
+              <div class="boot-bar"><i id="bootBar"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scrim" id="panelScrim"></div>
+    <aside class="panel" id="panel">
+      <div class="grab"></div>
+      <div class="panel-head">
+        <div class="tabs" role="tablist">
+          <button class="tab" role="tab" data-tab="game" aria-selected="true">Partida</button>
+          <button class="tab" role="tab" data-tab="cheats" aria-selected="false">Trucos<span class="count" id="cheatCount" hidden>0</span></button>
+          <button class="tab" role="tab" data-tab="controls" aria-selected="false">Controles</button>
+          <button class="tab" role="tab" data-tab="aspect" aria-selected="false">Aspecto</button>
+          <button class="tab" role="tab" data-tab="online" aria-selected="false">Online</button>
+        </div>
+        <button class="iconbtn panel-close" id="panelClose" aria-label="Cerrar menú" title="Cerrar"><i data-i="close"></i></button>
+      </div>
+      <div class="pane" id="pane-cheats">
+        <h3>Trucos</h3>
+        <p class="hint" id="cheatHint">Se activan al instante y puedes quitarlos cuando quieras.</p>
+        <input class="search" id="q" type="search" placeholder="Buscar truco (ej. dinero, MT, shiny)…" autocomplete="off">
+        <div class="active-bar" id="activeBar">
+          <div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:.85rem">Activos</b><button class="link" id="offAll">Desactivar todos</button></div>
+          <div class="chips" id="chips"></div>
+        </div>
+        <div id="groups"></div>
+        <div class="note" id="cheatNote">Las ventajas de los trucos se aplican mientras estén activos. Para evitar problemas, guarda la partida antes de usarlos.</div>
+      </div>
+
+      <div class="pane" id="pane-controls">
+        <h3>Controles</h3>
+        <p class="hint">Haz clic en el juego para que el teclado funcione. Se pueden cambiar en <button class="link" id="remap">Configurar controles</button>.</p>
+        <table>
+          <thead><tr><th>Botón DS</th><th>Teclado</th></tr></thead>
+          <tbody>
+            <tr><td>Cruceta</td><td><div class="kgrid"><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd></div></td></tr>
+            <tr><td>A</td><td><kbd>Z</kbd></td></tr>
+            <tr><td>B</td><td><kbd>X</kbd></td></tr>
+            <tr><td>X</td><td><kbd>A</kbd></td></tr>
+            <tr><td>Y</td><td><kbd>S</kbd></td></tr>
+            <tr><td>L</td><td><kbd>Q</kbd></td></tr>
+            <tr><td>R</td><td><kbd>E</kbd></td></tr>
+            <tr><td>Start</td><td><kbd>Enter</kbd></td></tr>
+            <tr><td>Select</td><td><kbd>V</kbd></td></tr>
+            <tr><td>Pantalla táctil</td><td>Clic / toque en la pantalla inferior</td></tr>
+          </tbody>
+        </table>
+        <div class="opts">
+          <div class="opt"><div><b>Mando</b><small>Un mando USB o Bluetooth se detecta solo al pulsar un botón.</small></div></div>
+          <div class="opt"><div><b>Móvil / tablet</b><small>Aparecen botones táctiles sobre el juego.</small></div></div>
+        </div>
+      </div>
+
+      <div class="pane" id="pane-aspect">
+        <h3>Aspecto</h3>
+        <p class="hint">Personaliza los controles y la pantalla. Se guarda en este navegador y se aplica al instante.</p>
+        <div class="frow"><label>Tema de los controles</label>
+          <select class="field" id="padPreset">
+            <option value="classic">Clásico (gris translúcido)</option>
+            <option value="dark">Oscuro</option>
+            <option value="light">Claro</option>
+            <option value="neon">Neón</option>
+            <option value="watermelon">Sandía</option>
+            <option value="crystal">Cristal</option>
+            <option value="custom">Personalizado</option>
+          </select>
+        </div>
+        <div class="frow"><label>Color de los botones</label>
+          <div style="display:flex;align-items:center;gap:10px">
+            <input type="color" id="padColor" value="#768094" title="Color base">
+            <span class="hint" style="margin:0">activo</span>
+            <input type="color" id="padActive" value="#d2dcec" title="Color al pulsar">
+          </div>
+        </div>
+        <div class="frow"><label>Transparencia <small id="padOpacityLabel">62 %</small></label>
+          <input type="range" id="padOpacity" min="20" max="95" value="62" style="width:100%;accent-color:var(--accent)">
+        </div>
+        <div class="frow"><label>Tamaño del pad <small id="padScaleLabel">100 %</small></label>
+          <input type="range" id="padScale" min="85" max="115" value="100" style="width:100%;accent-color:var(--accent)">
+        </div>
+        <div class="frow"><label>Pantalla</label>
+          <select class="field" id="aspectLayout">
+            <option value="top">Vertical (arriba/abajo)</option>
+            <option value="side">Lado a lado</option>
+            <option value="hyb">Híbrida</option>
+          </select>
+        </div>
+        <div class="frow"><label>Separación de pantallas <small id="aspectGapLabel">0 px</small></label>
+          <input type="range" id="aspectGap" min="0" max="40" value="0" style="width:100%;accent-color:var(--accent)">
+        </div>
+        <div class="frow"><label>Fondo del marco</label><input type="color" id="frameColor" value="#05070d"></div>
+        <div class="label-s">En pantalla</div>
+        <div class="opts">
+          <div class="opt"><div><b>Indicador de FPS</b><small>Arriba a la derecha</small></div><button class="sw" id="showFps" role="switch" aria-checked="true" aria-label="Indicador de FPS"></button></div>
+          <div class="opt"><div><b>SELECT / START laterales</b><small>Píldoras sobre la pantalla</small></div><button class="sw" id="showSide" role="switch" aria-checked="true" aria-label="SELECT y START laterales"></button></div>
+          <div class="opt"><div><b>Botones táctiles</b><small>Cruceta, A/B/X/Y y gatillos</small></div><button class="sw" id="showPad" role="switch" aria-checked="true" aria-label="Botones táctiles"></button></div>
+          <div class="opt"><div><b>Modo zurdo</b><small>Cruceta a la derecha, botones a la izquierda</small></div><button class="sw" id="showLefty" role="switch" aria-checked="false" aria-label="Modo zurdo"></button></div>
+          <div class="opt"><div><b>Vibración al pulsar</b><small>Si tu móvil lo permite</small></div><button class="sw" id="showHaptic" role="switch" aria-checked="true" aria-label="Vibración al pulsar"></button></div>
+        </div>
+        <div class="label-s">Interfaz</div>
+        <div id="appearance"></div>
+        <button class="btn" id="aspectReset" style="margin-top:16px;width:100%">Restablecer aspecto</button>
+      </div>
+
+      <div class="pane" id="pane-online">
+        <h3>Multijugador</h3>
+        <p class="hint">Juega acompañado: tus amigos ven y controlan tu partida desde su navegador, sin instalar nada y sin necesitar la ROM.</p>
+        <div id="hostIdle">
+          <div class="frow"><label>Nombre de la sala</label><input class="field" id="roomName" value="Sala de Pokémon" maxlength="30"></div>
+          <div class="frow"><label>Tu nombre</label><input class="field" id="playerName" value="Entrenador" maxlength="20"></div>
+          <div class="frow"><label>Jugadores (máx.)</label><select class="field" id="maxPl"><option>2</option><option selected>3</option><option>4</option></select></div>
+          <div class="frow"><label>Contraseña (opcional)</label><input class="field" id="roomPw" maxlength="20" autocomplete="off"></div>
+          <button class="btn primary" id="openRoom" style="width:100%;justify-content:center">Crear sala</button>
+        </div>
+        <div id="hostLive" hidden>
+          <div class="note info" id="liveInfo"></div>
+          <div class="frow" style="margin-top:12px"><label>Enlace de invitación</label>
+            <div class="invite"><input class="field" id="inviteUrl" readonly><button class="btn" id="copyInvite">Copiar</button></div></div>
+          <div class="frow"><label>Jugadores conectados</label><div class="chips" id="players"></div></div>
+          <button class="btn danger" id="closeRoom" style="width:100%;justify-content:center;margin-top:6px">Cerrar sala</button>
+        </div>
+        <div class="note">Cómo funciona: tu navegador emite la partida y tus invitados la reciben en directo (WebRTC). Ellos manejan la cruceta y los botones <b>y también la pantalla táctil</b>. Los intercambios y combates por Wi-Fi local entre dos consolas no se pueden emular en el navegador.</div>
+        <ol class="steps"><li>Pulsa <b>Crear sala</b>.</li><li>Comparte el enlace con tus amigos.</li><li>Entran, ven tu juego y pueden manejarlo.</li></ol>
+      </div>
+
+      <div class="pane show" id="pane-game">
+        <div class="opts" style="margin-bottom:14px">
+          <div class="opt"><div><b>Filtro de imagen</b><small id="fltHint">Suaviza o da aspecto de pantalla antigua</small></div>
+            <select class="field" id="filter" style="width:150px"></select></div>
+          <div class="opt"><div><b>Separación de pantallas</b><small id="gapLabel">0 px</small></div><input type="range" id="gap" min="0" max="40" value="0" style="width:130px;accent-color:var(--accent)"></div>
+          <div class="opt" id="resRow" hidden><div><b>Resolución interna</b><small>Más nítido, pero consume más CPU</small></div>
+            <select class="field" id="res" style="width:150px"><option value="256x192">Original</option><option value="512x384">x2 (512×384)</option><option value="768x576">x3 (768×576)</option><option value="1024x768">x4 (1024×768)</option></select></div>
+          <div class="opt" id="texRow" hidden><div><b>Escalado de texturas</b><small>Suaviza las texturas 3D</small></div>
+            <select class="field" id="tex" style="width:90px"><option>1</option><option>2</option><option>4</option></select></div>
+          <div class="opt" id="hybRow"><div><b>Pantalla pequeña (híbrida)</b><small>Cuál se muestra junto a la grande</small></div>
+            <select class="field" id="hybrid" style="width:120px"><option value="Bottom">Inferior</option><option value="Top">Superior</option><option value="Duplicate">Duplicada</option></select></div>
+        </div>
+        <h3>Partida</h3>
+        <p class="hint">La partida se guarda en este navegador cuando guardas dentro del juego.</p>
+        <div class="note" id="errTip" hidden style="margin:0 0 14px">¿Te sale <b>"error de conexión"</b> al cargar tu partida? Es un fallo conocido de melonDS en el navegador con los Pokémon de DS. <b>1)</b> Pulsa «Descargar» en Exportar partida para guardar una copia. <b>2)</b> Cambia a DeSmuME e impórtala.
+          <div style="margin-top:8px"><button class="btn primary" id="swCore">Cambiar a DeSmuME</button></div></div>
+        <div class="opts">
+          <div class="opt"><div><b>Guardar estado</b><small>Foto instantánea (ranura 1)</small></div><button class="btn" id="qs">Guardar</button></div>
+          <div class="opt"><div><b>Cargar estado</b><small>Vuelve a la ranura 1</small></div><button class="btn" id="ql">Cargar</button></div>
+          <div class="opt"><div><b>Exportar partida</b><small>Descarga el .sav</small></div><button class="btn" id="expSav">Descargar</button></div>
+          <div class="opt"><div><b>Importar partida</b><small id="impHint">Carga un .sav y reinicia</small></div><label class="btn">Elegir<input id="impSav" type="file" accept=".sav"></label></div>
+          <div class="opt" id="libSavRow" hidden><div><b>Partida de tu PC</b><small>Hay un .sav junto a esta ROM</small></div><button class="btn primary" id="libSav">Cargar</button></div>
+          <div class="opt"><div><b>Volumen</b><small id="volLabel">80%</small></div><input type="range" id="vol" min="0" max="100" value="80" style="width:130px;accent-color:var(--accent)"></div>
+          <div class="opt"><div><b>Prueba de velocidad</b><small id="benchOut">Mide los fps con y sin acelerar (dura 14 s)</small></div><button class="btn" id="bench">Medir</button></div>
+          <div class="opt"><div><b>Buscar qué ralentiza</b><small id="tuneOut">Prueba ajustes uno a uno (dura 25 s)</small></div><button class="btn" id="tune">Probar</button></div>
+          <div class="opt"><div><b>Reiniciar juego</b><small>Como apagar y encender</small></div><button class="btn danger" id="reset">Reiniciar</button></div>
+        </div>
+      </div>
+    </aside>
+  </section>
+</main>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="firmware.js"></script>
+<script>
+  const $ = id => document.getElementById(id);
+const params = new URLSearchParams(location.search);
+const KEY = params.get("k") || "";
+const q = p => p + (KEY ? (p.includes("?") ? "&" : "?") + "k=" + encodeURIComponent(KEY) : "");
+const CDN = "https://cdn.emulatorjs.org/latest/data/";
+const CHEAT_GAMES = { CPUS:"Platino", IPGS:"SoulSilver", IRBS:"Negra", IRES:"Negra 2" };
+const COVERS = { CPUS:["#7a8ab5","#2b3a63","PT"], IPGS:["#c8d0e8","#5a6a99","SS"], IRBS:["#3a3d4a","#0e0f16","N"], IRES:["#4a2f6b","#120a22","N2"] };
+const CORE = params.get("engine") || params.get("core") || store0("nds.core") || "melonds";
+const IS_WASM = CORE === "wasm"; // Phase 11: the melonDS-WASM port instead of EmulatorJS
+function store0(k){ try{ return localStorage.getItem(k); }catch{ return null; } }
+const OPT = CORE === "desmume" ? { layout: "desmume_screens_layout", gap: "desmume_screens_gap" } : { layout: "melonds_screen_layout", gap: "melonds_screen_gap" };
+const LAYOUT = CORE === "desmume" ? { top: "top/bottom", side: "left/right", hyb: "hybrid/top" } : { top: "Top/Bottom", side: "Left/Right", hyb: "Hybrid Top" };
+const toast = (m, ms = 2600) => UI.toast(m, ms);
+// The header pill only reports settled states (Listo / Jugando / Pausado / errors). While loading, the overlay is the
+// one and only indicator, so the pill hides itself on "busy".
+const status = (t, k = "") => { $("statusText").textContent = t; $("status").className = "pill " + k; $("status").hidden = k === "busy"; };
+// Loading overlay: the player must never stare at a black screen wondering whether the ROM is loading.
+const bootEl = $("boot");
+const showBoot = (text, sub = "", error = false, cover = null) => {
+  bootEl.hidden = false;
+  bootEl.classList.toggle("err", !!error);
+  $("bootText").textContent = text;
+  $("bootSub").textContent = sub;
+  bootEl.querySelectorAll(".boot-info .btn").forEach((b) => b.remove());
+  const img = $("bootCover"), noArt = $("bootNoArt"), bg = $("bootBg");
+  img.onerror = () => { img.hidden = true; noArt.hidden = false; bg.style.backgroundImage = ""; };
+  if (cover) {
+    img.src = cover;
+    img.hidden = false;
+    noArt.hidden = true;
+    bg.style.backgroundImage = `url("${cover}")`;
+  } else {
+    img.hidden = true;
+    img.removeAttribute("src");
+    noArt.hidden = false;
+    bg.style.backgroundImage = "";
+  }
+  $("bootDev").textContent = IS_WASM ? "melonDS · WebAssembly" : "melonDS · EmulatorJS";
+};
+const bootSub = (text) => { if (!bootEl.hidden) $("bootSub").textContent = text; };
+const hideBoot = () => { bootEl.hidden = true; };
+const setIcon = (btn, name) => btn.querySelector("use")?.setAttribute("href", "#i-" + name);
+const setLbl = (btn, text) => { const l = btn.querySelector(".lbl"); if (l) l.textContent = text; };
+const buzz = () => { try { if (aspectState.haptic) navigator.vibrate?.(8); } catch {} };
+const store = { get(k){ try{ return localStorage.getItem(k); }catch{ return null; } }, set(k,v){ try{ localStorage.setItem(k,v); }catch{} } };
+/* ---------- appearance: pads, screen layout and theme (persisted) ---------- */
+const ASPECT_KEY = "nds.aspect";
+const ASPECT_DEFAULT = { preset: "classic", base: "#768094", active: "#d2dcec", opacity: 62, scale: 100, layout: "top", gap: 0, frame: "#0b0a0d", fps: true, side: true, pad: true, lefty: false, haptic: true };
+const PAD_PRESETS = {
+  classic: { base: "#768094", active: "#d2dcec", frame: "#0b0a0d" },
+  dark: { base: "#1b2233", active: "#6c8cff", frame: "#000000" },
+  light: { base: "#e8eeff", active: "#6c8cff", frame: "#eef2fb" },
+  neon: { base: "#00e6b0", active: "#ff3bd4", frame: "#04080a" },
+  watermelon: { base: "#ff6b8b", active: "#3ddc97", frame: "#0a1410" },
+  crystal: { base: "#ffffff", active: "#9fdcff", frame: "#02060c" },
+};
+let aspectState = { ...ASPECT_DEFAULT };
+try { aspectState = { ...ASPECT_DEFAULT, ...(JSON.parse(store.get(ASPECT_KEY) || "{}") || {}) }; } catch {}
+const saveAspect = () => store.set(ASPECT_KEY, JSON.stringify(aspectState));
+const hexRgb = (hex) => { const m = /^#?([0-9a-f]{6})$/i.exec(hex || ""); const n = m ? parseInt(m[1], 16) : 0x768094; return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
+const rgba = (hex, alpha) => { const [r, g, b] = hexRgb(hex); return `rgba(${r},${g},${b},${Math.max(0, Math.min(1, alpha)).toFixed(2)})`; };
+const lum = (hex) => { const [r, g, b] = hexRgb(hex).map((c) => c / 255); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+function applyAspect() {
+  const a = aspectState;
+  const root = document.documentElement.style;
+  root.setProperty("--pad-bg", rgba(a.base, a.opacity / 100));
+  root.setProperty("--pad-active", rgba(a.active, Math.min(100, a.opacity + 30) / 100));
+  root.setProperty("--pad-fg", lum(a.base) > 0.62 ? "#0a1020" : "#f1f5ff");
+  root.setProperty("--pad-scale", (a.scale / 100).toFixed(2));
+  root.setProperty("--frame-bg", a.frame);
+  document.body.classList.toggle("hide-fps", !a.fps);
+  document.body.classList.toggle("lefty", !!a.lefty);
+  document.body.classList.toggle("hide-side", !a.side);
+  document.body.classList.toggle("hide-pad", !a.pad);
+  const manager = window.EJS_emulator?.gameManager;
+  if (manager?.setVariable) {
+    try { manager.setVariable(OPT.layout, LAYOUT[a.layout] || a.layout); manager.setVariable(OPT.gap, String(a.gap)); } catch {}
+  }
+  const gap = $("gap"), aspectGap = $("aspectGap");
+  if (gap) { gap.value = a.gap; $("gapLabel").textContent = a.gap + " px"; }
+  if (aspectGap) { aspectGap.value = a.gap; $("aspectGapLabel").textContent = a.gap + " px"; }
+  const aspectLayout = $("aspectLayout"); if (aspectLayout) aspectLayout.value = a.layout;
+  syncAspectUI();
+}
+function syncAspectUI() {
+  const a = aspectState;
+  if (!$("padPreset")) return;
+  $("padPreset").value = a.preset;
+  $("padColor").value = a.base;
+  $("padActive").value = a.active;
+  $("frameColor").value = a.frame;
+  $("padOpacity").value = a.opacity; $("padOpacityLabel").textContent = a.opacity + " %";
+  $("padScale").value = a.scale; $("padScaleLabel").textContent = a.scale + " %";
+  for (const [id, value] of [["showFps", a.fps], ["showSide", a.side], ["showPad", a.pad], ["showLefty", a.lefty], ["showHaptic", a.haptic]]) $(id).setAttribute("aria-checked", String(value));
+}
+function setupAspect() {
+  if (!$("padPreset")) return;
+  const setPreset = (name, apply = true) => {
+    aspectState.preset = name;
+    const preset = PAD_PRESETS[name];
+    if (preset) Object.assign(aspectState, preset);
+    saveAspect();
+    if (apply) applyAspect();
+  };
+  $("padPreset").onchange = (e) => setPreset(e.target.value);
+  for (const [id, key] of [["padColor", "base"], ["padActive", "active"], ["frameColor", "frame"]]) {
+    $(id).oninput = (e) => { aspectState[key] = e.target.value; aspectState.preset = "custom"; saveAspect(); applyAspect(); };
+  }
+  $("padOpacity").oninput = (e) => { aspectState.opacity = +e.target.value; aspectState.preset = "custom"; saveAspect(); applyAspect(); };
+  $("padScale").oninput = (e) => { aspectState.scale = +e.target.value; saveAspect(); applyAspect(); };
+  $("aspectLayout").onchange = (e) => { aspectState.layout = e.target.value; saveAspect(); applyAspect(); };
+  $("aspectGap").oninput = (e) => { aspectState.gap = +e.target.value; saveAspect(); applyAspect(); };
+  for (const [id, key] of [["showFps", "fps"], ["showSide", "side"], ["showPad", "pad"], ["showLefty", "lefty"], ["showHaptic", "haptic"]]) {
+    $(id).onclick = () => { aspectState[key] = !aspectState[key]; $(id).setAttribute("aria-checked", String(aspectState[key])); saveAspect(); applyAspect(); };
+  }
+  UI.mountAppearance($("appearance"));
+  $("aspectReset").onclick = () => { aspectState = { ...ASPECT_DEFAULT }; saveAspect(); applyAspect(); UI.setTheme("system"); UI.setAccent("red"); UI.mountAppearance($("appearance")); toast("Aspecto restablecido"); };
+  applyAspect();
+}
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+const fmtMB = n => (n / 1048576).toFixed(0) + " MB";
+
+/* ---------- keep the page still while playing ---------- */
+addEventListener("keydown", e => {
+  if (!["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(e.key)) return;
+  if (/^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement?.tagName || "")) return;
+  e.preventDefault();
+}, { capture: true });
+
+/* ---------- tabs ---------- */
+for (const t of document.querySelectorAll(".tab")) t.onclick = () => {
+  for (const x of document.querySelectorAll(".tab")) x.setAttribute("aria-selected", x === t);
+  for (const p of document.querySelectorAll(".pane")) p.classList.toggle("show", p.id === "pane-" + t.dataset.tab);
+};
+$("changeGame").onclick = () => { location.href = "/#nds"; };
+
+/* ---------- library ---------- */
+let current = null; // {name, code, id, hasSav}
+async function loadLibrary(){
+  try {
+    const r = await fetch(q("/nds/api/roms"));
+    if (r.status === 403) {
+      $("lockedMsg").hidden = false;
+      $("lockedMsg").innerHTML = "Tu biblioteca solo está disponible abriendo esta página desde tu PC (<b>http://127.0.0.1:8080/nds/</b>). Desde aquí puedes cargar tu propia ROM.";
+      return;
+    }
+    const list = await r.json();
+    const auto = params.get("play");
+    if (auto !== null) { const g = list.find(x => String(x.id) === auto); if (g) { startGame({ url: q("/nds/api/rom/" + g.id), name: g.name, code: g.code, id: g.id, hasSav: g.hasSav }); return; } }
+    const grid = $("games"); grid.textContent = "";
+    if (!list.length) grid.innerHTML = '<div class="empty-box">No hay ROM en tu carpeta de DS.</div>';
+    for (const g of list) {
+      const c = COVERS[g.code] || ["#4f63b8", "#1a2150", (g.title || "DS").slice(0, 2).toUpperCase()];
+      const el = document.createElement("button"); el.className = "card"; el.type = "button";
+      el.innerHTML = `<div class="cover" style="background:linear-gradient(135deg,${c[0]},${c[1]})"><span class="ph">${c[2]}</span><img loading="lazy" alt="" src="${q("/art/nds/" + g.id)}"><span class="play">${UI.icon("play", "sm")}</span></div><div class="info"><b></b><small></small><div class="tags"></div></div>`;
+      const im = el.querySelector("img"); im.onload = () => { el.querySelector(".ph")?.remove(); el.querySelector(".cover").style.background = "var(--panel2)"; }; im.onerror = () => im.remove();
+      el.querySelector("b").textContent = g.name; el.querySelector("small").textContent = g.code + " · " + fmtMB(g.size);
+      const tags = el.querySelector(".tags");
+      if (CHEAT_GAMES[g.code]) tags.insertAdjacentHTML("beforeend", '<span class="tag ok">Trucos</span>');
+      if (g.hasSav) tags.insertAdjacentHTML("beforeend", '<span class="tag">Partida</span>');
+      if (g.size > 300 * 1048576) tags.insertAdjacentHTML("beforeend", '<span class="tag">ROM grande</span>');
+      el.onclick = () => startGame({ url: q("/nds/api/rom/" + g.id), name: g.name, code: g.code, id: g.id, hasSav: g.hasSav });
+      grid.append(el);
+    }
+  } catch { $("games").innerHTML = '<div class="empty-box">No se pudo leer la biblioteca.</div>'; }
+}
+const coreHints = { melonds: "Más preciso. Resolución original.", desmume: "Permite resolución x2/x3/x4 y escalado de texturas.", wasm: "El port nuevo: 60 fps, avance rápido real y sin firmware." };
+function paintCore(){ for (const b of document.querySelectorAll("#coreSeg button")) b.classList.toggle("on", b.dataset.c === CORE); $("coreHint").textContent = coreHints[CORE]; }
+for (const b of document.querySelectorAll("#coreSeg button")) b.onclick = () => { store.set("nds.core", b.dataset.c); location.search = (KEY ? "?k=" + KEY : ""); };
+paintCore();
+setupAspect();
+loadLibrary();
+
+const drop = $("drop");
+drop.ondragover = e => { e.preventDefault(); drop.classList.add("over"); };
+drop.ondragleave = () => drop.classList.remove("over");
+drop.ondrop = e => { e.preventDefault(); drop.classList.remove("over"); if (e.dataTransfer.files[0]) fromFile(e.dataTransfer.files[0]); };
+$("file").onchange = e => { if (e.target.files[0]) fromFile(e.target.files[0]); };
+async function fromFile(f){
+  const head = new Uint8Array(await f.slice(0, 0x20).arrayBuffer());
+  const code = String.fromCharCode(...head.slice(12, 16));
+  startGame({ url: URL.createObjectURL(f), name: f.name.replace(/\.(nds|zip|7z)$/i, ""), code, id: null, hasSav: false, file: f });
+}
+
+/* ---------- start emulator ---------- */
+function hash(s){ let h = 0; for (const c of s) h = (h * 31 + c.charCodeAt(0)) | 0; return Math.abs(h); }
+async function biosFiles(){
+  // ?fw=none (nada) | ?fw=gen (firmware generado, sin archivos de Nintendo) | ?fw=real (BIOS+firmware del servidor)
+  // Sin parámetro: el real si el servidor lo tiene; si no, el generado.
+  let mode = params.get("fw") || (params.get("bios") === "0" ? "none" : "auto");
+  if (mode === "none") return null;
+  const dirs = ["/", "/system/", "/home/web_user/retroarch/system/", "/home/web_user/retroarch/userdata/system/"];
+  if (mode !== "gen") {
+    try {
+      const ok = (await Promise.all(["bios7.bin", "bios9.bin", "firmware.bin"].map(n => fetch("/nds/api/bios/" + n, { method: "HEAD" }).then(r => r.ok)))).every(Boolean);
+      if (ok) {
+        const ext = {};
+        for (const d of dirs) for (const n of ["bios7.bin", "bios9.bin", "firmware.bin"]) ext[d + n] = location.origin + "/nds/api/bios/" + n;
+        return ext;
+      }
+    } catch {}
+    if (mode === "real") return null;
+  }
+  // firmware propio generado en el navegador; la BIOS libre (FreeBIOS) la pone el propio emulador
+  const url = URL.createObjectURL(new Blob([makeFirmware({ language: 5 })]));
+  const ext = {}; for (const d of dirs) ext[d + "firmware.bin"] = url;
+  return ext;
+}
+async function startGame(g){
+  current = g;
+  document.body.classList.add("playing");
+  $("changeGame").hidden = false;
+  if (g.id != null) UI.recent.add({ t: "nds", name: g.name });
+  status("Cargando juego…", "busy");
+  showBoot("Cargando " + (g.name || "el juego"), "Leyendo la ROM y preparando el emulador…", false, g.id != null ? q("/art/nds/" + g.id) : null);
+  document.title = g.name + " · Nintendo DS";
+  if (IS_WASM) { await startWasm(g); return; }
+  const bios = await biosFiles();
+  bootSub("Preparando el firmware y el emulador EmulatorJS…");
+  Object.assign(window, {
+    EJS_externalFiles: bios || {},
+    EJS_player: "#ejs", EJS_core: CORE, EJS_pathtodata: CDN, EJS_gameUrl: g.url, EJS_gameName: g.name,
+    EJS_gameID: hash(g.code + g.name), EJS_color: "#6c8cff", EJS_startOnLoaded: true, EJS_threads: !params.get("nothreads"),
+    EJS_backgroundColor: "#050b1b", EJS_volume: 0.8, EJS_netplayServer: location.origin, EJS_retroarchOpts: { video_font_enable: false, menu_enable_widgets: false, audio_sync: false },
+    EJS_netplayICEServers: [{ urls: "stun:stun.l.google.com:19302" }, { urls: "stun:stun1.l.google.com:19302" }],
+    EJS_defaultOptions: Object.assign({ "save-state-location": "browser" }, CORE === "melonds" ? { melonds_threaded_renderer: "enabled" } : {}, CORE === "desmume" ? { desmume_internal_resolution: store.get("nds.res") || "512x384" } : {}),
+    EJS_onGameStart: onGameStart,
+  });
+  const s = document.createElement("script"); s.src = CDN + "loader.js"; document.body.append(s);
+  // If the EmulatorJS CDN is blocked, explain it instead of leaving a black screen forever.
+  clearTimeout(window.__bootWatch);
+  window.__bootWatch = setTimeout(() => {
+    if (!window.EJS_emulator) showBoot("No se pudo iniciar EmulatorJS", "Comprueba la conexión: el reproductor se descarga de un CDN externo. También puedes probar el motor «melonDS WASM».", true);
+  }, 45000);
+}
+
+/* ---------- melonDS WASM engine (Phase 11) ---------- */
+async function startWasm(g){
+  status("Arrancando el emulador WASM…", "busy");
+  bootSub("Iniciando el motor WASM y descargando la ROM…");
+  const box = $("ejs");
+  box.textContent = "";
+  const canvas = document.createElement("canvas");
+  canvas.id = "wasmcanvas";
+  canvas.tabIndex = 0;
+  canvas.style.cssText = "width:100%;height:100%;display:block;image-rendering:pixelated;outline:none";
+  box.append(canvas);
+  const { createWebappEmulator } = await import(q("/nds/wasm/adapters/webapp-adapter.js"));
+  const adapter = await createWebappEmulator({
+    canvas,
+    container: document.querySelector(".screen"),
+    romUrl: g.url,
+    saveUrl: current && current.id != null ? q("/nds/api/sav/" + current.id) : null,
+    fetchSave: Boolean(current && current.hasSav),
+    firmware: params.get("fw") === "real" ? "real" : "none",
+    onStatus: (m) => console.debug("[wasm]", m),
+  }).catch((error) => {
+    // A ROM that does not fit in the wasm heap (the 512 MB one against the 1 GiB build) rejects with ROM_TOO_LARGE:
+    // say it in plain words instead of leaving the spinner running for ever (PROGRESO.md §10.6). The error is also
+    // left in window.__wasmLoadError so automated tests can fail fast instead of timing out.
+    window.__wasmLoadError = { code: error.code ?? "WASM_BOOT", message: String(error.message ?? error) };
+    status(
+      error.code === "ROM_TOO_LARGE"
+        ? "Este juego no cabe en la memoria del motor WASM actual (2 GiB). Abajo tienes un botón para jugarlo con el motor melonDS de siempre (más lento)."
+        : "No se pudo cargar el motor WASM: " + error.message,
+      "err",
+    );
+    showBoot(
+      "No se pudo cargar el juego",
+      error.code === "ROM_TOO_LARGE"
+        ? "Este juego necesita más memoria de la que tiene esta build (2 GiB). Puedes jugarlo con el motor melonDS de siempre."
+        : "Error del motor WASM: " + error.message,
+      true,
+      current && current.id != null ? q("/art/nds/" + current.id) : null,
+    );
+    // A game that cannot boot with the WASM engine is still playable with the EmulatorJS engine (the default one), so
+    // offer a one-click fallback instead of a dead end. Only for library games: a locally picked file cannot be reloaded.
+    if (g.id != null) {
+      const fallback = document.createElement("button");
+      fallback.id = "wasmFallback";
+      fallback.className = "btn primary";
+      fallback.textContent = "Jugar con el motor melonDS (EmulatorJS)";
+      fallback.style.cssText = "margin-top:10px";
+      fallback.onclick = () => {
+        store.set("nds.core", "melonds");
+        location.href = q("/nds/?core=melonds&play=" + g.id);
+      };
+      bootEl.querySelector(".boot-info").append(fallback);
+    }
+    return null; // do not re-throw: the message above is the user-facing error and a rejection would only log noise
+  });
+  if (!adapter) return; // the status bar already explains why (failed to boot)
+  window.EJS_emulator = adapter;
+  adapter.melonDS.on("error", (error) => status("Error del emulador: " + error.message, "err"));
+  await onGameStart();
+  canvas.focus();
+  status("Jugando", "ok");
+}
+
+/* ---------- once the game runs ---------- */
+let ejs, gm;
+async function onGameStart(){
+  clearTimeout(window.__bootWatch);
+  hideBoot();
+  $("fpsBadge").hidden = false;
+  ejs = window.EJS_emulator; gm = ejs.gameManager;
+  applyAspect();
+  status("Jugando", "ok");
+  setupControls(); setupTouchPad(); setupImage(); setupGameTab(); setupBench(); setupTune(); setupOnline();
+  await loadCheats();
+}
+
+function setupControls(){
+  $("remap").onclick = () => clickBar(/control|gamepad|mando/i);
+  $("pause").onclick = () => {
+    const p = !ejs.paused; p ? ejs.pause() : ejs.play();
+    $("pause").classList.toggle("on", p); setIcon($("pause"), p ? "play" : "pause"); setLbl($("pause"), p ? "Reanudar" : "Pausa");
+    $("pause").title = $("pause").ariaLabel = p ? "Reanudar" : "Pausa";
+    status(p ? "Pausado" : "Jugando", "ok");
+  };
+  const SPEEDS = [1, 2, 3, 0]; let spd = 0; // 0 = sin límite
+  // ONE place for speed + audio: the speed button. Above 2x the audio is muted by design, so the badge turns into a
+  // muted-speaker chip and the tooltip explains it; the toast says it once per visit instead of nagging.
+  let explainedMute = false;
+  const speedUI = (r) => {
+    const label = r === 0 ? "Máx" : r === 1 ? "1x" : "x" + r;
+    const muted = r === 0 || r > 2; // the port keeps audio up to 2x; above that it is muted (see PROGRESO §10)
+    const tag = $("spdTag");
+    tag.innerHTML = label + (muted ? UI.icon("mute", "sm").replace('class="i sm"', 'class="i" style="width:12px;height:12px;margin-left:3px"') : "");
+    tag.classList.toggle("muted", muted);
+    $("ff").classList.toggle("on", r !== 1);
+    const tip = `Velocidad ${label}${muted ? " · sin audio por encima de 2x" : r === 1 ? "" : " · con audio"}`;
+    $("ff").title = tip; $("ff").setAttribute("aria-label", tip);
+    return { label, muted };
+  };
+  speedUI(1);
+  let limiter = null, loopPaused = false;
+  const stopLimiter = () => { clearInterval(limiter); limiter = null; if (loopPaused) { try { ejs.Module.resumeMainLoop(); } catch {} loopPaused = false; } };
+  const startLimiter = target => {
+    // el bucle se libera de la pantalla (vsync off) y aquí lo frenamos a 60·N fotogramas por segundo
+    stopLimiter();
+    let t0 = performance.now(), f0 = gm.getFrameNum();
+    limiter = setInterval(() => {
+      if (ejs.paused || loopPaused) return;
+      const now = performance.now(), f = gm.getFrameNum(), ahead = f - (f0 + (now - t0) / 1000 * target);
+      if (now - t0 > 3000) { t0 = now; f0 = f; }
+      if (ahead > 1) {
+        loopPaused = true; try { ejs.Module.pauseMainLoop(); } catch {}
+        setTimeout(() => { try { ejs.Module.resumeMainLoop(); } catch {} loopPaused = false; }, Math.min(100, ahead / target * 1000));
+      }
+    }, 6);
+  };
+  $("ff").onclick = () => {
+    spd = (spd + 1) % SPEEDS.length; const r = SPEEDS[spd];
+    if (IS_WASM) {
+      // The port has its own pacing (audio clock): ask for the exact multiplier. Going through setFastForwardRatio(0)
+      // + toggleFastForward (the EmulatorJS recipe) turned x2 into "unlimited", which mutes the audio.
+      ejs.melonDS.setSpeed(r);
+    } else if (spd === 0) { stopLimiter(); ejs.isFastForward = false; gm.toggleFastForward(0); gm.setVSync(1); }
+    else {
+      gm.setVSync(0); gm.setFastForwardRatio(0); ejs.isFastForward = true; gm.toggleFastForward(1);
+      r === 0 ? stopLimiter() : startLimiter(60 * r);
+    }
+    const ui = speedUI(r);
+    if (ui.muted && !explainedMute) { explainedMute = true; toast(`Velocidad ${ui.label} · el audio se silencia por encima de 2x`, 2600); }
+    buzz();
+  };
+  // live speed readout so slowdowns are visible
+  let lastF = gm.getFrameNum(), lastT = performance.now();
+  setInterval(() => {
+    const f = gm.getFrameNum(), t = performance.now(), fps = (f - lastF) / ((t - lastT) / 1000); lastF = f; lastT = t;
+    if (!ejs.paused) $("fpsBadge").textContent = "FPS: " + Math.round(fps);
+  }, 1000);
+  $("shot").onclick = () => { try { ejs.screenshot((blob) => { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = (current.name || "ds") + ".png"; a.click(); }); } catch { toast("No se pudo capturar"); } };
+  // Fullscreen: on the WASM engine fullscreen the whole console (screen + toolbar + on-screen pad) instead of only the
+  // canvas, so the mobile controls stay reachable in fullscreen. EmulatorJS keeps its own fullscreen UI.
+  const fullscreenTarget = () => $("consoleBox");
+  const setFullscreen = (want) => {
+    if (IS_WASM) {
+      if (want && !document.fullscreenElement) fullscreenTarget().requestFullscreen?.().catch(() => toast("El navegador no permite pantalla completa aquí"));
+      else if (!want && document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
+    } else ejs.toggleFullscreen(want);
+  };
+  $("full").onclick = () => setFullscreen(!document.fullscreenElement);
+  // In fullscreen the one action bar floats over the game and hides itself; any touch or mouse move brings it back.
+  let barT = null;
+  const bar = $("actions");
+  const showBar = () => {
+    if (!document.body.classList.contains("fs")) return;
+    bar.classList.add("show"); clearTimeout(barT);
+    barT = setTimeout(() => { const hovering = matchMedia("(hover:hover)").matches && bar.matches(":hover"); if (!hovering) bar.classList.remove("show"); }, 3200);
+  };
+  for (const ev of ["pointerdown", "pointermove", "keydown"]) document.addEventListener(ev, showBar, { passive: true });
+  document.addEventListener("fullscreenchange", () => {
+    const active = !!document.fullscreenElement;
+    document.body.classList.toggle("fs", active);
+    if (active && IS_WASM) $("touchpad").classList.add("show");
+    setLbl($("full"), active ? "Salir" : "Pantalla completa"); setIcon($("full"), active ? "shrink" : "expand");
+    $("full").title = $("full").ariaLabel = active ? "Salir de pantalla completa" : "Pantalla completa";
+    bar.classList.toggle("show", active); if (active) showBar();
+  });
+  // Menu = bottom sheet on phones (scrim + panel.open), side column on desktop.
+  const panel = $("panel"), scrim = $("panelScrim");
+  const openPanel = (on) => { panel.classList.toggle("open", on); scrim.classList.toggle("open", on); };
+  $("panelBtn").onclick = () => openPanel(!panel.classList.contains("open"));
+  $("panelClose").onclick = scrim.onclick = () => openPanel(false);
+  addEventListener("keydown", (e) => { if (e.key === "Escape" && panel.classList.contains("open")) openPanel(false); });
+  $("vol").oninput = e => { const v = +e.target.value; ejs.setVolume(v / 100); $("volLabel").textContent = v + "%"; };
+}
+/* ---------- on-screen controls: mobile / touch (WASM engine) ---------- */
+function setupTouchPad(){
+  const pad = $("touchpad"), toggle = $("tpadBtn");
+  const coarse = window.matchMedia?.("(pointer:coarse)").matches;
+  if (coarse) pad.classList.add("show");
+  toggle.hidden = !IS_WASM; // EmulatorJS brings its own virtual gamepad
+  toggle.onclick = () => pad.classList.toggle("show");
+  if (!IS_WASM) { pad.classList.remove("show"); return; }
+  // A first touch anywhere also unlocks the AudioContext (the adapter needs a user gesture).
+  document.addEventListener("pointerdown", () => ejs.melonDS.unlockAudio().catch(() => {}), { once: true, capture: true });
+  for (const b of pad.querySelectorAll(".key[data-b]")) {
+    const name = b.dataset.b;
+    b.addEventListener("pointerdown", e => {
+      e.preventDefault();
+      b.setPointerCapture?.(e.pointerId);
+      b.classList.add("active");
+      buzz();
+      ejs.melonDS.button(name, true);
+    });
+    for (const ev of ["pointerup", "pointercancel", "lostpointercapture"])
+      b.addEventListener(ev, () => { b.classList.remove("active"); ejs.melonDS.button(name, false); });
+  }
+  // SELECT/START as side pills over the screen (like WatermelonDS), only for the WASM engine.
+  if (IS_WASM) {
+    for (const [id, name] of [["selBtn", "SELECT"], ["startBtn", "START"]]) {
+      const b = $(id);
+      if (!b) continue;
+      b.addEventListener("pointerdown", (e) => { e.preventDefault(); b.setPointerCapture?.(e.pointerId); b.classList.add("active"); buzz(); ejs.melonDS.button(name, true); });
+      for (const ev of ["pointerup", "pointercancel", "lostpointercapture"]) b.addEventListener(ev, () => { b.classList.remove("active"); ejs.melonDS.button(name, false); });
+    }
+  } else {
+    for (const id of ["selBtn", "startBtn"]) { const b = $(id); if (b) b.style.display = "none"; }
+  }
+}
+function clickBar(re){
+  const btns = [...document.querySelectorAll("#ejs .ejs_menu_button")];
+  const b = btns.find(x => re.test(x.textContent + " " + (x.title || "") + " " + (x.getAttribute("aria-label") || "")));
+  if (b) b.click(); else toast("Usa el menú del juego para configurarlo");
+}
+
+
+/* ---------- image filters ---------- */
+const FILTERS = [["disabled","Ninguno (píxel nítido)"],["bicubic","Suavizado bicúbico"],["sabr","SABR (bordes suaves)"],["2xScaleHQ.glslp","Escala HQ x2"],["4xScaleHQ.glslp","Escala HQ x4"],["crt-zfast","LCD / CRT ligero"],["crt-aperture.glslp","CRT apertura"],["crt-easymode.glslp","CRT easymode"],["crt-geom.glslp","CRT curvo"],["crt-lottes","CRT Lottes"],["crt-mattias.glslp","CRT Mattias"],["crt-beam","CRT haz"],["crt-caligari","CRT Caligari"],["mix-frames","Mezclar cuadros"]];
+function setupImage(){
+  const sel = $("filter");
+  // The WASM port has its own GLSL filters (js/filters.js, names from ejs.filterList); EmulatorJS has its RetroArch shaders.
+  const wasmHints = { disabled: "Píxel nítido, sin procesar" };
+  if (IS_WASM) { sel.add(new Option("Ninguno (píxel nítido)", "disabled")); for (const f of ejs.filterList) { sel.add(new Option(f.name, f.id)); wasmHints[f.id] = f.hint; } }
+  else for (const [v, n] of FILTERS) if (v === "disabled" || ejs.shaders[v]) sel.add(new Option(n, v));
+  const FKEY = IS_WASM ? "nds.filter.wasm" : "nds.filter";
+  const applyFilter = (id) => {
+    const ok = ejs.enableShader(id);
+    if (IS_WASM) { if (ok === false) { sel.value = "disabled"; store.set(FKEY, "disabled"); toast("Tu navegador no puede usar este filtro"); } $("fltHint").textContent = wasmHints[sel.value] || ""; }
+  };
+  const saved = store.get(FKEY) || "disabled"; sel.value = [...sel.options].some((o) => o.value === saved) ? saved : "disabled";
+  if (sel.value !== "disabled") applyFilter(sel.value); else if (IS_WASM) $("fltHint").textContent = wasmHints.disabled;
+  sel.onchange = () => { applyFilter(sel.value); store.set(FKEY, sel.value); };
+  $("gap").oninput = e => {
+    gm.setVariable(OPT.gap, e.target.value);
+    $("gapLabel").textContent = e.target.value + " px";
+    aspectState.gap = +e.target.value;
+    saveAspect();
+    if ($("aspectGap")) { $("aspectGap").value = e.target.value; $("aspectGapLabel").textContent = e.target.value + " px"; }
+  };
+  $("hybrid").onchange = e => gm.setVariable("melonds_hybrid_small_screen", e.target.value);
+  if (CORE === "desmume") {
+    $("hybRow").hidden = true; $("resRow").hidden = false; $("texRow").hidden = false;
+    $("res").value = store.get("nds.res") || "512x384";
+    $("res").onchange = e => { gm.setVariable("desmume_internal_resolution", e.target.value); store.set("nds.res", e.target.value); };
+    $("tex").value = store.get("nds.tex") || "1"; if ($("tex").value !== "1") gm.setVariable("desmume_gfx_texture_scaling", $("tex").value);
+    $("tex").onchange = e => { gm.setVariable("desmume_gfx_texture_scaling", e.target.value); store.set("nds.tex", e.target.value); };
+  }
+}
+
+/* ---------- speed benchmark (to see what the machine can really do) ---------- */
+function setupBench(){
+  $("bench").onclick = async () => {
+    const b = $("bench"); b.disabled = true; const out = [];
+    const fps = async ms => { const a = gm.getFrameNum(), t = performance.now(); await sleep(ms); return ((gm.getFrameNum() - a) / ((performance.now() - t) / 1000)).toFixed(0); };
+    const set = async (vs, ff) => { gm.setVSync(vs); gm.setFastForwardRatio(ff === 0 ? 0 : ff); gm.toggleFastForward(ff === null ? 0 : 1); await sleep(600); };
+    try {
+      await set(1, null); out.push("normal: " + await fps(3000));
+      await set(0, null); out.push("sin vsync: " + await fps(3000));
+      await set(0, 0); out.push("sin vsync + FF máx: " + await fps(3000));
+      await set(1, 3); out.push("con vsync + FF x3: " + await fps(3000));
+    } finally { await set(1, null); b.disabled = false; }
+    const txt = out.join(" · ") + " · hilos: " + (ejs.config.threads ? "sí" : "no") + " · CPU: " + navigator.hardwareConcurrency;
+    $("benchOut").textContent = txt; try { await navigator.clipboard.writeText(txt); toast("Resultado copiado"); } catch {}
+  };
+}
+
+/* ---------- what slows the emulator down? ---------- */
+function setupTune(){
+  $("tune").onclick = async () => {
+    const b = $("tune"); b.disabled = true; const out = [];
+    const fps = async ms => { const a = gm.getFrameNum(), t = performance.now(); await sleep(ms); return Math.round((gm.getFrameNum() - a) / ((performance.now() - t) / 1000)); };
+    const cv = document.querySelector("#ejs canvas"), vol = +$("vol").value;
+    const run = async (label, on, off) => { try { on && on(); await sleep(700); out.push(label + ": " + await fps(3000)); } catch (e) { out.push(label + ": error"); } finally { try { off && off(); } catch {} await sleep(300); } };
+    const sv = (k, v) => gm.setVariable(k, v);
+    try {
+      await run("ahora", null, null);
+      await run("sin hilos de render", () => sv("melonds_threaded_renderer", "disabled"), () => sv("melonds_threaded_renderer", "enabled"));
+      await run("solo pantalla superior", () => sv("melonds_screen_layout", "Top Only"), () => sv("melonds_screen_layout", "Top/Bottom"));
+      await run("sin audio", () => ejs.setVolume(0), () => ejs.setVolume(vol / 100));
+      await run("lienzo oculto", () => { cv.style.visibility = "hidden"; }, () => { cv.style.visibility = ""; });
+      await run("lienzo pequeño", () => { cv.style.width = "256px"; cv.style.height = "384px"; }, () => { cv.style.width = ""; cv.style.height = ""; });
+    } finally { b.disabled = false; }
+    const txt = out.join(" · "); $("tuneOut").textContent = txt; try { await navigator.clipboard.writeText(txt); toast("Resultado copiado"); } catch {}
+  };
+}
+
+/* ---------- game tab ---------- */
+function setupGameTab(){
+  if (CORE === "melonds" && /^[ICA][PR]/.test(current.code)) { $("errTip").hidden = false; $("swCore").onclick = () => { store.set("nds.core", "desmume"); location.href = location.pathname + location.search.replace(/[?&]core=[^&]*/, ""); }; }
+  $("qs").onclick = () => toast(gm.quickSave("1") ? "Estado guardado" : "No se pudo guardar");
+  $("ql").onclick = () => { try { gm.quickLoad("1"); toast("Estado cargado"); } catch { toast("Aún no hay estado guardado"); } };
+  $("reset").onclick = () => { if (confirm("¿Reiniciar el juego?")) gm.restart(); };
+  $("expSav").onclick = () => {
+    const s = gm.getSaveFile(); if (!s) return toast("Aún no hay partida guardada");
+    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([s])); a.download = (current.name || "partida") + ".sav"; a.click();
+  };
+  const importSav = async bytes => {
+    gm.FS.writeFile(gm.getSaveFilePath(), bytes); gm.loadSaveFiles(); await sleep(200); gm.restart(); toast("Partida cargada");
+  };
+  $("impSav").onchange = async e => { const f = e.target.files[0]; if (f) importSav(new Uint8Array(await f.arrayBuffer())); };
+  if (current.hasSav) {
+    $("libSavRow").hidden = false;
+    $("libSav").onclick = async () => { try { importSav(new Uint8Array(await (await fetch(q("/nds/api/sav/" + current.id))).arrayBuffer())); } catch { toast("No se pudo leer el .sav"); } };
+  }
+}
+
+/* ---------- cheats ---------- */
+let cheatData = null, enabled = new Set(), nextIdx = 0;
+const idxOf = new Map();       // cheat uid -> retroarch index
+const cheatKey = () => "nds.cheats." + current.code + "." + current.name;
+const uidOf = (ci, i) => ci + ":" + i;
+async function loadCheats(){
+  const has = !!CHEAT_GAMES[current.code];
+  if (has) { try { cheatData = await (await fetch("cheats/" + current.code + ".json")).json(); } catch {} }
+  if (!cheatData) {
+    $("groups").innerHTML = '<div class="empty">No tengo trucos para este juego todavía.<br>Los hay para Pokémon Platino, SoulSilver, Negra y Negra 2 (ediciones en español).</div>';
+    $("q").hidden = true; $("cheatNote").hidden = true; $("cheatHint").hidden = true; return;
+  }
+  $("cheatHint").textContent = cheatData.categories.reduce((a, c) => a + c.cheats.length, 0) + " trucos para " + cheatData.title + ". Empiezan desactivados y se activan al instante.";
+  store.set(cheatKey(), "[]"); // los trucos empiezan siempre desactivados: aplicarlos durante el arranque puede romper el juego
+  renderCheats();
+}
+function cheatOf(uid){ const [ci, i] = uid.split(":"); return cheatData.categories[ci].cheats[i]; }
+function applyCheat(uid, on){
+  if (!idxOf.has(uid)) idxOf.set(uid, nextIdx++);
+  try { gm.setCheat(idxOf.get(uid), on ? 1 : 0, cheatOf(uid).c); } catch (e) { console.warn(e); }
+}
+function toggleCheat(uid){
+  const on = !enabled.has(uid);
+  on ? enabled.add(uid) : enabled.delete(uid);
+  applyCheat(uid, on);
+  store.set(cheatKey(), JSON.stringify([...enabled]));
+  renderCheats();
+}
+const openCats = new Set();
+function renderCheats(){
+  const query = norm($("q").value.trim());
+  const root = $("groups"); root.textContent = "";
+  cheatData.categories.forEach((cat, ci) => {
+    const items = cat.cheats.map((c, i) => ({ c, i })).filter(x => !query || norm(x.c.n + " " + (x.c.e || "") + " " + cat.name + " " + (cat.en || "")).includes(query));
+    if (!items.length) return;
+    const open = query ? true : openCats.has(ci);
+    const onN = cat.cheats.filter((_, i) => enabled.has(uidOf(ci, i))).length;
+    const el = document.createElement("div"); el.className = "grp" + (open ? " open" : "");
+    const head = document.createElement("button");
+    head.innerHTML = '<span class="t"></span><span class="chev">▸</span>';
+    head.firstChild.textContent = cat.name.replace(/ Codes?$/i, "");
+    head.firstChild.insertAdjacentHTML("beforeend", `<small>${query ? items.length + " resultados" : cat.cheats.length}${onN ? " · " + onN + " activo" + (onN > 1 ? "s" : "") : ""}</small>`);
+    head.onclick = () => { openCats.has(ci) ? openCats.delete(ci) : openCats.add(ci); renderCheats(); };
+    el.append(head);
+    if (open) {
+      const body = document.createElement("div"); body.className = "body";
+      const list = document.createElement("div"); list.className = "list";
+      for (const { c, i } of items.slice(0, 200)) {
+        const uid = uidOf(ci, i), on = enabled.has(uid);
+        const row = document.createElement("div"); row.className = "row" + (on ? " on" : "");
+        row.innerHTML = '<div class="n"></div><button class="sw" role="switch"></button>';
+        row.firstChild.textContent = c.n;
+        const sw = row.lastChild; sw.setAttribute("aria-checked", on); sw.setAttribute("aria-label", c.n);
+        row.onclick = () => toggleCheat(uid);
+        list.append(row);
+      }
+      body.append(list); el.append(body);
+    }
+    root.append(el);
+  });
+  if (!root.children.length) root.innerHTML = '<div class="empty">Sin resultados</div>';
+  const c = $("cheatCount"); c.hidden = !enabled.size; c.textContent = enabled.size;
+  $("activeBar").classList.toggle("show", enabled.size > 0);
+  const chips = $("chips"); chips.textContent = "";
+  for (const uid of enabled) {
+    const ch = document.createElement("span"); ch.className = "chip";
+    ch.innerHTML = "<span></span><button aria-label='Desactivar'>×</button>"; ch.firstChild.textContent = cheatOf(uid).n;
+    ch.lastChild.onclick = () => toggleCheat(uid);
+    chips.append(ch);
+  }
+}
+$("q").oninput = () => cheatData && renderCheats();
+$("offAll").onclick = () => { for (const u of [...enabled]) { enabled.delete(u); applyCheat(u, false); } store.set(cheatKey(), "[]"); renderCheats(); };
+
+/* ---------- online ---------- */
+let publicUrl = "";
+async function setupOnline(){
+  try { publicUrl = (await (await fetch("/nds/api/public")).json()).url || ""; } catch {}
+  if (IS_WASM) { setupOnlineWasm(); return; } // Phase 12: our own WebRTC host instead of ejs.netplay
+  const np = ejs.netplay;
+  $("playerName").value = store.get("nds.player") || "Entrenador";
+  $("openRoom").onclick = async () => {
+    const name = $("roomName").value.trim() || "Sala", pn = $("playerName").value.trim() || "Entrenador";
+    store.set("nds.player", pn);
+    np.name = pn;
+    try { np.openRoom(name, +$("maxPl").value, $("roomPw").value); } catch (e) { toast("No se pudo crear la sala"); return; }
+    for (let i = 0; i < 40 && !np.connected && !np.owner; i++) await sleep(100);
+    await sleep(600);
+    liveUI(true);
+  };
+  $("closeRoom").onclick = () => { try { np.leaveRoom(); } catch {} liveUI(false); };
+  $("copyInvite").onclick = async () => { try { await navigator.clipboard.writeText($("inviteUrl").value); toast("Enlace copiado"); } catch { $("inviteUrl").select(); } };
+  // guests can also use the touch screen: map their taps onto our canvas
+  const hookSocket = () => {
+    const s = np.socket; if (!s || s.__ndsHooked) return false; s.__ndsHooked = true;
+    s.on("data-message", d => { if (d && d.touch) remoteTouch(d.touch); });
+    s.on("users-updated", u => renderPlayers(u));
+    return true;
+  };
+  setInterval(hookSocket, 500);
+}
+function liveUI(on, host){
+  $("hostIdle").hidden = on; $("hostLive").hidden = !on;
+  if (!on) return;
+  const np = ejs.netplay;
+  const sid = host ? host.sessionid : np?.extra && np.extra.sessionid;
+  const roomName = host ? host.name : np?.extra ? np.extra.room_name : "";
+  const base = publicUrl || location.origin;
+  $("inviteUrl").value = base + "/nds/join.html?room=" + encodeURIComponent(sid || "");
+  $("liveInfo").innerHTML = "Sala <b></b> abierta. " + (publicUrl ? "Comparte el enlace con tus amigos." : "Aviso: abre esta página con el enlace público para que tus amigos puedan entrar.");
+  $("liveInfo").querySelector("b").textContent = roomName;
+  status("Sala abierta", "ok");
+}
+
+/* ---------- Phase 12: WebRTC host on the WASM engine (adapters/netplay-host.js) ---------- */
+let netplayHost = null;
+function setupOnlineWasm(){
+  $("playerName").value = store.get("nds.player") || "Entrenador";
+  $("openRoom").textContent = "Crear sala";
+  $("openRoom").disabled = false;
+  const closeRoom = async () => { if (netplayHost) { await netplayHost.leave().catch(() => {}); netplayHost = null; } liveUI(false); };
+  $("openRoom").onclick = async () => {
+    if (netplayHost) return;
+    const roomName = $("roomName").value.trim() || "Sala", player = $("playerName").value.trim() || "Entrenador";
+    store.set("nds.player", player);
+    $("openRoom").disabled = true;
+    try {
+      const { createNetplayHost } = await import(q("/nds/wasm/adapters/netplay-host.js"));
+      netplayHost = await createNetplayHost({
+        ds: ejs.melonDS,
+        canvas: document.querySelector("#ejs canvas"),
+        key: KEY,
+        serverUrl: location.origin,
+        roomName,
+        playerName: player,
+        maxPlayers: +$("maxPl").value,
+        password: $("roomPw").value,
+        gameId: current ? hash(current.code + current.name) : 0,
+        gameName: current ? current.name : "",
+        onPlayers: (users) => renderPlayers(users),
+        onGuestJoined: () => toast("Un amigo se ha conectado"),
+        onGuestLeft: () => toast("Un amigo ha salido"),
+        onError: (error) => console.warn("[netplay]", error),
+      });
+      liveUI(true, netplayHost);
+    } catch (error) {
+      toast("No se pudo crear la sala: " + error.message);
+      $("openRoom").disabled = false;
+    }
+  };
+  $("closeRoom").onclick = closeRoom;
+  $("copyInvite").onclick = async () => { try { await navigator.clipboard.writeText($("inviteUrl").value); toast("Enlace copiado"); } catch { $("inviteUrl").select(); } };
+  addEventListener("pagehide", () => { netplayHost?.leave?.().catch(() => {}); });
+}
+function renderPlayers(u){
+  const box = $("players"); box.textContent = "";
+  for (const k of Object.keys(u || {})) { const c = document.createElement("span"); c.className = "chip"; c.innerHTML = "<span></span>"; c.firstChild.textContent = u[k].player_name || "Jugador"; box.append(c); }
+}
+let touching = false;
+function remoteTouch(t){
+  const cv = ejs.canvas || document.querySelector("#ejs canvas"); if (!cv) return;
+  const r = cv.getBoundingClientRect();
+  const x = r.left + Math.min(Math.max(t.x, 0), 1) * r.width, y = r.top + Math.min(Math.max(t.y, 0), 1) * r.height;
+  const mk = type => new MouseEvent(type, { clientX: x, clientY: y, screenX: x, screenY: y, bubbles: true, cancelable: true, view: window, buttons: type === "mouseup" ? 0 : 1, button: 0 });
+  if (t.s === "down") { cv.dispatchEvent(mk("mousemove")); cv.dispatchEvent(mk("mousedown")); touching = true; }
+  else if (t.s === "move" && touching) cv.dispatchEvent(mk("mousemove"));
+  else if (t.s === "up") { cv.dispatchEvent(mk("mouseup")); touching = false; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+/* Emerald Web · reproductor compartido (NDS + GBA): pantalla, barra de acciones única, pad táctil, carga, menú como hoja
+   inferior y pantalla completa. Usa los tokens de ui.css. */
+:root { --pad-bg: rgba(118,128,148,.62); --pad-fg: #f1f5ff; --pad-active: rgba(210,220,240,.92); --pad-scale: 1; --frame-bg: #0b0a0d; }
+/* ---------- escenario ---------- */
+#stage { display: none; grid-template-columns: minmax(0,1fr) 400px; gap: 20px; align-items: start; }
+body.playing #stage { display: grid; }
+body.playing #library { display: none; }
+.console { position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: 22px; padding: 14px; box-shadow: var(--shadow); }
+.screen { position: relative; border-radius: 14px; overflow: hidden; background: var(--frame-bg); height: min(78vh, 860px); min-height: 420px; }
+#ejs { position: absolute; inset: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+#ejs .ejs_menu_bar, #ejs .ejs_menu_bar_hidden { display: none !important; }
+
+/* FPS: un único indicador, arriba a la derecha */
+.fps-badge { position: absolute; right: 10px; top: calc(8px + var(--safe-t)); z-index: 7; padding: 5px 10px; border-radius: 9px; background: rgba(11,10,13,.55); border: 1px solid rgba(255,255,255,.14); color: #f6f5f3; font: 700 .72rem/1 var(--mono); backdrop-filter: blur(8px); pointer-events: none; }
+/* SELECT / START laterales (píldoras sobre la pantalla) */
+.screen-side { display: none; position: absolute; top: 50%; transform: translateY(-50%); z-index: 8; min-width: 64px; height: 36px; padding: 0 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,.16); background: var(--pad-bg); color: var(--pad-fg); font: 700 .62rem/1 var(--mono); letter-spacing: .06em; backdrop-filter: blur(6px); touch-action: manipulation; cursor: pointer; }
+.side-l { left: max(6px, var(--safe-l)); } .side-r { right: max(6px, var(--safe-r)); }
+.screen-side:active, .screen-side.active { background: var(--pad-active); color: #0a1020; }
+
+/* ---------- barra de acciones: UNA sola para todos los contextos ---------- */
+.actions { display: flex; gap: 8px; margin-top: 12px; align-items: center; justify-content: center; flex-wrap: wrap; }
+.actions .iconbtn { width: auto; min-width: 44px; height: 44px; padding: 0 12px; gap: 8px; display: inline-flex; align-items: center; justify-content: center; border-radius: 22px; }
+.actions .lbl { display: none; font-weight: 600; font-size: .86rem; }
+.actions .iconbtn .tag-s { right: -4px; bottom: -4px; }
+@media (min-width: 981px) { .actions .lbl { display: inline; } .actions .iconbtn .tag-s { position: static; margin-left: 2px; } }
+.mobileOnly { display: none !important; }
+
+/* ---------- controles táctiles ---------- */
+.pad2 { display: none; justify-content: space-between; align-items: center; gap: 10px; margin-top: 12px; user-select: none; -webkit-user-select: none; touch-action: none; transform: scale(var(--pad-scale)); transform-origin: bottom center; }
+.pad2.show { display: flex; }
+body.lefty .pad2 { flex-direction: row-reverse; }
+.pad2 .dpad { display: grid; grid-template-columns: repeat(3, 52px); grid-template-rows: repeat(3, 52px); gap: 4px; }
+.pad2 .key { border: 1px solid rgba(255,255,255,.12); background: var(--pad-bg); color: var(--pad-fg); border-radius: 14px; font-weight: 700; display: grid; place-items: center; touch-action: none; cursor: pointer; font: inherit; font-size: .95rem; box-shadow: 0 3px 10px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.08); backdrop-filter: blur(5px); }
+.pad2 .key:active, .pad2 .key.active { background: var(--pad-active); color: #0a1020; box-shadow: 0 0 0 2px rgba(255,255,255,.25), 0 0 16px rgba(220,230,255,.35); }
+.pad2 .ab { --k: 52px; position: relative; width: calc(var(--k) * 2.7); height: calc(var(--k) * 2.2); }
+.pad2 .ab .key { position: absolute; width: var(--k); height: var(--k); border-radius: 50%; }
+.ab .kx { left: 50%; top: 0; transform: translateX(-50%); } .ab .kb { left: 50%; bottom: 0; transform: translateX(-50%); }
+.ab .ky { left: 0; top: 50%; transform: translateY(-50%); } .ab .ka { right: 0; top: 50%; transform: translateY(-50%); }
+.pad2 .mid { display: flex; flex-direction: column; gap: 6px; }
+.pad2 .mid .key { width: 70px; height: 44px; border-radius: 999px; font-size: .62rem; }
+.pad2 .sh { display: flex; gap: 6px; margin-bottom: 8px; }
+.pad2 .sh .key { width: 72px; height: 44px; font-size: .8rem; border-radius: 999px; }
+body.hide-fps .fps-badge { display: none !important; }
+body.hide-side .screen-side { display: none !important; }
+body.hide-pad .pad2 { display: none !important; }
+
+/* ---------- carga: una sola experiencia ---------- */
+.boot { position: absolute; inset: 0; z-index: 40; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #0b0a0d; color: #f6f5f3; border-radius: inherit; }
+.boot-bg { position: absolute; inset: -30px; background-size: cover; background-position: center; filter: blur(26px) brightness(.42) saturate(1.15); transform: scale(1.08); }
+.boot::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,10,13,.35), rgba(11,10,13,.9)); }
+.boot-body { position: relative; z-index: 1; display: flex; align-items: center; gap: 20px; padding: 24px; width: min(640px, 92vw); }
+.boot-cover { width: min(170px, 40vw); aspect-ratio: 1/1; border-radius: 16px; overflow: hidden; background: #1e1d24; box-shadow: 0 20px 60px rgba(0,0,0,.6); display: grid; place-items: center; flex: 0 0 auto; padding: 6px; }
+.boot-cover img { width: 100%; height: 100%; object-fit: contain; display: block; border-radius: 10px; }
+.boot-noart { font-size: 2.4rem; font-weight: 800; color: #b3b1bd; letter-spacing: .06em; }
+.boot-info { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.boot-chip { align-self: flex-start; padding: 4px 8px; border-radius: 7px; background: #f6f5f3; color: #141317; font: 800 .66rem/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.boot-info h2 { margin: 0; font-size: clamp(1.15rem, 4.4vw, 1.8rem); line-height: 1.15; }
+#bootDev { color: #b3b1bd; font-size: .78rem; font-family: var(--mono); }
+#bootSub { color: #d6d4dc; font-size: .84rem; line-height: 1.35; min-height: 2.1em; }
+.boot-bar { width: min(260px, 64vw); height: 4px; border-radius: 999px; background: rgba(255,255,255,.14); overflow: hidden; margin-top: 4px; }
+.boot-bar i { display: block; width: 35%; height: 100%; background: linear-gradient(90deg, transparent, var(--accent), transparent); animation: bootbar 1.2s infinite; }
+.boot.err .boot-bar { display: none; }
+.boot.err .boot-info h2 { color: #ffb3b3; }
+@keyframes bootbar { 0% { transform: translateX(-120%); } 100% { transform: translateX(320%); } }
+@media (max-width: 520px) { .boot-body { flex-direction: column; text-align: center; align-items: center; } .boot-chip { align-self: center; } }
+
+/* ---------- panel / menú ---------- */
+.panel { position: sticky; top: 12px; max-height: calc(100vh - 24px); }
+.panel-head { display: flex; align-items: center; }
+.panel-head .tabs { flex: 1; min-width: 0; }
+.panel-close { display: none; }
+.grab { display: none; }
+#panelScrim { display: none; }
+
+/* ---------- escritorio estrecho y móvil: pantalla + controles en el mismo viewport ---------- */
+@media (max-width: 980px) {
+  #stage { grid-template-columns: 1fr; }
+  .panel { position: static; max-height: none; }
+  .screen { height: min(70vh, 720px); }
+  .mobileOnly { display: inline-flex !important; }
+  body.playing { overflow: hidden; height: 100dvh; background: var(--frame-bg); }
+  body.playing .topbar { display: none; }
+  body.playing main { padding: 0; max-width: none; }
+  body.playing #stage { display: block; height: 100dvh; }
+  body.playing .console { height: 100dvh; border: 0; border-radius: 0; padding: 0; display: flex; flex-direction: column; background: var(--frame-bg); box-shadow: none; }
+  body.playing .screen { flex: 1 1 auto; height: auto; min-height: 0; border-radius: 0; }
+  body.playing .actions { margin: 0; padding: 8px max(10px, var(--safe-r)) 8px max(10px, var(--safe-l)); background: var(--frame-bg); border-top: 1px solid var(--line); flex: 0 0 auto; flex-wrap: nowrap; }
+  body.playing .actions .iconbtn { background: var(--pad-bg); color: var(--pad-fg); border-color: rgba(255,255,255,.14); backdrop-filter: blur(6px); }
+  body.playing .actions .iconbtn:active { background: var(--pad-active); color: #0a1020; }
+  body.playing .actions .iconbtn.on { background: var(--accent); color: var(--accent-ink); }
+  body.playing .screen-side { display: block; }
+  body.playing .pad2 .mid { display: none; }
+  body.playing .pad2 { margin: 0; padding: 6px max(10px, var(--safe-l)) calc(10px + var(--safe-b)) max(10px, var(--safe-r)); background: var(--frame-bg); flex: 0 0 auto; transform-origin: bottom center; }
+  body.playing .pad2:not(.show) { display: none; }
+  /* el menú es una hoja inferior sobre el juego */
+  body.playing #panelScrim { display: block; position: fixed; inset: 0; z-index: 119; background: rgba(0,0,0,.55); backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: opacity .2s; }
+  body.playing #panelScrim.open { opacity: 1; pointer-events: auto; }
+  body.playing aside.panel { display: flex; position: fixed; left: 0; right: 0; bottom: 0; top: auto; z-index: 120; max-height: 88dvh; border-radius: 22px 22px 0 0; border-bottom: 0; transform: translateY(105%); transition: transform .26s cubic-bezier(.2,.8,.2,1); background: var(--panel); padding-bottom: var(--safe-b); }
+  body.playing aside.panel.open { transform: none; }
+  body.playing .grab { display: block; width: 40px; height: 4px; border-radius: 4px; background: var(--line2); margin: 8px auto 0; }
+  body.playing .panel-close { display: inline-grid; margin: 4px 8px 4px 0; flex: none; }
+  body.playing .panel-head .tabs { padding-right: 4px; }
+  /* pantalla completa: la barra de acciones flota y se oculta sola */
+  body.fs .actions { position: fixed; top: calc(8px + var(--safe-t)); left: 50%; transform: translate(-50%, -8px); z-index: 131; margin: 0; padding: 5px; border: 1px solid rgba(255,255,255,.16); border-radius: 999px; background: rgba(11,10,13,.7); backdrop-filter: blur(10px); box-shadow: 0 8px 24px rgba(0,0,0,.35); opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; }
+  body.fs .actions.show { opacity: 1; pointer-events: auto; transform: translate(-50%, 0); }
+}
+/* escritorio en pantalla completa también flota */
+body.fs .actions { position: fixed; top: calc(8px + var(--safe-t)); left: 50%; transform: translate(-50%, -8px); z-index: 131; margin: 0; padding: 5px; border: 1px solid rgba(255,255,255,.16); border-radius: 999px; background: rgba(11,10,13,.7); backdrop-filter: blur(10px); opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; }
+body.fs .actions.show { opacity: 1; pointer-events: auto; transform: translate(-50%, 0); }
+body.fs .actions .iconbtn { color: #f6f5f3; background: rgba(42,40,51,.8); }
+body.fs .console { padding: 0; border: 0; border-radius: 0; background: var(--frame-bg); }
+body.fs .screen { border-radius: 0; }
+/* apaisado en móvil: pantalla a la izquierda, controles a la derecha */
+@media (max-width: 980px) and (orientation: landscape) {
+  body.playing .console { display: grid; grid-template-columns: minmax(0,1fr) minmax(260px, 36vw); grid-template-rows: minmax(0,1fr) auto; grid-template-areas: "screen pad" "bar pad"; }
+  body.playing .screen { grid-area: screen; min-height: 0; }
+  body.playing .actions { grid-area: bar; }
+  body.playing .pad2 { grid-area: pad; display: flex; flex-direction: row; flex-wrap: wrap; align-content: center; justify-content: center; gap: 10px; border-left: 1px solid var(--line); padding: 6px calc(10px + var(--safe-r)) 6px 8px; }
+  body.playing .pad2:not(.show) { display: none; }
+  body.playing aside.panel { left: auto; right: 0; top: 0; bottom: 0; width: min(440px, 70vw); max-height: none; border-radius: 22px 0 0 22px; transform: translateX(105%); }
+  body.playing aside.panel.open { transform: none; }
+  body.playing .grab { display: none; }
+}
+@media (max-width: 380px) {
+  .pad2 .dpad { grid-template-columns: repeat(3, 44px); grid-template-rows: repeat(3, 44px); }
+  .pad2 .ab { --k: 46px; }
+}
+@media (max-height: 430px) and (orientation: landscape) {
+  .pad2 .dpad { grid-template-columns: repeat(3, 44px); grid-template-rows: repeat(3, 44px); }
+  .pad2 .ab { --k: 46px; }
+}

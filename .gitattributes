@@ -1,0 +1,20 @@
+# Keep line endings stable on every OS: the build scripts run inside a Linux container and the patches in core/patches/
+# must apply byte-for-byte, so a Windows checkout (core.autocrlf=true) must not turn them into CRLF.
+* text=auto
+*.sh text eol=lf
+*.patch text eol=lf
+*.diff text eol=lf
+*.ld text eol=lf
+*.s text eol=lf
+*.py text eol=lf
+*.c text eol=lf
+*.cpp text eol=lf
+*.h text eol=lf
+*.hpp text eol=lf
+*.mjs text eol=lf
+*.cjs text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.html text eol=lf
+*.ps1 text eol=crlf

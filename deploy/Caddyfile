@@ -1,0 +1,18 @@
+# Caddy para Emerald Web (deploy/README.md, opción C).
+# Caddy obtiene el certificado solo y **no** toca las cabeceras COOP/COEP que manda server.mjs.
+emerald.tudominio.com {
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:8080 {
+		# WebSocket de socket.io (multijugador)
+		header_up Connection {http.request.header.Connection}
+		header_up Upgrade {http.request.header.Upgrade}
+		# El hub tarda en servir ROMs grandes: que Caddy no corte la respuesta
+		transport http {
+			read_timeout 10m
+			write_timeout 10m
+		}
+	}
+	# Si el proxy se saltara las cabeceras del origen, descomenta y fija las dos:
+	# header Cross-Origin-Opener-Policy "same-origin"
+	# header Cross-Origin-Embedder-Policy "require-corp"
+}

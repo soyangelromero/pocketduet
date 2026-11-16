@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#141317">
+<title>Game Boy Advance · Web</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='9' width='28' height='14' rx='6' fill='%23f44336'/%3E%3Crect x='8' y='12' width='11' height='8' rx='1' fill='%23fff'/%3E%3C/svg%3E">
+<script src="/ui/ui.js"></script>
+<link rel="stylesheet" href="/ui/ui.css">
+<link rel="stylesheet" href="/ui/player.css">
+<style>
+  main { max-width: 1280px; margin: 0 auto; padding: 0 max(16px, var(--safe-r)) 28px max(16px, var(--safe-l)); }
+  #stage { display: grid; }
+  .screen { height: auto; min-height: 0; aspect-ratio: 3/2; background: #000; }
+  .screen canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; image-rendering: pixelated; background: #000; outline: none; object-fit: contain; }
+  .gba-pad .ab { --k: 62px; width: calc(var(--k) * 2.1); height: calc(var(--k) * 1.55); }
+  .gba-pad .ab .ka { right: 0; top: 0; transform: none; } .gba-pad .ab .kb { left: 0; bottom: 0; top: auto; transform: none; }
+  .gba-pad .mid { flex-direction: column; align-items: center; }
+  @media (max-width: 980px) {
+    .screen { aspect-ratio: auto; }
+    body.playing .gba-pad .mid { display: flex; }
+    body.playing .screen-side { display: none; }
+    body.playing .screen { background: #000; }
+  }
+  @media (max-width: 420px) { .pad2 .dpad { grid-template-columns: repeat(3, 46px); grid-template-rows: repeat(3, 46px); } .gba-pad .ab { --k: 54px; } .pad2 .sh .key { width: 64px; } }
+  /* ---------- image filters (CSS only: mGBA owns its own WebGL context, so there is no shader hook) ---------- */
+  .flt-overlay { position: absolute; pointer-events: none; z-index: 3; display: none; mix-blend-mode: multiply; --px: 3px; }
+  .screen[data-flt="lcd"] .flt-overlay, .screen[data-flt="scanlines"] .flt-overlay, .screen[data-flt="crt"] .flt-overlay { display: block; }
+  .screen[data-flt="lcd"] .flt-overlay { background: linear-gradient(to right, rgba(0,0,0,.5) 0, rgba(0,0,0,.5) 1px, transparent 1px) 0 0 / var(--px) var(--px), linear-gradient(to bottom, rgba(0,0,0,.5) 0, rgba(0,0,0,.5) 1px, transparent 1px) 0 0 / var(--px) var(--px); }
+  .screen[data-flt="scanlines"] .flt-overlay { background: linear-gradient(to bottom, #fff 0, #fff 55%, rgba(60,60,60,.85) 100%) 0 0 / 100% var(--px); }
+  .screen[data-flt="crt"] .flt-overlay { background: linear-gradient(to bottom, #fff 0, #fff 50%, rgba(70,70,70,.8) 100%) 0 0 / 100% var(--px), repeating-linear-gradient(to right, #ffb0b0 0 1px, #b0ffb0 1px 2px, #b0b0ff 2px 3px), radial-gradient(ellipse at center, #fff 55%, #bbb 130%); background-blend-mode: multiply; }
+  .screen[data-flt="smooth"] canvas { image-rendering: auto; }
+  .screen[data-flt="gba"] canvas { filter: saturate(.86) brightness(1.1) contrast(.96); }
+  .grp .ico { font-size: 1.05rem; }
+  .boot { z-index: 40; }
+</style>
+</head>
+<body class="playing">
+<header class="topbar">
+  <div class="brand">
+    <div class="logo"><svg class="i lg" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-gamepad"/></svg></div>
+    <div><h1 id="gameTitle">Game Boy Advance</h1><small id="gameSub">Jugable en tu navegador</small></div>
+  </div>
+  <div class="grow"></div>
+  <a class="btn" href="/#gba" id="changeGame"><i data-i="back" data-size="sm"></i>Biblioteca</a>
+  <div class="pill" id="status"><span class="dot"></span><span id="statusText">Iniciando…</span></div>
+</header>
+
+<main>
+  <section id="stage">
+    <div>
+      <div class="console" id="consoleBox">
+        <div class="screen">
+          <canvas id="canvas" width="240" height="160" tabindex="0"></canvas>
+          <div class="flt-overlay" id="fltOverlay"></div>
+          <div class="fps-badge" id="fpsBadge" hidden>FPS: 0</div>
+        </div>
+
+        <div class="actions" id="actions" role="toolbar" aria-label="Acciones del juego">
+          <button class="iconbtn" id="pause" title="Pausa / reanudar" aria-label="Pausa"><i data-i="pause"></i><span class="lbl">Pausa</span></button>
+          <button class="iconbtn" id="ff" title="Velocidad 1x" aria-label="Velocidad 1x"><i data-i="ff"></i><span class="lbl">Velocidad</span><span class="tag-s" id="spdTag">1x</span></button>
+          <button class="iconbtn" id="mute" title="Silenciar" aria-label="Silenciar"><i data-i="volume"></i><span class="lbl">Sonido</span></button>
+          <button class="iconbtn" id="shot" title="Captura de pantalla" aria-label="Captura"><i data-i="camera"></i><span class="lbl">Captura</span></button>
+          <button class="iconbtn" id="tpadBtn" title="Mostrar u ocultar botones" aria-label="Botones"><i data-i="gamepad"></i><span class="lbl">Botones</span></button>
+          <button class="iconbtn" id="full" title="Pantalla completa" aria-label="Pantalla completa"><i data-i="expand"></i><span class="lbl">Pantalla completa</span></button>
+          <button class="iconbtn mobileOnly" id="panelBtn" title="Partida, trucos y opciones" aria-label="Menú"><i data-i="menu"></i><span class="lbl">Menú</span></button>
+        </div>
+
+        <div class="pad2 gba-pad" id="touchpad">
+          <div>
+            <div class="sh"><button class="key" data-b="L">L</button></div>
+            <div class="dpad">
+              <span></span><button class="key" data-b="Up" aria-label="Arriba">▲</button><span></span>
+              <button class="key" data-b="Left" aria-label="Izquierda">◀</button><span></span><button class="key" data-b="Right" aria-label="Derecha">▶</button>
+              <span></span><button class="key" data-b="Down" aria-label="Abajo">▼</button><span></span>
+            </div>
+          </div>
+          <div class="mid"><button class="key" data-b="Select">SELECT</button><button class="key" data-b="Start">START</button></div>
+          <div>
+            <div class="sh" style="justify-content:flex-end"><button class="key" data-b="R">R</button></div>
+            <div class="ab">
+              <button class="key kb" data-b="B">B</button>
+              <button class="key ka" data-b="A">A</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="boot" id="boot">
+          <div class="boot-bg" id="bootBg"></div>
+          <div class="boot-body">
+            <div class="boot-cover">
+              <img id="bootCover" alt="" hidden />
+              <div class="boot-noart" id="bootNoArt">GBA</div>
+            </div>
+            <div class="boot-info">
+              <span class="boot-chip">Game Boy Advance</span>
+              <h2 id="bootTitle">Cargando emulador…</h2>
+              <div id="bootDev">mGBA · WebAssembly</div>
+              <small id="bootSub">Preparando tu ROM y tu partida</small>
+              <div class="boot-bar"><i></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scrim" id="panelScrim"></div>
+    <aside class="panel" id="panel">
+      <div class="grab"></div>
+      <div class="panel-head">
+        <div class="tabs" role="tablist">
+          <button class="tab" role="tab" data-tab="game" aria-selected="true">Partida</button>
+          <button class="tab" role="tab" data-tab="cheats" aria-selected="false">Trucos<span class="count" id="cheatCount" hidden>0</span></button>
+          <button class="tab" role="tab" data-tab="controls" aria-selected="false">Controles</button>
+          <button class="tab" role="tab" data-tab="aspect" aria-selected="false">Aspecto</button>
+        </div>
+        <button class="iconbtn panel-close" id="panelClose" aria-label="Cerrar menú" title="Cerrar"><i data-i="close"></i></button>
+      </div>
+
+      <div class="pane" id="pane-cheats">
+        <h2>Trucos</h2>
+        <p class="hint">Activa y desactiva con un toque. Funcionan con la ROM en español.</p>
+        <input class="search" id="q" type="search" placeholder="Buscar Pokémon, lugar u objeto…" autocomplete="off">
+        <div class="active-bar" id="activeBar">
+          <div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:.85rem">Trucos activos</b><button class="link" id="offAll">Desactivar todos</button></div>
+          <div class="chips" id="chips"></div>
+        </div>
+        <div id="groups"></div>
+        <div class="note" id="cheatNote">Al <b>desactivar</b> un truco el emulador se reinicia un instante y vuelves exactamente donde estabas. Activar es inmediato.</div>
+      </div>
+
+      <div class="pane" id="pane-controls">
+        <h2>Controles</h2>
+        <p class="hint">Haz clic en la pantalla del juego para que el teclado funcione.</p>
+        <table>
+          <thead><tr><th>Botón GBA</th><th>Teclado</th></tr></thead>
+          <tbody>
+            <tr><td>Cruceta</td><td><div class="kgrid"><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd></div></td></tr>
+            <tr><td>A (aceptar / hablar)</td><td><kbd>X</kbd></td></tr>
+            <tr><td>B (cancelar / correr)</td><td><kbd>Z</kbd></td></tr>
+            <tr><td>Start (menú)</td><td><kbd>Enter</kbd></td></tr>
+            <tr><td>Select</td><td><kbd>Retroceso</kbd></td></tr>
+            <tr><td>L</td><td><kbd>A</kbd></td></tr>
+            <tr><td>R</td><td><kbd>S</kbd></td></tr>
+          </tbody>
+        </table>
+        <div class="opts">
+          <div class="opt"><div><b>En el móvil</b><small>Los botones táctiles aparecen bajo la pantalla.</small></div></div>
+          <div class="opt"><div><b>Consejos</b><small>Mantén <kbd>Z</kbd> mientras caminas para correr con los zapatos deportivos. El juego guarda desde Menú → Guardar.</small></div></div>
+        </div>
+      </div>
+
+      <div class="pane" id="pane-aspect">
+        <h2>Aspecto</h2>
+        <p class="hint">Personaliza los controles. Se guarda en este navegador y se aplica al instante.</p>
+        <div class="frow"><label>Tema de los controles</label>
+          <select class="field" id="padPreset">
+            <option value="classic">Clásico (gris translúcido)</option>
+            <option value="dark">Oscuro</option>
+            <option value="light">Claro</option>
+            <option value="neon">Neón</option>
+            <option value="watermelon">Sandía</option>
+            <option value="crystal">Cristal</option>
+            <option value="custom">Personalizado</option>
+          </select>
+        </div>
+        <div class="frow"><label>Color de los botones</label>
+          <div style="display:flex;align-items:center;gap:10px">
+            <input type="color" id="padColor" value="#768094" title="Color base">
+            <span class="hint" style="margin:0">al pulsar</span>
+            <input type="color" id="padActive" value="#d2dcec" title="Color al pulsar">
+          </div>
+        </div>
+        <div class="frow"><label>Transparencia <small id="padOpacityLabel">62 %</small></label><input type="range" id="padOpacity" min="20" max="95" value="62"></div>
+        <div class="frow"><label>Tamaño del pad <small id="padScaleLabel">100 %</small></label><input type="range" id="padScale" min="85" max="115" value="100"></div>
+        <div class="frow"><label>Fondo del marco</label><input type="color" id="frameColor" value="#0b0a0d"></div>
+        <div class="label-s">En pantalla</div>
+        <div class="opts">
+          <div class="opt"><div><b>Indicador de FPS</b><small>Arriba a la derecha</small></div><button class="sw" id="showFps" role="switch" aria-checked="true" aria-label="Indicador de FPS"></button></div>
+          <div class="opt"><div><b>Botones táctiles</b><small>Cruceta, A/B y gatillos</small></div><button class="sw" id="showPad" role="switch" aria-checked="true" aria-label="Botones táctiles"></button></div>
+          <div class="opt"><div><b>Modo zurdo</b><small>Cruceta a la derecha, botones a la izquierda</small></div><button class="sw" id="showLefty" role="switch" aria-checked="false" aria-label="Modo zurdo"></button></div>
+          <div class="opt"><div><b>Vibración al pulsar</b><small>Si tu móvil lo permite</small></div><button class="sw" id="showHaptic" role="switch" aria-checked="true" aria-label="Vibración al pulsar"></button></div>
+        </div>
+        <div class="label-s">Interfaz</div>
+        <div id="appearance"></div>
+        <button class="btn" id="aspectReset" style="margin-top:16px;width:100%">Restablecer aspecto</button>
+      </div>
+
+      <div class="pane show" id="pane-game">
+        <h2>Partida</h2>
+        <p class="hint">Tu progreso se guarda en el servidor cada pocos segundos cuando guardas dentro del juego.</p>
+        <div class="opts">
+          <div class="opt"><div><b>Guardar ahora</b><small id="saveInfo">Aún sin guardar en esta sesión</small></div><button class="btn primary" id="saveNow">Guardar</button></div>
+          <div class="opt"><div><b>Descargar partida</b><small>Copia de seguridad (.sav)</small></div><button class="btn" id="dl">Descargar</button></div>
+          <div class="opt"><div><b>Filtro de imagen</b><small id="fltHint">Píxel nítido, sin procesar</small></div>
+            <select class="field" id="filter" style="width:160px" aria-label="Filtro de imagen">
+              <option value="none">Ninguno (nítido)</option><option value="smooth">Suavizado</option><option value="lcd">Rejilla LCD</option>
+              <option value="scanlines">Líneas de escaneo</option><option value="crt">CRT suave</option><option value="gba">Colores de la GBA</option>
+            </select></div>
+          <div class="opt"><div><b>Volumen</b><small id="volLabel">80%</small></div><input type="range" id="vol" min="0" max="100" value="80"></div>
+          <div class="opt"><div><b>Cargar otra ROM</b><small>.gba desde tu equipo</small></div><label class="btn">Elegir<input id="rom" type="file" accept=".gba,.zip"></label></div>
+          <div class="opt"><div><b>Cargar otro .sav</b><small>Reemplaza la partida actual</small></div><label class="btn">Elegir<input id="sav" type="file" accept=".sav"></label></div>
+        </div>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<script type="module">
+import mGBA from "./mgba.js";
+const $ = id => document.getElementById(id);
+const GAME_ID = new URLSearchParams(location.search).get("id");
+if (GAME_ID === null) location.replace("/#gba");
+const ROM_NAME = "game" + GAME_ID + ".gba";
+let META = { name: "Game Boy Advance", code: "", base: "partida" };
+try { const all = await (await fetch("/gba/api/roms")).json(); META = all.find(g => String(g.id) === GAME_ID) || META; } catch {}
+const LS_KEY = "esm.cheats.v1";
+const SS_KEY = "gba.resume.v1." + GAME_ID;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+/* ---------- UI helpers ---------- */
+const toast = (m, ms) => UI.toast(m, ms);
+// The header pill only reports settled states; while loading, the overlay is the one and only indicator.
+function status(text, kind = ""){ $("statusText").textContent = text; $("status").className = "pill " + kind; $("status").hidden = kind === "busy"; }
+const bootEl = $("boot");
+function boot(title, sub, error = false){ bootEl.hidden = false; bootEl.classList.toggle("err", !!error); $("bootTitle").textContent = title; $("bootSub").textContent = sub || ""; }
+function bootDone(){ bootEl.hidden = true; $("fpsBadge").hidden = false; }
+const setIcon = (btn, name) => btn.querySelector("use")?.setAttribute("href", "#i-" + name);
+const setLbl = (btn, text) => { const l = btn.querySelector(".lbl"); if (l) l.textContent = text; };
+const store = UI.ls;
+const sess = { get(k){ try{ return sessionStorage.getItem(k); }catch{ return null; } }, set(k,v){ try{ sessionStorage.setItem(k,v); }catch{} }, del(k){ try{ sessionStorage.removeItem(k); }catch{} } };
+
+/* ---------- boot screen with the cover ---------- */
+{
+  const cover = `/art/gba/${GAME_ID}`;
+  const img = $("bootCover");
+  img.onerror = () => { img.hidden = true; $("bootNoArt").hidden = false; $("bootBg").style.backgroundImage = ""; };
+  img.onload = () => { img.hidden = false; $("bootNoArt").hidden = true; $("bootBg").style.backgroundImage = `url("${cover}")`; };
+  img.src = cover;
+}
+
+/* ---------- keep the page still while playing ---------- */
+addEventListener("keydown", e => {
+  if (!["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(e.key)) return;
+  if (/^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement?.tagName || "")) return;
+  e.preventDefault();
+}, { capture: true });
+
+/* ---------- tabs ---------- */
+for (const t of document.querySelectorAll(".tab")) t.onclick = () => {
+  for (const x of document.querySelectorAll(".tab")) x.setAttribute("aria-selected", x === t);
+  for (const p of document.querySelectorAll(".pane")) p.classList.toggle("show", p.id === "pane-" + t.dataset.tab);
+};
+
+/* ---------- appearance (same model as the NDS page) ---------- */
+const ASPECT_KEY = "gba.aspect";
+const ASPECT_DEFAULT = { preset: "classic", base: "#768094", active: "#d2dcec", opacity: 62, scale: 100, frame: "#0b0a0d", fps: true, pad: true, lefty: false, haptic: true };
+const PAD_PRESETS = {
+  classic: { base: "#768094", active: "#d2dcec", frame: "#0b0a0d" }, dark: { base: "#1b2233", active: "#6c8cff", frame: "#000000" },
+  light: { base: "#e8eeff", active: "#6c8cff", frame: "#eef2fb" }, neon: { base: "#00e6b0", active: "#ff3bd4", frame: "#04080a" },
+  watermelon: { base: "#ff6b8b", active: "#3ddc97", frame: "#0a1410" }, crystal: { base: "#ffffff", active: "#9fdcff", frame: "#02060c" },
+};
+let aspect = { ...ASPECT_DEFAULT };
+try { aspect = { ...ASPECT_DEFAULT, ...(JSON.parse(store.get(ASPECT_KEY) || "{}") || {}) }; } catch {}
+const saveAspect = () => store.set(ASPECT_KEY, JSON.stringify(aspect));
+const hexRgb = hex => { const m = /^#?([0-9a-f]{6})$/i.exec(hex || ""); const n = m ? parseInt(m[1], 16) : 0x768094; return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
+const rgba = (hex, a) => { const [r, g, b] = hexRgb(hex); return `rgba(${r},${g},${b},${Math.max(0, Math.min(1, a)).toFixed(2)})`; };
+const lum = hex => { const [r, g, b] = hexRgb(hex).map(c => c / 255); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+const buzz = () => { try { if (aspect.haptic) navigator.vibrate?.(8); } catch {} };
+function applyAspect(){
+  const a = aspect, st = document.documentElement.style;
+  st.setProperty("--pad-bg", rgba(a.base, a.opacity / 100)); st.setProperty("--pad-active", rgba(a.active, Math.min(100, a.opacity + 30) / 100));
+  st.setProperty("--pad-fg", lum(a.base) > 0.62 ? "#0a1020" : "#f1f5ff"); st.setProperty("--pad-scale", (a.scale / 100).toFixed(2)); st.setProperty("--frame-bg", a.frame);
+  document.body.classList.toggle("hide-fps", !a.fps); document.body.classList.toggle("hide-pad", !a.pad); document.body.classList.toggle("lefty", !!a.lefty);
+  $("padPreset").value = a.preset; $("padColor").value = a.base; $("padActive").value = a.active; $("frameColor").value = a.frame;
+  $("padOpacity").value = a.opacity; $("padOpacityLabel").textContent = a.opacity + " %"; $("padScale").value = a.scale; $("padScaleLabel").textContent = a.scale + " %";
+  for (const [id, v] of [["showFps", a.fps], ["showPad", a.pad], ["showLefty", a.lefty], ["showHaptic", a.haptic]]) $(id).setAttribute("aria-checked", String(v));
+}
+$("padPreset").onchange = e => { aspect.preset = e.target.value; if (PAD_PRESETS[aspect.preset]) Object.assign(aspect, PAD_PRESETS[aspect.preset]); saveAspect(); applyAspect(); };
+for (const [id, k] of [["padColor", "base"], ["padActive", "active"], ["frameColor", "frame"]]) $(id).oninput = e => { aspect[k] = e.target.value; aspect.preset = "custom"; saveAspect(); applyAspect(); };
+$("padOpacity").oninput = e => { aspect.opacity = +e.target.value; aspect.preset = "custom"; saveAspect(); applyAspect(); };
+$("padScale").oninput = e => { aspect.scale = +e.target.value; saveAspect(); applyAspect(); };
+for (const [id, k] of [["showFps", "fps"], ["showPad", "pad"], ["showLefty", "lefty"], ["showHaptic", "haptic"]]) $(id).onclick = () => { aspect[k] = !aspect[k]; saveAspect(); applyAspect(); };
+UI.mountAppearance($("appearance"));
+$("aspectReset").onclick = () => { aspect = { ...ASPECT_DEFAULT }; saveAspect(); applyAspect(); UI.setTheme("system"); UI.setAccent("red"); UI.mountAppearance($("appearance")); toast("Aspecto restablecido"); };
+applyAspect();
+
+/* ---------- emulator ---------- */
+boot("Cargando emulador…", "Descargando mGBA");
+status("Iniciando…", "busy");
+UI.recent.add({ t: "gba", name: META.name });
+const emu = await mGBA({ canvas: $("canvas") });
+await emu.FSInit();
+window.__emu = emu;
+
+const keymap = { Up:"Up", Down:"Down", Left:"Left", Right:"Right", X:"A", Z:"B", A:"L", S:"R", Return:"Start", Backspace:"Select" };
+for (const [k, b] of Object.entries(keymap)) { try { emu.bindKey(k, b); } catch {} }
+
+let romName = ROM_NAME, loaded = false;
+const fileOf = (bytes, name) => new File([bytes], name);
+const uploadSav = (bytes, name) => new Promise(ok => emu.uploadSaveOrSaveState(fileOf(bytes, name), ok));
+const uploadRom = (bytes, name) => new Promise(ok => emu.uploadRom(fileOf(bytes, name), ok));
+const cheatsPath = () => "/data/cheats/" + romName.replace(/\.\w+$/, "") + ".cheats";
+
+/* ---------- cheats ---------- */
+let groups = [], items = new Map(), enabled = new Set();
+document.title = META.name + " · GBA"; $("gameTitle").textContent = META.name; $("gameSub").textContent = META.code + " · Game Boy Advance";
+$("bootDev").textContent = "mGBA · WebAssembly";
+if (META.code === "BPES") { try { groups = await (await fetch("cheats.json")).json(); } catch { groups = []; } }
+for (const g of groups) for (const it of g.items) { it.group = g; items.set(it.id, it); }
+try { for (const id of JSON.parse(store.get(LS_KEY) || "[]")) if (items.has(id)) enabled.add(id); } catch {}
+
+function cheatFile(ids){
+  let out = "";
+  for (const id of ids) {
+    const it = items.get(id);
+    out += "!reset\n" + (it.kind === "PAR" ? "!PARv3 raw\n" : "") + "# " + it.name.replace(/\n/g, " ") + "\n" + it.lines.join("\n") + "\n";
+  }
+  return out;
+}
+const writeCheats = ids => emu.FS.writeFile(cheatsPath(), cheatFile(ids));
+async function pushCheats(){
+  for (let i = 0; i < 40; i++) { if (emu.autoLoadCheats()) return true; await sleep(100); }
+  return false;
+}
+const persist = () => store.set(LS_KEY, JSON.stringify([...enabled]));
+
+let reloadTimer;
+async function applyChange(prev){
+  persist(); renderAll();
+  const added = [...enabled].filter(id => !prev.has(id));
+  const removed = [...prev].filter(id => !enabled.has(id));
+  const addedGroups = new Set(added.map(id => items.get(id).group.id));
+  const real = removed.filter(id => { const g = items.get(id).group; return !(g.swap && addedGroups.has(g.id)); });
+  if (real.length) {
+    clearTimeout(reloadTimer);
+    toast("Aplicando cambios…");
+    reloadTimer = setTimeout(restartWithState, 700);
+    return;
+  }
+  if (added.length && loaded) {
+    writeCheats(added);
+    const ok = await pushCheats();
+    writeCheats([...enabled]);
+    toast(ok ? "Truco activado" : "No se pudo activar el truco");
+  }
+}
+async function restartWithState(){
+  try {
+    if (loaded) {
+      emu.saveState(9);
+      const f = emu.FS.readFile("/data/states/" + romName.replace(/\.\w+$/, "") + ".ss9");
+      let s = ""; for (let i = 0; i < f.length; i += 8192) s += String.fromCharCode(...f.subarray(i, i + 8192));
+      sess.set(SS_KEY, btoa(s));
+      await pushSave();
+    }
+  } catch {}
+  location.reload();
+}
+
+/* ---------- cheat UI ---------- */
+const openGroups = new Set();
+const ICONS = { isla:"🏝️", exp:"⭐", objeto:"🎒", pokemon:"🐾", mapa:"🧭", pc:"💾" };
+function norm(s){ return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+function toggle(id){
+  const prev = new Set(enabled), it = items.get(id);
+  if (enabled.has(id)) enabled.delete(id);
+  else { if (it.group.items.length > 1 && it.group.id !== "exp") for (const o of it.group.items) enabled.delete(o.id); enabled.add(id); }
+  applyChange(prev);
+}
+function renderAll(){
+  const q = norm($("q").value.trim());
+  const root = $("groups"); root.textContent = "";
+  for (const g of groups) {
+    const matches = q ? g.items.filter(it => norm(it.name + " " + (it.sub || "")).includes(q)) : g.items;
+    if (q && !matches.length) continue;
+    const open = q ? true : openGroups.has(g.id);
+    const onCount = g.items.filter(it => enabled.has(it.id)).length;
+    const el = document.createElement("div"); el.className = "grp" + (open ? " open" : "");
+    const head = document.createElement("button");
+    head.innerHTML = `<span class="ico">${ICONS[g.icon] || "✨"}</span><span class="t"><b></b><small></small></span><span class="chev">${UI.icon("chev", "sm")}</span>`;
+    head.querySelector("b").textContent = g.title;
+    head.querySelector("small").textContent = (q ? matches.length + " resultados" : g.items.length + (g.items.length === 1 ? " truco" : " trucos")) + (onCount ? " · " + onCount + " activo" : "");
+    head.onclick = () => { if (openGroups.has(g.id)) openGroups.delete(g.id); else openGroups.add(g.id); renderAll(); };
+    el.append(head);
+    if (open) {
+      const body = document.createElement("div"); body.className = "body";
+      const d = document.createElement("p"); d.className = "desc"; d.textContent = g.desc; body.append(d);
+      const list = document.createElement("div"); list.className = "list";
+      for (const it of matches) {
+        const row = document.createElement("div"); row.className = "row" + (enabled.has(it.id) ? " on" : "");
+        row.innerHTML = `<div class="n"><b></b><small></small></div><button class="sw" role="switch"></button>`;
+        row.querySelector("b").textContent = it.name; row.querySelector("small").textContent = it.sub || "";
+        const sw = row.querySelector(".sw"); sw.setAttribute("aria-checked", enabled.has(it.id)); sw.setAttribute("aria-label", it.name);
+        row.onclick = () => toggle(it.id);
+        list.append(row);
+      }
+      body.append(list); el.append(body);
+    }
+    root.append(el);
+  }
+  if (!groups.length) { root.innerHTML = '<div class="empty">Todavía no tengo trucos para este juego.<br>Están disponibles para Pokémon Edición Esmeralda (España).</div>'; $("q").hidden = true; $("cheatNote").hidden = true; }
+  else if (!root.children.length) root.innerHTML = '<div class="empty">Sin resultados</div>';
+  const c = $("cheatCount"); c.hidden = !enabled.size; c.textContent = enabled.size;
+  $("activeBar").classList.toggle("show", enabled.size > 0);
+  const chips = $("chips"); chips.textContent = "";
+  for (const id of enabled) {
+    const it = items.get(id), ch = document.createElement("span"); ch.className = "chip";
+    ch.innerHTML = "<span></span><button aria-label='Desactivar'>×</button>"; ch.firstChild.textContent = it.name;
+    ch.lastChild.onclick = () => toggle(id);
+    chips.append(ch);
+  }
+}
+$("q").oninput = renderAll;
+$("offAll").onclick = () => { const prev = new Set(enabled); enabled.clear(); applyChange(prev); };
+renderAll();
+
+/* ---------- save sync ---------- */
+let lastSave = "";
+async function pushSave(){
+  const s = emu.getSave?.();
+  if (!s || s.length < 512) return false;
+  const cur = s.join();
+  if (cur === lastSave) return true;
+  const r = await fetch("/gba/api/sav/" + GAME_ID, { method: "PUT", body: s });
+  if (r.ok) { lastSave = cur; $("saveInfo").textContent = "Guardado a las " + new Date().toLocaleTimeString(); }
+  return r.ok;
+}
+setInterval(() => { if (loaded) pushSave().catch(() => {}); }, 15000);
+setInterval(() => { if (loaded) emu.FSSync().catch(() => {}); }, 10000);
+addEventListener("pagehide", () => { try { const s = emu.getSave?.(); if (s && s.length >= 512) navigator.sendBeacon?.("/gba/api/sav/" + GAME_ID, s); } catch {} });
+
+/* ---------- start game ---------- */
+async function startGame(romBytes, savBytes){
+  romName = ROM_NAME;
+  if (savBytes) await uploadSav(savBytes, ROM_NAME.replace(/\.\w+$/, ".sav"));
+  await uploadRom(romBytes, ROM_NAME);
+  writeCheats([...enabled]);
+  if (!emu.loadGame("/data/games/" + ROM_NAME)) throw new Error("loadGame");
+  loaded = true;
+  if (enabled.size) await pushCheats();
+  const resume = sess.get(SS_KEY);
+  if (resume) {
+    sess.del(SS_KEY);
+    try {
+      const bin = atob(resume), u = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+      emu.FS.writeFile("/data/states/" + ROM_NAME.replace(/\.\w+$/, "") + ".ss9", u);
+      await sleep(500);
+      emu.loadStateSlot(9);
+    } catch {}
+  }
+}
+try {
+  boot("Cargando " + META.name, "ROM y partida desde el servidor");
+  const get = async n => { const r = await fetch("/gba/api/" + n + "/" + GAME_ID); if (!r.ok) { if (n === "sav") return null; throw new Error(n + " " + r.status); } return new Uint8Array(await r.arrayBuffer()); };
+  const [rom, sav] = await Promise.all([get("rom"), get("sav")]);
+  lastSave = sav ? sav.join() : "";
+  await startGame(rom, sav);
+  bootDone(); status("Jugando", "ok");
+  $("canvas").focus();
+} catch (err) {
+  boot("No se pudo cargar automáticamente", "Abre el menú → Partida para elegir tu ROM (" + err.message + ")", true);
+  status("Carga manual necesaria", "err");
+  $("fpsBadge").hidden = true;
+}
+
+/* ---------- actions: ONE bar for every context ---------- */
+let paused = false, spd = 0, muted = false;
+const SPEEDS = [1, 2, 3, 5];
+$("pause").onclick = () => {
+  paused = !paused; paused ? emu.pauseGame() : emu.resumeGame();
+  $("pause").classList.toggle("on", paused); setIcon($("pause"), paused ? "play" : "pause"); setLbl($("pause"), paused ? "Reanudar" : "Pausa");
+  $("pause").title = $("pause").ariaLabel = paused ? "Reanudar" : "Pausa"; status(paused ? "Pausado" : "Jugando", "ok");
+};
+// Speed + audio in one place: the speed badge. mGBA keeps audio while fast-forwarding, but pitched up: the tooltip says so.
+$("ff").onclick = () => {
+  spd = (spd + 1) % SPEEDS.length; const r = SPEEDS[spd]; emu.setFastForwardMultiplier(r);
+  $("spdTag").textContent = r === 1 ? "1x" : "x" + r; $("ff").classList.toggle("on", r > 1);
+  const tip = "Velocidad " + (r === 1 ? "1x" : "x" + r) + (r > 1 ? " · el audio suena más agudo" : ""); $("ff").title = tip; $("ff").setAttribute("aria-label", tip); buzz();
+};
+const setVol = v => { emu.setVolume(v); $("volLabel").textContent = v + "%"; };
+$("vol").oninput = e => { muted = false; syncMute(); setVol(+e.target.value); };
+const syncMute = () => { $("mute").classList.toggle("on", muted); setIcon($("mute"), muted ? "mute" : "volume"); setLbl($("mute"), muted ? "Silenciado" : "Sonido"); $("mute").title = $("mute").ariaLabel = muted ? "Activar sonido" : "Silenciar"; };
+$("mute").onclick = () => { muted = !muted; setVol(muted ? 0 : +$("vol").value); syncMute(); };
+setVol(80);
+$("shot").onclick = () => { requestAnimationFrame(() => $("canvas").toBlob(b => { if (!b) return toast("No se pudo capturar"); const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = (META.base || "gba") + ".png"; a.click(); }, "image/png")); };
+
+// fullscreen on the whole console (screen + controls); the bar floats and hides itself
+const bar = $("actions"); let barT;
+const showBar = () => { if (!document.body.classList.contains("fs")) return; bar.classList.add("show"); clearTimeout(barT); barT = setTimeout(() => { const hov = matchMedia("(hover:hover)").matches && bar.matches(":hover"); if (!hov) bar.classList.remove("show"); }, 3200); };
+for (const ev of ["pointerdown", "pointermove", "keydown"]) document.addEventListener(ev, showBar, { passive: true });
+$("full").onclick = () => { const el = $("consoleBox"); document.fullscreenElement ? document.exitFullscreen() : el.requestFullscreen?.().catch(() => toast("El navegador no permite pantalla completa aquí")); };
+document.addEventListener("fullscreenchange", () => {
+  const on = !!document.fullscreenElement; document.body.classList.toggle("fs", on);
+  if (on) $("touchpad").classList.add("show");
+  setLbl($("full"), on ? "Salir" : "Pantalla completa"); setIcon($("full"), on ? "shrink" : "expand"); $("full").title = $("full").ariaLabel = on ? "Salir de pantalla completa" : "Pantalla completa";
+  bar.classList.toggle("show", on); if (on) showBar();
+});
+
+// menu = bottom sheet on phones, side column on desktop
+const panel = $("panel"), scrim = $("panelScrim");
+const openPanel = on => { panel.classList.toggle("open", on); scrim.classList.toggle("open", on); };
+$("panelBtn").onclick = () => openPanel(!panel.classList.contains("open"));
+$("panelClose").onclick = scrim.onclick = () => openPanel(false);
+addEventListener("keydown", e => { if (e.key === "Escape" && panel.classList.contains("open")) openPanel(false); });
+
+// FPS = presented frames x fast-forward multiplier (mGBA exposes no frame counter)
+{
+  let frames = 0, last = performance.now();
+  const tick = () => { if (!paused) frames++; requestAnimationFrame(tick); }; requestAnimationFrame(tick);
+  setInterval(() => { const now = performance.now(), fps = frames / ((now - last) / 1000) * SPEEDS[spd]; frames = 0; last = now; if (!paused) $("fpsBadge").textContent = "FPS: " + Math.min(Math.round(fps), 999); }, 1000);
+}
+
+/* ---------- touch pad ---------- */
+const pad = $("touchpad"); const coarse = matchMedia?.("(pointer:coarse)").matches;
+if (coarse) pad.classList.add("show");
+$("tpadBtn").onclick = () => { pad.classList.toggle("show"); $("tpadBtn").classList.toggle("on", pad.classList.contains("show")); };
+$("tpadBtn").classList.toggle("on", pad.classList.contains("show"));
+for (const b of document.querySelectorAll(".key[data-b]")) {
+  const n = b.dataset.b;
+  b.addEventListener("pointerdown", e => { e.preventDefault(); b.setPointerCapture(e.pointerId); b.classList.add("active"); buzz(); emu.buttonPress(n); });
+  for (const ev of ["pointerup", "pointercancel", "lostpointercapture"]) b.addEventListener(ev, () => { b.classList.remove("active"); emu.buttonUnpress(n); });
+}
+$("canvas").addEventListener("pointerdown", () => $("canvas").focus());
+
+/* ---------- image filters (CSS overlay, aligned to the picture) ---------- */
+{
+  const FILTER_HINTS = { none: "Píxel nítido, sin procesar", smooth: "Interpolación suave", lcd: "Separación entre píxeles, como la pantalla de la GBA", scanlines: "Oscurece el borde de cada fila", crt: "Líneas, máscara RGB y viñeta ligera", gba: "Colores algo más lavados, como el LCD original" };
+  const screen = document.querySelector(".screen"), ov = $("fltOverlay"), sel = $("filter");
+  // the picture is 240x160 object-fit:contain inside .screen: put the overlay exactly over it and tell CSS how big one pixel is
+  const place = () => {
+    const w = screen.clientWidth, h = screen.clientHeight, pw = Math.min(w, h * 1.5), ph = pw / 1.5;
+    Object.assign(ov.style, { left: (w - pw) / 2 + "px", top: (h - ph) / 2 + "px", width: pw + "px", height: ph + "px" });
+    ov.style.setProperty("--px", Math.max(2, pw / 240) + "px");
+  };
+  new ResizeObserver(place).observe(screen); place();
+  const apply = (v) => { if (!FILTER_HINTS[v]) v = "none"; sel.value = v; screen.dataset.flt = v; $("fltHint").textContent = FILTER_HINTS[v]; store.set("gba.filter", v); };
+  sel.onchange = () => apply(sel.value);
+  apply(store.get("gba.filter") || "none");
+}
+
+/* ---------- panel buttons ---------- */
+$("saveNow").onclick = async () => { const ok = await pushSave().catch(() => false); toast(ok ? "Partida guardada" : "Guarda primero dentro del juego (Menú → Guardar)"); if (ok) status("Partida guardada", "ok"); };
+$("dl").onclick = () => {
+  const s = emu.getSave?.(); if (!s) return toast("Aún no hay partida guardada");
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([s])); a.download = META.base + ".sav"; a.click();
+};
+$("rom").onchange = async e => {
+  const f = e.target.files[0]; if (!f) return;
+  boot("Cargando ROM…", f.name);
+  try { await startGame(new Uint8Array(await f.arrayBuffer()), null); bootDone(); status("Jugando", "ok"); openPanel(false); } catch { boot("No se pudo cargar la ROM", "", true); }
+};
+$("sav").onchange = async e => {
+  const f = e.target.files[0]; if (!f) return;
+  await uploadSav(new Uint8Array(await f.arrayBuffer()), romName.replace(/\.\w+$/, ".sav")); emu.quickReload(); toast("Partida cargada");
+};
+</script>
+</body>
+</html>

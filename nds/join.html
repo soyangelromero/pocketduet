@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#070d1a">
+<title>Unirse a una sala · Nintendo DS</title>
+<style>
+  :root{--bg:#070d1a;--bg2:#0c1530;--panel:#0f1a38;--panel2:#15244b;--line:#213366;--line2:#2f4a8f;--fg:#eaf0ff;--muted:#93a6d6;--accent:#6c8cff;--accent-ink:#06112e;--ok:#3ddc97;--danger:#ff6b81;color-scheme:dark}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%}
+  body{color:var(--fg);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:radial-gradient(900px 520px at 12% -10%,#1b2f7a 0%,transparent 60%),var(--bg);overflow-x:hidden}
+  button,input{font:inherit;color:inherit}
+  .wrap{max-width:560px;margin:0 auto;padding:20px 16px}
+  h1{font-size:1.25rem;margin:6px 0 4px}
+  .sub{color:var(--muted);margin:0 0 16px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px}
+  .card .n{flex:1;min-width:0}
+  .card b{display:block}
+  .card small{color:var(--muted)}
+  .btn{padding:10px 16px;border-radius:11px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);font-weight:700;cursor:pointer}
+  .btn.ghost{background:var(--bg2);color:var(--fg);border-color:var(--line2)}
+  .field{width:100%;padding:11px 13px;border-radius:11px;border:1px solid var(--line2);background:var(--bg2);outline:none;margin-bottom:10px}
+  .field:focus{border-color:var(--accent)}
+  .empty{color:var(--muted);text-align:center;padding:26px 8px;border:2px dashed var(--line2);border-radius:16px}
+  #game{display:none;position:fixed;inset:0;background:#000;flex-direction:column}
+  body.live #lobby{display:none}
+  body.live #game{display:flex}
+  #stageBox{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;position:relative}
+  video{max-width:100%;max-height:100%;background:#000;touch-action:none}
+  .bar{display:flex;gap:8px;align-items:center;padding:8px 12px;background:#050b1b;border-bottom:1px solid var(--line)}
+  .bar .grow{flex:1;color:var(--muted);font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pad{display:none;justify-content:space-between;align-items:center;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:#050b1b;border-top:1px solid var(--line);user-select:none;-webkit-user-select:none;touch-action:none}
+  .pad.show{display:flex}
+  .key{border:1px solid var(--line2);background:var(--bg2);border-radius:14px;font-weight:700;display:grid;place-items:center;touch-action:none;cursor:pointer}
+  .key.active{background:var(--accent);color:var(--accent-ink)}
+  .dpad{display:grid;grid-template-columns:repeat(3,46px);grid-template-rows:repeat(3,46px);gap:3px}
+  .ab{position:relative;width:128px;height:96px}
+  .ab .key{position:absolute;width:46px;height:46px;border-radius:50%}
+  .mid{display:flex;flex-direction:column;gap:8px;align-items:center}
+  .mid .key{width:64px;height:28px;border-radius:999px;font-size:.7rem}
+  .sh{display:flex;gap:8px;margin-bottom:8px}
+  .sh .key{width:60px;height:30px;font-size:.8rem}
+  .msg{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:#101c42;border:1px solid var(--accent);padding:8px 14px;border-radius:10px;font-size:.88rem;display:none}
+  @media (pointer:coarse){.pad{display:flex}}
+</style>
+</head>
+<body>
+<div class="wrap" id="lobby">
+  <h1>Unirse a una sala</h1>
+  <p class="sub">Elige una sala abierta para ver la partida en directo y jugar con tu anfitrión. No necesitas la ROM.</p>
+  <input class="field" id="name" placeholder="Tu nombre" maxlength="20" value="Invitado">
+  <div id="rooms"></div>
+  <p class="sub" style="font-size:.8rem;margin-top:14px">Usa teclado (flechas, Z, X, A, S, Q, E, Enter, V) o los botones táctiles. Toca el vídeo para usar la pantalla táctil.</p>
+</div>
+
+<div id="game">
+  <div class="bar"><span class="grow" id="roomLabel"></span><button class="btn ghost" id="tpad">Botones</button><button class="btn ghost" id="mute">Sonido</button><button class="btn ghost" id="leave">Salir</button></div>
+  <div id="stageBox"><video id="v" autoplay playsinline muted></video><div class="msg" id="msg"></div></div>
+  <div class="pad" id="pad">
+    <div><div class="sh"><button class="key" data-i="10">L</button></div>
+      <div class="dpad"><span></span><button class="key" data-i="4">▲</button><span></span><button class="key" data-i="6">◀</button><span></span><button class="key" data-i="7">▶</button><span></span><button class="key" data-i="5">▼</button><span></span></div></div>
+    <div class="mid"><button class="key" data-i="2">SELECT</button><button class="key" data-i="3">START</button></div>
+    <div><div class="sh" style="justify-content:flex-end"><button class="key" data-i="11">R</button></div>
+      <div class="ab"><button class="key" data-i="9" style="left:41px;top:0">X</button><button class="key" data-i="1" style="left:0;top:25px">Y</button><button class="key" data-i="8" style="right:0;top:25px">A</button><button class="key" data-i="0" style="left:41px;top:50px">B</button></div></div>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const guid = () => crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2) + Date.now();
+const ICE = [{ urls: "stun:stun.l.google.com:19302" }, { urls: "stun:stun1.l.google.com:19302" }];
+const wanted = new URLSearchParams(location.search).get("room");
+let socket, pc, dc, room = null, selfId = guid(), hostSid = null;
+
+/* ---------- lobby ---------- */
+async function refresh(){
+  if (document.body.classList.contains("live")) return;
+  let rooms = {};
+  try { rooms = await (await fetch("/list")).json(); } catch {}
+  const box = $("rooms"); box.textContent = "";
+  const ids = Object.keys(rooms);
+  if (!ids.length) box.innerHTML = '<div class="empty">No hay salas abiertas ahora mismo.<br>Pídele a tu anfitrión que cree una.</div>';
+  for (const sid of ids) {
+    const r = rooms[sid];
+    const el = document.createElement("div"); el.className = "card";
+    el.innerHTML = '<div class="n"><b></b><small></small></div><button class="btn">Entrar</button>';
+    el.querySelector("b").textContent = (r.hasPassword ? "🔒 " : "") + r.room_name;
+    el.querySelector("small").textContent = (r.game ? r.game + " · " : "") + r.current + "/" + r.max + " jugadores";
+    const b = el.querySelector("button"); b.disabled = r.current >= r.max; b.style.opacity = b.disabled ? .5 : 1;
+    b.onclick = () => join(sid, r);
+    box.append(el);
+    if (wanted === sid && !window.__auto) { window.__auto = true; join(sid, r); }
+  }
+}
+refresh(); setInterval(refresh, 3000);
+
+/* ---------- join ---------- */
+function join(sid, r){
+  let pw = "";
+  if (r.hasPassword) { pw = prompt("Contraseña de la sala"); if (pw === null) return; }
+  const name = $("name").value.trim() || "Invitado";
+  socket = io();
+  socket.on("connect", () => {
+    const extra = { domain: location.host, game_id: r.game_id, room_name: r.room_name, player_name: name, userid: selfId, sessionid: sid };
+    socket.emit("join-room", { extra, password: pw }, (err, users) => {
+      if (err) { alert(err === "Wrong password" ? "Contraseña incorrecta" : err === "Room is full" ? "La sala está llena" : "No se pudo entrar"); socket.close(); return; }
+      room = sid; hostSid = null;
+      document.body.classList.add("live"); $("roomLabel").textContent = r.room_name; note("Conectando con el anfitrión…");
+    });
+  });
+  socket.on("webrtc-signal", onSignal);
+  socket.on("users-updated", u => { if (room && !Object.keys(u || {}).length) leave("La sala se cerró"); });
+  socket.on("disconnect", () => { if (room) leave("Conexión perdida"); });
+}
+function note(t, ms){ const m = $("msg"); m.textContent = t; m.style.display = t ? "block" : "none"; if (ms) setTimeout(() => { if (m.textContent === t) m.style.display = "none"; }, ms); }
+
+function makePc(sender){
+  hostSid = sender;
+  pc = new RTCPeerConnection({ iceServers: ICE });
+  pc.onicecandidate = e => { if (e.candidate) socket.emit("webrtc-signal", { target: sender, candidate: e.candidate }); };
+  pc.ondatachannel = e => { dc = e.channel; dc.onopen = () => note("¡Conectado!", 1500); dc.onmessage = m => { try { if (JSON.parse(m.data).type === "host-left") leave("El anfitrión salió"); } catch {} }; };
+  pc.ontrack = e => {
+    try { e.receiver.playoutDelayHint = 0; } catch {}
+    const v = $("v"); v.srcObject = e.streams[0] || new MediaStream([e.track]); v.play().catch(() => {});
+  };
+  pc.onconnectionstatechange = () => { if (pc.connectionState === "failed") note("Conexión fallida: puede que tu red necesite un servidor TURN", 6000); };
+  return pc;
+}
+let queued = [];
+async function onSignal(d){
+  if (!d.sender) return;
+  if (d.offer) {
+    if (pc) try { pc.close(); } catch {}
+    makePc(d.sender); queued = [];
+    await pc.setRemoteDescription(new RTCSessionDescription(d.offer));
+    for (const c of queued) pc.addIceCandidate(new RTCIceCandidate(c)).catch(() => {});
+    queued = [];
+    const ans = await pc.createAnswer(); await pc.setLocalDescription(ans);
+    socket.emit("webrtc-signal", { target: d.sender, answer: pc.localDescription });
+  } else if (d.candidate) {
+    if (pc && pc.remoteDescription) pc.addIceCandidate(new RTCIceCandidate(d.candidate)).catch(() => {});
+    else queued.push(d.candidate);
+  }
+}
+function leave(msg){
+  room = null;
+  try { socket.emit("leave-room"); socket.close(); } catch {}
+  try { pc && pc.close(); } catch {}
+  pc = dc = null; $("v").srcObject = null;
+  document.body.classList.remove("live"); if (msg) alert(msg); refresh();
+}
+$("leave").onclick = () => leave();
+
+/* ---------- input ---------- */
+const send = (i, v) => { if (dc && dc.readyState === "open") dc.send(JSON.stringify({ player: 0, index: i, value: v })); };
+const KEYS = { ArrowUp:4, ArrowDown:5, ArrowLeft:6, ArrowRight:7, z:8, x:0, a:9, s:1, q:10, e:11, Enter:3, v:2 };
+const held = new Set();
+addEventListener("keydown", e => { const i = KEYS[e.key.length === 1 ? e.key.toLowerCase() : e.key]; if (i === undefined || !room) return; e.preventDefault(); if (!held.has(i)) { held.add(i); send(i, 1); } });
+addEventListener("keyup", e => { const i = KEYS[e.key.length === 1 ? e.key.toLowerCase() : e.key]; if (i === undefined || !room) return; e.preventDefault(); held.delete(i); send(i, 0); });
+for (const b of document.querySelectorAll(".key[data-i]")) {
+  const i = +b.dataset.i;
+  b.addEventListener("pointerdown", e => { e.preventDefault(); b.setPointerCapture(e.pointerId); b.classList.add("active"); send(i, 1); });
+  for (const ev of ["pointerup", "pointercancel", "lostpointercapture"]) b.addEventListener(ev, () => { b.classList.remove("active"); send(i, 0); });
+}
+// touch screen: send normalized position over the video frame
+const v = $("v");
+const pos = e => { const r = v.getBoundingClientRect(); return { x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height }; };
+let down = false;
+v.addEventListener("pointerdown", e => { down = true; v.setPointerCapture(e.pointerId); socket.emit("data-message", { touch: { ...pos(e), s: "down" } }); });
+v.addEventListener("pointermove", e => { if (down) socket.emit("data-message", { touch: { ...pos(e), s: "move" } }); });
+for (const ev of ["pointerup", "pointercancel"]) v.addEventListener(ev, e => { if (down) { down = false; socket.emit("data-message", { touch: { ...pos(e), s: "up" } }); } });
+$("mute").onclick = () => { v.muted = !v.muted; $("mute").textContent = v.muted ? "Sonido" : "Silenciar"; v.play().catch(() => {}); };
+$("tpad").onclick = () => $("pad").classList.toggle("show");
+</script>
+</body>
+</html>

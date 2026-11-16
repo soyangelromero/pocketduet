@@ -1,0 +1,22 @@
+# Servicio systemd para Emerald Web en un VPS (deploy/README.md, opción C).
+# Copiar a /etc/systemd/system/emerald-web.service, ajustar rutas/usuario/clave y:
+#   sudo systemctl daemon-reload && sudo systemctl enable --now emerald-web
+[Unit]
+Description=Emerald Web - hub de emulacion retro en el navegador
+After=network.target
+
+[Service]
+Type=simple
+User=emerald
+WorkingDirectory=/srv/emerald-web
+Environment=HOST=127.0.0.1
+Environment=PORT=8080
+Environment=ACCESS_KEY=cambia-esta-clave-por-una-larga-y-aleatoria
+ExecStart=/usr/bin/node server.mjs
+Restart=on-failure
+RestartSec=3
+# melonDS-WASM usa hilos y memoria compartida: deja limites holgados
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

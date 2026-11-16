@@ -1,0 +1,57 @@
+node_modules/
+package-lock.json.bak
+*.log
+
+# Generated / local data
+data/*
+!data/.gitkeep
+!data/gba-saves/
+!data/art/
+data/gba-saves/*
+!data/gba-saves/.gitkeep
+data/art/*
+!data/art/.gitkeep
+
+# Games and console files are NEVER committed
+roms/*
+!roms/nds/
+!roms/gba/
+!roms/bios/
+!roms/nds/.gitkeep
+!roms/gba/.gitkeep
+!roms/bios/.gitkeep
+roms/**/*
+!roms/**/.gitkeep
+*.nds
+*.gba
+*.sav
+*.dsv
+*.bin
+*.rom
+*.firmware
+*.srl
+bios7.bin
+bios9.bin
+firmware.bin
+
+# Local runtime / secrets
+token.txt
+tunnel*.log
+tunnel*.txt
+server*.log
+server*.err
+server*.out
+.acl-recovery/
+.playwright-mcp/
+.env
+*.pem
+*.key
+
+# Build output / generated release
+package/
+release/
+dist-local/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

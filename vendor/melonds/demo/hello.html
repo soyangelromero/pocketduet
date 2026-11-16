@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>melonds-wasm · Fase 0</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 2rem; background: #111; color: #eee; }
+      main { max-width: 40rem; margin: 0 auto; }
+      code { background: #222; padding: 0.15rem 0.35rem; border-radius: 0.25rem; }
+      output { font-size: 2.5rem; font-weight: 700; color: #7ee787; }
+      .error { color: #ff7b72; white-space: pre-wrap; }
+      dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.35rem 1rem; }
+      dt { color: #9da7b3; }
+      dd { margin: 0; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>melonDS WASM · Fase 0</h1>
+      <p>Valor devuelto por <code>mds_hello()</code> desde WebAssembly:</p>
+      <output id="result">…</output>
+      <dl>
+        <dt>crossOriginIsolated</dt>
+        <dd id="coi">…</dd>
+        <dt>SharedArrayBuffer</dt>
+        <dd id="sab">…</dd>
+        <dt>pthreads compilados</dt>
+        <dd id="pthreads">…</dd>
+      </dl>
+      <p id="error" class="error" hidden></p>
+    </main>
+    <script type="module">
+      const result = document.querySelector("#result");
+      const error = document.querySelector("#error");
+
+      document.querySelector("#coi").textContent = String(globalThis.crossOriginIsolated);
+      document.querySelector("#sab").textContent = String(typeof SharedArrayBuffer !== "undefined");
+
+      try {
+        const { default: createModule } = await import("../dist/hello.js");
+        const module = await createModule();
+        result.textContent = String(module._mds_hello());
+        document.querySelector("#pthreads").textContent = String(module._mds_pthreads_enabled());
+      } catch (cause) {
+        result.textContent = "error";
+        error.hidden = false;
+        error.textContent = String(cause?.stack ?? cause);
+        throw cause;
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#141317">
+<title>Biblioteca retro · Web</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='9' width='26' height='14' rx='5' fill='%23f44336'/%3E%3Ccircle cx='22' cy='16' r='2' fill='%23fff'/%3E%3Cpath d='M9 13v6M6 16h6' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E">
+<script src="/ui/ui.js"></script>
+<link rel="stylesheet" href="/ui/ui.css">
+<style>
+  main { max-width: 1280px; margin: 0 auto; padding: 0 max(16px, var(--safe-r)) calc(40px + var(--safe-b)) max(16px, var(--safe-l)); }
+  .toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 6px 0 4px; }
+  .toolbar .seg { flex: none; }
+  .searchbox { position: relative; flex: 1 1 220px; max-width: 420px; margin-left: auto; }
+  .searchbox .i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted2); pointer-events: none; }
+  .searchbox .search { padding-left: 38px; }
+  .tab-n { display: inline-grid; place-items: center; min-width: 22px; height: 20px; padding: 0 6px; margin-left: 8px; border-radius: 999px; background: rgba(127,127,127,.22); font: 700 .68rem/1 var(--mono); }
+  .seg button.on .tab-n { background: rgba(0,0,0,.2); }
+  .desc { color: var(--muted); margin: 6px 2px 0; font-size: .88rem; }
+
+  /* estante “Continuar” */
+  .shelf { margin-top: 18px; }
+  .shelf-row { display: flex; gap: 12px; overflow-x: auto; padding: 4px 2px 10px; scroll-snap-type: x proximity; scrollbar-width: thin; }
+  .shelf-row a { scroll-snap-align: start; flex: 0 0 auto; width: 132px; text-decoration: none; color: inherit; }
+  .shelf-art { position: relative; aspect-ratio: 1/1; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--panel2); display: grid; place-items: center; }
+  .shelf-art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+  .shelf-art .ph { font-weight: 800; font-size: 1.5rem; color: rgba(255,255,255,.9); }
+  .shelf-row a b { display: block; margin-top: 7px; font-size: .8rem; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .shelf-row a small { color: var(--muted2); font: 600 .62rem var(--mono); text-transform: uppercase; letter-spacing: .06em; }
+
+  footer { margin-top: 28px; color: var(--muted2); font-size: .78rem; text-align: center; }
+
+  .engine-opt { display: grid; gap: 8px; }
+  .engine-opt label { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--radius-sm); background: var(--panel2); border: 1px solid var(--line); cursor: pointer; min-height: 52px; }
+  .engine-opt input { accent-color: var(--accent); width: 18px; height: 18px; }
+  .engine-opt b { display: block; font-size: .9rem; }
+  .engine-opt small { color: var(--muted); font-size: .76rem; }
+  .engine-opt label:has(input:checked) { border-color: var(--accent); background: var(--panel3); }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="logo"><svg class="i lg" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-gamepad"/></svg></div>
+    <div><h1>Biblioteca retro</h1><small>Juega tus ROM en el navegador</small></div>
+  </div>
+  <div class="grow"></div>
+  <button class="iconbtn" id="btnSettings" aria-label="Apariencia y motor" title="Apariencia y motor"><i data-i="settings"></i></button>
+</header>
+
+<main>
+  <div class="toolbar">
+    <div class="seg" role="tablist" aria-label="Sistema">
+      <button role="tab" data-t="gba" aria-selected="true" class="on">Game Boy Advance<span class="tab-n" id="nGba">…</span></button>
+      <button role="tab" data-t="nds" aria-selected="false">Nintendo DS<span class="tab-n" id="nNds">…</span></button>
+    </div>
+    <label class="searchbox"><i data-i="search" data-size="sm"></i><input class="search" id="q" type="search" placeholder="Buscar juego…" autocomplete="off" aria-label="Buscar juego"></label>
+  </div>
+  <p class="desc" id="desc"></p>
+
+  <section class="shelf" id="shelf" hidden>
+    <div class="label-s" style="margin-top:8px">Continuar</div>
+    <div class="shelf-row" id="shelfRow"></div>
+  </section>
+
+  <div class="label-s" id="allLabel">Todos los juegos</div>
+  <div class="grid" id="grid"></div>
+  <footer>Las ROM se leen de tu PC. Comparte el enlace solo con quien confíes.</footer>
+</main>
+
+<div class="scrim" id="scrim"></div>
+<aside class="sheet" id="sheet" role="dialog" aria-label="Ajustes" aria-modal="true">
+  <div class="grab"></div>
+  <h2>Apariencia</h2>
+  <div id="appearance"></div>
+  <div class="label-s">Motor de Nintendo DS</div>
+  <div class="engine-opt" id="engine">
+    <label><input type="radio" name="core" value="wasm"><div><b>melonDS WASM <span class="tag hot">nuevo</span></b><small>60 fps, avance rápido real y sin firmware.</small></div></label>
+    <label><input type="radio" name="core" value="melonds"><div><b>melonDS (EmulatorJS)</b><small>El de siempre. Más lento, resolución original.</small></div></label>
+    <label><input type="radio" name="core" value="desmume"><div><b>DeSmuME</b><small>Permite resolución x2 / x4.</small></div></label>
+  </div>
+  <button class="btn" id="sheetClose" style="width:100%;margin-top:18px">Cerrar</button>
+</aside>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const norm = (s) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+const fmt = (n) => n >= 1073741824 ? (n / 1073741824).toFixed(1) + " GB" : (n / 1048576).toFixed(0) + " MB";
+const DESC = { gba: "Pokémon y más para Game Boy Advance, con trucos y partida guardada en el servidor.", nds: "Nintendo DS con melonDS WASM, melonDS o DeSmuME, trucos, filtros y sala multijugador." };
+const NDS_CHEATS = new Set(["CPUS", "IPGS", "IRBS", "IRES"]);
+const KNOWN = [
+  [/esmeralda|emerald/i, ["#2fd884", "#0a5a3a"], "ESM"], [/rojo fuego|fire ?red/i, ["#ff7a59", "#7a1d0d"], "RF"], [/verde hoja|leaf ?green/i, ["#6bd66b", "#14561f"], "VH"],
+  [/rub[ií]|ruby/i, ["#ff5d73", "#6a0f25"], "RU"], [/zafiro|sapphire/i, ["#5d9bff", "#12306e"], "ZA"], [/platino|platinum/i, ["#8b95b8", "#2b3355"], "PT"],
+  [/soulsilver|plata/i, ["#cfd6ee", "#5b6794"], "SS"], [/heartgold|oro/i, ["#f2c75c", "#7a5a10"], "HG"], [/negra 2|black 2/i, ["#4a2f6b", "#120a22"], "N2"],
+  [/negra|black/i, ["#3a3d4a", "#0e0f16"], "N"], [/blanca 2|white 2/i, ["#9fb2e8", "#2e3a6b"], "B2"], [/blanca|white/i, ["#c9d4ff", "#51609b"], "B"],
+  [/diamante|diamond/i, ["#79b8ff", "#1c3f7a"], "D"], [/perla|pearl/i, ["#ffb3d1", "#8a3a63"], "P"],
+];
+function cover(name) {
+  for (const [re, c, t] of KNOWN) if (re.test(name)) return [c, t];
+  let h = 0; for (const ch of name) h = (h * 31 + ch.charCodeAt(0)) | 0; const a = Math.abs(h) % 360;
+  return [[`hsl(${a} 55% 48%)`, `hsl(${(a + 40) % 360} 50% 20%)`], name.replace(/[^A-Za-z0-9]/g, "").slice(0, 3).toUpperCase()];
+}
+const keyOf = (t, g) => t + ":" + g.name;
+const hrefOf = (t, g) => t === "gba" ? `/gba/?id=${g.id}` : `/nds/?play=${g.id}`;
+const data = { gba: [], nds: [] };
+let tab = location.hash === "#nds" ? "nds" : "gba";
+
+async function load() {
+  for (const t of ["gba", "nds"]) {
+    try { data[t] = await (await fetch(`/${t}/api/roms`)).json(); } catch { data[t] = []; }
+    $(t === "gba" ? "nGba" : "nNds").textContent = data[t].length;
+  }
+  render();
+}
+function artCover(t, g, cls) {
+  const [c, ph] = cover(g.name);
+  const el = document.createElement("div"); el.className = cls;
+  el.style.background = `linear-gradient(135deg,${c[0]},${c[1]})`;
+  el.innerHTML = `<span class="ph">${ph}</span><img loading="lazy" alt="" src="/art/${t}/${g.id}">`;
+  const im = el.querySelector("img");
+  im.onload = () => { el.querySelector(".ph")?.remove(); if (cls === "cover") el.style.background = "var(--panel2)"; };
+  im.onerror = () => im.remove();
+  return el;
+}
+function renderShelf() {
+  const recent = UI.recent.list().filter((r) => r.t === tab && data[tab].some((g) => g.name === r.name)).slice(0, 8);
+  const row = $("shelfRow"); row.textContent = "";
+  $("shelf").hidden = !recent.length || !!$("q").value.trim();
+  for (const r of recent) {
+    const g = data[tab].find((x) => x.name === r.name);
+    const a = document.createElement("a"); a.href = hrefOf(tab, g);
+    a.append(artCover(tab, g, "shelf-art"));
+    a.insertAdjacentHTML("beforeend", "<b></b><small></small>");
+    a.querySelector("b").textContent = g.name.replace(/^Pokemon - /, "");
+    a.querySelector("small").textContent = tab === "gba" ? "GBA" : "NDS";
+    row.append(a);
+  }
+}
+function render() {
+  for (const b of document.querySelectorAll(".seg [data-t]")) { const on = b.dataset.t === tab; b.setAttribute("aria-selected", on); b.classList.toggle("on", on); }
+  $("desc").textContent = DESC[tab];
+  const q = norm($("q").value.trim());
+  const favs = UI.favs.all();
+  const list = data[tab].filter((g) => !q || norm(g.name + " " + g.code).includes(q))
+    .sort((a, b) => (favs.has(keyOf(tab, b)) - favs.has(keyOf(tab, a))) || 0);
+  renderShelf();
+  $("allLabel").textContent = q ? "Resultados" : "Todos los juegos";
+  const grid = $("grid"); grid.textContent = "";
+  if (!list.length) { grid.innerHTML = '<div class="empty-box">' + (q ? "Sin resultados." : "No hay juegos en esta carpeta.") + "</div>"; return; }
+  for (const g of list) {
+    const a = document.createElement("a"); a.className = "card"; a.href = hrefOf(tab, g);
+    a.append(artCover(tab, g, "cover"));
+    a.insertAdjacentHTML("beforeend", '<div class="info"><b></b><small></small><div class="tags"></div></div>');
+    a.querySelector(".cover").insertAdjacentHTML("beforeend", '<span class="play">' + UI.icon("play", "sm") + "</span>");
+    const fav = document.createElement("button"); fav.className = "fav"; fav.type = "button"; fav.setAttribute("aria-label", "Favorito"); fav.innerHTML = UI.icon("star", "sm");
+    fav.setAttribute("aria-pressed", String(favs.has(keyOf(tab, g))));
+    fav.onclick = (e) => { e.preventDefault(); e.stopPropagation(); UI.favs.toggle(keyOf(tab, g)); render(); };
+    a.querySelector(".cover").append(fav);
+    a.querySelector("b").textContent = g.name; a.querySelector("small").textContent = g.code + " · " + fmt(g.size);
+    const tags = a.querySelector(".tags");
+    if ((tab === "gba" && g.code === "BPES") || (tab === "nds" && NDS_CHEATS.has(g.code))) tags.insertAdjacentHTML("beforeend", '<span class="tag ok">Trucos</span>');
+    if (g.hasSav) tags.insertAdjacentHTML("beforeend", '<span class="tag">Partida</span>');
+    if (g.size > 300 * 1048576) tags.insertAdjacentHTML("beforeend", '<span class="tag">ROM grande</span>');
+    a.addEventListener("click", () => UI.recent.add({ t: tab, name: g.name }));
+    grid.append(a);
+  }
+}
+for (const b of document.querySelectorAll(".seg [data-t]")) b.onclick = () => { tab = b.dataset.t; history.replaceState(null, "", "#" + tab); render(); };
+$("q").oninput = render;
+
+/* ajustes: apariencia + motor NDS */
+UI.mountAppearance($("appearance"));
+const core = UI.ls.get("nds.core") || "melonds";
+for (const r of document.querySelectorAll("#engine input")) { r.checked = r.value === core; r.onchange = () => { UI.ls.set("nds.core", r.value); UI.toast("Motor guardado"); }; }
+const sheet = $("sheet"), scrim = $("scrim");
+const openSheet = (on) => { sheet.classList.toggle("open", on); scrim.classList.toggle("open", on); };
+$("btnSettings").onclick = () => openSheet(!sheet.classList.contains("open"));
+$("sheetClose").onclick = scrim.onclick = () => openSheet(false);
+addEventListener("keydown", (e) => { if (e.key === "Escape") openSheet(false); });
+addEventListener("hashchange", () => { tab = location.hash === "#nds" ? "nds" : "gba"; render(); });
+load();
+</script>
+</body>
+</html>

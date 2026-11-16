@@ -1,0 +1,4325 @@
+[
+{
+"id": "islas",
+"title": "Islas secretas",
+"desc": "Activa una isla, entra a cualquier edificio o cambia de escenario y aparecerás allí. Desactívala después o volverás a la entrada de la isla.",
+"icon": "isla",
+"swap": true,
+"search": false,
+"items": [
+{
+"id": "islas:0",
+"name": "Isla Origen (Deoxys)",
+"sub": "Mapa de Deoxys",
+"kind": "CB",
+"lines": [
+"820322E4 3A1A"
+]
+},
+{
+"id": "islas:1",
+"name": "Roca Ombligo (Lugia / Ho-Oh)",
+"sub": "Isla del Navío / Roca",
+"kind": "CB",
+"lines": [
+"820322E4 421A"
+]
+},
+{
+"id": "islas:2",
+"name": "Isla Suprema (Mew)",
+"sub": "Isla de Mew",
+"kind": "CB",
+"lines": [
+"820322E4 381A"
+]
+},
+{
+"id": "islas:3",
+"name": "Isla del Sur (Latias / Latios)",
+"sub": "Isla del Sur",
+"kind": "CB",
+"lines": [
+"820322E4 0A1A"
+]
+}
+]
+},
+{
+"id": "exp",
+"title": "Experiencia infinita",
+"desc": "Activa, derrota a un Pokémon salvaje y tu Pokémon gana EXP sin parar. Desactívalo antes de evolucionar o aprender movimientos.",
+"icon": "exp",
+"swap": false,
+"search": false,
+"items": [
+{
+"id": "exp:0",
+"name": "EXP infinita",
+"sub": "Sube nivel sin límite",
+"kind": "CB",
+"lines": [
+"82000060 270F",
+"82022D48 270F",
+"82022F7C 270F",
+"8202309C 270F",
+"820241F0 270F"
+]
+}
+]
+},
+{
+"id": "objetos",
+"title": "Objeto infinito en el PC",
+"desc": "Reemplaza el primer objeto del PC por el que elijas (cantidad infinita). Antes saca tus objetos del PC: se sobrescribe esa ranura.",
+"icon": "objeto",
+"swap": true,
+"search": false,
+"items": [
+{
+"id": "objetos:0",
+"name": "Master Ball",
+"sub": "Master Balls",
+"kind": "PAR",
+"lines": [
+"02225EE0 00000001"
+]
+},
+{
+"id": "objetos:1",
+"name": "Old Sea Map",
+"sub": "Mapa Marino",
+"kind": "PAR",
+"lines": [
+"02225EE0 00000178"
+]
+},
+{
+"id": "objetos:2",
+"name": "Aurora Ticket",
+"sub": "Ticket Aurora",
+"kind": "PAR",
+"lines": [
+"02225EE0 00000173"
+]
+},
+{
+"id": "objetos:3",
+"name": "Mystic Ticket",
+"sub": "Ticket Místico",
+"kind": "PAR",
+"lines": [
+"02225EE0 00000172"
+]
+},
+{
+"id": "objetos:4",
+"name": "Rare Candy",
+"sub": "Caramelo Raro",
+"kind": "PAR",
+"lines": [
+"02225EE0 00000044"
+]
+},
+{
+"id": "objetos:5",
+"name": "Eon Ticket",
+"sub": "Ticket Eón",
+"kind": "PAR",
+"lines": [
+"02225EE0 00000113"
+]
+},
+{
+"id": "objetos:6",
+"name": "HP Up",
+"sub": "PS Más",
+"kind": "PAR",
+"lines": [
+"02225EE0 0000003F"
+]
+},
+{
+"id": "objetos:7",
+"name": "Protein",
+"sub": "Proteína",
+"kind": "PAR",
+"lines": [
+"02225EE0 00000040"
+]
+},
+{
+"id": "objetos:8",
+"name": "Iron",
+"sub": "Hierro",
+"kind": "PAR",
+"lines": [
+"02225EE0 00000041"
+]
+},
+{
+"id": "objetos:9",
+"name": "Carbos",
+"sub": "Carburante",
+"kind": "PAR",
+"lines": [
+"02225EE0 00000042"
+]
+},
+{
+"id": "objetos:10",
+"name": "Calcium",
+"sub": "Calcio",
+"kind": "PAR",
+"lines": [
+"02225EE0 00000043"
+]
+},
+{
+"id": "objetos:11",
+"name": "Lucky Egg",
+"sub": "Huevo Suerte",
+"kind": "PAR",
+"lines": [
+"02225EE0 000000C5"
+]
+}
+]
+},
+{
+"id": "pokemon",
+"title": "Pokémon salvajes",
+"desc": "Elige un Pokémon y camina por la hierba: solo aparecerá ese. Desactívalo cuando lo captures.",
+"icon": "pokemon",
+"swap": true,
+"search": true,
+"items": [
+{
+"id": "pokemon:0",
+"name": "Bulbasaur",
+"sub": "#001 · Bulbasaur",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000001"
+]
+},
+{
+"id": "pokemon:1",
+"name": "Ivysaur",
+"sub": "#002 · Ivysaur",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000002"
+]
+},
+{
+"id": "pokemon:2",
+"name": "Venusaur",
+"sub": "#003 · Venusaur",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000003"
+]
+},
+{
+"id": "pokemon:3",
+"name": "Charmander",
+"sub": "#004 · Charmander",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000004"
+]
+},
+{
+"id": "pokemon:4",
+"name": "Charmeleon",
+"sub": "#005 · Charmeleon",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000005"
+]
+},
+{
+"id": "pokemon:5",
+"name": "Charizard",
+"sub": "#006 · Charizard",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000006"
+]
+},
+{
+"id": "pokemon:6",
+"name": "Squirtle",
+"sub": "#007 · Squirtle",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000007"
+]
+},
+{
+"id": "pokemon:7",
+"name": "Wartortle",
+"sub": "#008 · Wartortle",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000008"
+]
+},
+{
+"id": "pokemon:8",
+"name": "Blastoise",
+"sub": "#009 · Blastoise",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000009"
+]
+},
+{
+"id": "pokemon:9",
+"name": "Caterpie",
+"sub": "#010 · Caterpie",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000000A"
+]
+},
+{
+"id": "pokemon:10",
+"name": "Metapod",
+"sub": "#011 · Metapod",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000000B"
+]
+},
+{
+"id": "pokemon:11",
+"name": "Butterfree",
+"sub": "#012 · Butterfree",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000000C"
+]
+},
+{
+"id": "pokemon:12",
+"name": "Weedle",
+"sub": "#013 · Weedle",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000000D"
+]
+},
+{
+"id": "pokemon:13",
+"name": "Kakuna",
+"sub": "#014 · Kakuna",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000000E"
+]
+},
+{
+"id": "pokemon:14",
+"name": "Beedrill",
+"sub": "#015 · Beedrill",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000000F"
+]
+},
+{
+"id": "pokemon:15",
+"name": "Pidgey",
+"sub": "#016 · Pidgey",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000010"
+]
+},
+{
+"id": "pokemon:16",
+"name": "Pidgeotto",
+"sub": "#017 · Pidgeotto",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000011"
+]
+},
+{
+"id": "pokemon:17",
+"name": "Pidgeot",
+"sub": "#018 · Pidgeot",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000012"
+]
+},
+{
+"id": "pokemon:18",
+"name": "Rattata",
+"sub": "#019 · Rattata",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000013"
+]
+},
+{
+"id": "pokemon:19",
+"name": "Raticate",
+"sub": "#020 · Raticate",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000014"
+]
+},
+{
+"id": "pokemon:20",
+"name": "Spearow",
+"sub": "#021 · Spearow",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000015"
+]
+},
+{
+"id": "pokemon:21",
+"name": "Fearow",
+"sub": "#022 · Fearow",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000016"
+]
+},
+{
+"id": "pokemon:22",
+"name": "Ekans",
+"sub": "#023 · Ekans",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000017"
+]
+},
+{
+"id": "pokemon:23",
+"name": "Arbok",
+"sub": "#024 · Arbok",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000018"
+]
+},
+{
+"id": "pokemon:24",
+"name": "Pikachu",
+"sub": "#025 · Pikachu",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000019"
+]
+},
+{
+"id": "pokemon:25",
+"name": "Raichu",
+"sub": "#026 · Raichu",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000001A"
+]
+},
+{
+"id": "pokemon:26",
+"name": "Sandshrew",
+"sub": "#027 · Sandshrew",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000001B"
+]
+},
+{
+"id": "pokemon:27",
+"name": "Sandslash",
+"sub": "#028 · Sandslash",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000001C"
+]
+},
+{
+"id": "pokemon:28",
+"name": "Nidoran♀",
+"sub": "#029 · Nidoran Female",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000001D"
+]
+},
+{
+"id": "pokemon:29",
+"name": "Nidorina",
+"sub": "#030 · Nidorina",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000001E"
+]
+},
+{
+"id": "pokemon:30",
+"name": "Nidoqueen",
+"sub": "#031 · Nidoqueen",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000001F"
+]
+},
+{
+"id": "pokemon:31",
+"name": "Nidoran♂",
+"sub": "#032 · Nidoran Male",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000020"
+]
+},
+{
+"id": "pokemon:32",
+"name": "Nidorino",
+"sub": "#033 · Nidorino",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000021"
+]
+},
+{
+"id": "pokemon:33",
+"name": "Nidoking",
+"sub": "#034 · Nidoking",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000022"
+]
+},
+{
+"id": "pokemon:34",
+"name": "Clefairy",
+"sub": "#035 · Clefairy",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000023"
+]
+},
+{
+"id": "pokemon:35",
+"name": "Clefable",
+"sub": "#036 · Clefable",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000024"
+]
+},
+{
+"id": "pokemon:36",
+"name": "Vulpix",
+"sub": "#037 · Vulpix",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000025"
+]
+},
+{
+"id": "pokemon:37",
+"name": "Ninetales",
+"sub": "#038 · Ninetales",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000026"
+]
+},
+{
+"id": "pokemon:38",
+"name": "Jigglypuff",
+"sub": "#039 · Jigglypuff",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000027"
+]
+},
+{
+"id": "pokemon:39",
+"name": "Wigglytuff",
+"sub": "#040 · Wigglytuff",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000028"
+]
+},
+{
+"id": "pokemon:40",
+"name": "Zubat",
+"sub": "#041 · Zubat",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000029"
+]
+},
+{
+"id": "pokemon:41",
+"name": "Golbat",
+"sub": "#042 · Golbat",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000002A"
+]
+},
+{
+"id": "pokemon:42",
+"name": "Oddish",
+"sub": "#043 · Oddish",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000002B"
+]
+},
+{
+"id": "pokemon:43",
+"name": "Gloom",
+"sub": "#044 · Gloom",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000002C"
+]
+},
+{
+"id": "pokemon:44",
+"name": "Vileplume",
+"sub": "#045 · Vileplume",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000002D"
+]
+},
+{
+"id": "pokemon:45",
+"name": "Paras",
+"sub": "#046 · Paras",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000002E"
+]
+},
+{
+"id": "pokemon:46",
+"name": "Parasect",
+"sub": "#047 · Parasect",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000002F"
+]
+},
+{
+"id": "pokemon:47",
+"name": "Venonat",
+"sub": "#048 · Venonat",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000030"
+]
+},
+{
+"id": "pokemon:48",
+"name": "Venomoth",
+"sub": "#049 · Venomoth",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000031"
+]
+},
+{
+"id": "pokemon:49",
+"name": "Diglett",
+"sub": "#050 · Diglett",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000032"
+]
+},
+{
+"id": "pokemon:50",
+"name": "Dugtrio",
+"sub": "#051 · Dugtrio",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000033"
+]
+},
+{
+"id": "pokemon:51",
+"name": "Meowth",
+"sub": "#052 · Meowth",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000034"
+]
+},
+{
+"id": "pokemon:52",
+"name": "Persian",
+"sub": "#053 · Persian",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000035"
+]
+},
+{
+"id": "pokemon:53",
+"name": "Psyduck",
+"sub": "#054 · Psyduck",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000036"
+]
+},
+{
+"id": "pokemon:54",
+"name": "Golduck",
+"sub": "#055 · Golduck",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000037"
+]
+},
+{
+"id": "pokemon:55",
+"name": "Mankey",
+"sub": "#056 · Mankey",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000038"
+]
+},
+{
+"id": "pokemon:56",
+"name": "Primeape",
+"sub": "#057 · Primeape",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000039"
+]
+},
+{
+"id": "pokemon:57",
+"name": "Growlithe",
+"sub": "#058 · Growlithe",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000003A"
+]
+},
+{
+"id": "pokemon:58",
+"name": "Arcanine",
+"sub": "#059 · Arcanine",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000003B"
+]
+},
+{
+"id": "pokemon:59",
+"name": "Poliwag",
+"sub": "#060 · Poliwag",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000003C"
+]
+},
+{
+"id": "pokemon:60",
+"name": "Poliwhirl",
+"sub": "#061 · Poliwhirl",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000003D"
+]
+},
+{
+"id": "pokemon:61",
+"name": "Poliwrath",
+"sub": "#062 · Poliwrath",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000003E"
+]
+},
+{
+"id": "pokemon:62",
+"name": "Abra",
+"sub": "#063 · Abra",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000003F"
+]
+},
+{
+"id": "pokemon:63",
+"name": "Kadabra",
+"sub": "#064 · Kadabra",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000040"
+]
+},
+{
+"id": "pokemon:64",
+"name": "Alakazam",
+"sub": "#065 · Alakazam",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000041"
+]
+},
+{
+"id": "pokemon:65",
+"name": "Machop",
+"sub": "#066 · Machop",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000042"
+]
+},
+{
+"id": "pokemon:66",
+"name": "Machoke",
+"sub": "#067 · Machoke",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000043"
+]
+},
+{
+"id": "pokemon:67",
+"name": "Machamp",
+"sub": "#068 · Machamp",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000044"
+]
+},
+{
+"id": "pokemon:68",
+"name": "Bellsprout",
+"sub": "#069 · Bellsprout",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000045"
+]
+},
+{
+"id": "pokemon:69",
+"name": "Weepinbell",
+"sub": "#070 · Weepinbell",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000046"
+]
+},
+{
+"id": "pokemon:70",
+"name": "Victreebel",
+"sub": "#071 · Victreebel",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000047"
+]
+},
+{
+"id": "pokemon:71",
+"name": "Tentacool",
+"sub": "#072 · Tentacool",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000048"
+]
+},
+{
+"id": "pokemon:72",
+"name": "Tentacruel",
+"sub": "#073 · Tentacruel",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000049"
+]
+},
+{
+"id": "pokemon:73",
+"name": "Geodude",
+"sub": "#074 · Geodude",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000004A"
+]
+},
+{
+"id": "pokemon:74",
+"name": "Graveler",
+"sub": "#075 · Graveler",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000004B"
+]
+},
+{
+"id": "pokemon:75",
+"name": "Golem",
+"sub": "#076 · Golem",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000004C"
+]
+},
+{
+"id": "pokemon:76",
+"name": "Ponyta",
+"sub": "#077 · Ponyta",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000004D"
+]
+},
+{
+"id": "pokemon:77",
+"name": "Rapidash",
+"sub": "#078 · Rapidash",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000004E"
+]
+},
+{
+"id": "pokemon:78",
+"name": "Slowpoke",
+"sub": "#079 · Slowpoke",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000004F"
+]
+},
+{
+"id": "pokemon:79",
+"name": "Slowbro",
+"sub": "#080 · Slowbro",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000050"
+]
+},
+{
+"id": "pokemon:80",
+"name": "Magnemite",
+"sub": "#081 · Magnemite",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000051"
+]
+},
+{
+"id": "pokemon:81",
+"name": "Magneton",
+"sub": "#082 · Magneton",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000052"
+]
+},
+{
+"id": "pokemon:82",
+"name": "Farfetch’d",
+"sub": "#083 · Farfetch’D",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000053"
+]
+},
+{
+"id": "pokemon:83",
+"name": "Doduo",
+"sub": "#084 · Doduo",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000054"
+]
+},
+{
+"id": "pokemon:84",
+"name": "Dodrio",
+"sub": "#085 · Dodrio",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000055"
+]
+},
+{
+"id": "pokemon:85",
+"name": "Seel",
+"sub": "#086 · Seel",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000056"
+]
+},
+{
+"id": "pokemon:86",
+"name": "Dewgong",
+"sub": "#087 · Dewgong",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000057"
+]
+},
+{
+"id": "pokemon:87",
+"name": "Grimer",
+"sub": "#088 · Grimer",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000058"
+]
+},
+{
+"id": "pokemon:88",
+"name": "Muk",
+"sub": "#089 · Muk",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000059"
+]
+},
+{
+"id": "pokemon:89",
+"name": "Shellder",
+"sub": "#090 · Shellder",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000005A"
+]
+},
+{
+"id": "pokemon:90",
+"name": "Cloyster",
+"sub": "#091 · Cloyster",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000005B"
+]
+},
+{
+"id": "pokemon:91",
+"name": "Gastly",
+"sub": "#092 · Gastly",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000005C"
+]
+},
+{
+"id": "pokemon:92",
+"name": "Haunter",
+"sub": "#093 · Haunter",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000005D"
+]
+},
+{
+"id": "pokemon:93",
+"name": "Gengar",
+"sub": "#094 · Gengar",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000005E"
+]
+},
+{
+"id": "pokemon:94",
+"name": "Onix",
+"sub": "#095 · Onix",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000005F"
+]
+},
+{
+"id": "pokemon:95",
+"name": "Drowzee",
+"sub": "#096 · Drowzee",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000060"
+]
+},
+{
+"id": "pokemon:96",
+"name": "Hypno",
+"sub": "#097 · Hypno",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000061"
+]
+},
+{
+"id": "pokemon:97",
+"name": "Krabby",
+"sub": "#098 · Krabby",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000062"
+]
+},
+{
+"id": "pokemon:98",
+"name": "Kingler",
+"sub": "#099 · Kingler",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000063"
+]
+},
+{
+"id": "pokemon:99",
+"name": "Voltorb",
+"sub": "#100 · Voltorb",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000064"
+]
+},
+{
+"id": "pokemon:100",
+"name": "Electrode",
+"sub": "#101 · Electrode",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000065"
+]
+},
+{
+"id": "pokemon:101",
+"name": "Exeggcute",
+"sub": "#102 · Exeggcute",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000066"
+]
+},
+{
+"id": "pokemon:102",
+"name": "Exeggutor",
+"sub": "#103 · Exeggutor",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000067"
+]
+},
+{
+"id": "pokemon:103",
+"name": "Cubone",
+"sub": "#104 · Cubone",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000068"
+]
+},
+{
+"id": "pokemon:104",
+"name": "Marowak",
+"sub": "#105 · Marowak",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000069"
+]
+},
+{
+"id": "pokemon:105",
+"name": "Hitmonlee",
+"sub": "#106 · Hitmonlee",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000006A"
+]
+},
+{
+"id": "pokemon:106",
+"name": "Hitmonchan",
+"sub": "#107 · Hitmonchan",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000006B"
+]
+},
+{
+"id": "pokemon:107",
+"name": "Lickitung",
+"sub": "#108 · Lickitung",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000006C"
+]
+},
+{
+"id": "pokemon:108",
+"name": "Koffing",
+"sub": "#109 · Koffing",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000006D"
+]
+},
+{
+"id": "pokemon:109",
+"name": "Weezing",
+"sub": "#110 · Weezing",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000006E"
+]
+},
+{
+"id": "pokemon:110",
+"name": "Rhyhorn",
+"sub": "#111 · Rhyhorn",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000006F"
+]
+},
+{
+"id": "pokemon:111",
+"name": "Rhydon",
+"sub": "#112 · Rhydon",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000070"
+]
+},
+{
+"id": "pokemon:112",
+"name": "Chansey",
+"sub": "#113 · Chansey",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000071"
+]
+},
+{
+"id": "pokemon:113",
+"name": "Tangela",
+"sub": "#114 · Tangela",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000072"
+]
+},
+{
+"id": "pokemon:114",
+"name": "Kangaskhan",
+"sub": "#115 · Kangaskhan",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000073"
+]
+},
+{
+"id": "pokemon:115",
+"name": "Horsea",
+"sub": "#116 · Horsea",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000074"
+]
+},
+{
+"id": "pokemon:116",
+"name": "Seadra",
+"sub": "#117 · Seadra",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000075"
+]
+},
+{
+"id": "pokemon:117",
+"name": "Goldeen",
+"sub": "#118 · Goldeen",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000076"
+]
+},
+{
+"id": "pokemon:118",
+"name": "Seaking",
+"sub": "#119 · Seaking",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000077"
+]
+},
+{
+"id": "pokemon:119",
+"name": "Staryu",
+"sub": "#120 · Staryu",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000078"
+]
+},
+{
+"id": "pokemon:120",
+"name": "Starmie",
+"sub": "#121 · Starmie",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000079"
+]
+},
+{
+"id": "pokemon:121",
+"name": "Mr. Mime",
+"sub": "#122 · Mr.Mime",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000007A"
+]
+},
+{
+"id": "pokemon:122",
+"name": "Scyther",
+"sub": "#123 · Scyther",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000007B"
+]
+},
+{
+"id": "pokemon:123",
+"name": "Jynx",
+"sub": "#124 · Jynx",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000007C"
+]
+},
+{
+"id": "pokemon:124",
+"name": "Electabuzz",
+"sub": "#125 · Electabuzz",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000007D"
+]
+},
+{
+"id": "pokemon:125",
+"name": "Magmar",
+"sub": "#126 · Magmar",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000007E"
+]
+},
+{
+"id": "pokemon:126",
+"name": "Pinsir",
+"sub": "#127 · Pinsir",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000007F"
+]
+},
+{
+"id": "pokemon:127",
+"name": "Tauros",
+"sub": "#128 · Tauros",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000080"
+]
+},
+{
+"id": "pokemon:128",
+"name": "Magikarp",
+"sub": "#129 · Magikarp",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000081"
+]
+},
+{
+"id": "pokemon:129",
+"name": "Gyarados",
+"sub": "#130 · Gyarados",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000082"
+]
+},
+{
+"id": "pokemon:130",
+"name": "Lapras",
+"sub": "#131 · Lapras",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000083"
+]
+},
+{
+"id": "pokemon:131",
+"name": "Ditto",
+"sub": "#132 · Ditto",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000084"
+]
+},
+{
+"id": "pokemon:132",
+"name": "Eevee",
+"sub": "#133 · Eevee",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000085"
+]
+},
+{
+"id": "pokemon:133",
+"name": "Vaporeon",
+"sub": "#134 · Vaporeon",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000086"
+]
+},
+{
+"id": "pokemon:134",
+"name": "Jolteon",
+"sub": "#135 · Jolteon",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000087"
+]
+},
+{
+"id": "pokemon:135",
+"name": "Flareon",
+"sub": "#136 · Flareon",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000088"
+]
+},
+{
+"id": "pokemon:136",
+"name": "Porygon",
+"sub": "#137 · Porygon",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000089"
+]
+},
+{
+"id": "pokemon:137",
+"name": "Omanyte",
+"sub": "#138 · Omanyte",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000008A"
+]
+},
+{
+"id": "pokemon:138",
+"name": "Omastar",
+"sub": "#139 · Omastar",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000008B"
+]
+},
+{
+"id": "pokemon:139",
+"name": "Kabuto",
+"sub": "#140 · Kabuto",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000008C"
+]
+},
+{
+"id": "pokemon:140",
+"name": "Kabutops",
+"sub": "#141 · Kabutops",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000008D"
+]
+},
+{
+"id": "pokemon:141",
+"name": "Aerodactyl",
+"sub": "#142 · Aerodactyl",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000008E"
+]
+},
+{
+"id": "pokemon:142",
+"name": "Snorlax",
+"sub": "#143 · Snorlax",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000008F"
+]
+},
+{
+"id": "pokemon:143",
+"name": "Articuno",
+"sub": "#144 · Articuno",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000090"
+]
+},
+{
+"id": "pokemon:144",
+"name": "Zapdos",
+"sub": "#145 · Zapdos",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000091"
+]
+},
+{
+"id": "pokemon:145",
+"name": "Moltres",
+"sub": "#146 · Moltres",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000092"
+]
+},
+{
+"id": "pokemon:146",
+"name": "Dratini",
+"sub": "#147 · Dratini",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000093"
+]
+},
+{
+"id": "pokemon:147",
+"name": "Dragonair",
+"sub": "#148 · Dragonair",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000094"
+]
+},
+{
+"id": "pokemon:148",
+"name": "Dragonite",
+"sub": "#149 · Dragonite",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000095"
+]
+},
+{
+"id": "pokemon:149",
+"name": "Mewtwo",
+"sub": "#150 · Mewtwo",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000096"
+]
+},
+{
+"id": "pokemon:150",
+"name": "Mew",
+"sub": "#151 · Mew",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000097"
+]
+},
+{
+"id": "pokemon:151",
+"name": "Chikorita",
+"sub": "#152 · Chikorita",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000098"
+]
+},
+{
+"id": "pokemon:152",
+"name": "Bayleef",
+"sub": "#153 · Bayleef",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000099"
+]
+},
+{
+"id": "pokemon:153",
+"name": "Meganium",
+"sub": "#154 · Meganium",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000009A"
+]
+},
+{
+"id": "pokemon:154",
+"name": "Cyndaquil",
+"sub": "#155 · Cyndaquil",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000009B"
+]
+},
+{
+"id": "pokemon:155",
+"name": "Quilava",
+"sub": "#156 · Quilava",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000009C"
+]
+},
+{
+"id": "pokemon:156",
+"name": "Typhlosion",
+"sub": "#157 · Typhlosion",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000009D"
+]
+},
+{
+"id": "pokemon:157",
+"name": "Totodile",
+"sub": "#158 · Totodile",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000009E"
+]
+},
+{
+"id": "pokemon:158",
+"name": "Croconaw",
+"sub": "#159 · Croconaw",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000009F"
+]
+},
+{
+"id": "pokemon:159",
+"name": "Feraligatr",
+"sub": "#160 · Feraligatr",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000A0"
+]
+},
+{
+"id": "pokemon:160",
+"name": "Sentret",
+"sub": "#161 · Sentret",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000A1"
+]
+},
+{
+"id": "pokemon:161",
+"name": "Furret",
+"sub": "#162 · Furret",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000A2"
+]
+},
+{
+"id": "pokemon:162",
+"name": "Hoothoot",
+"sub": "#163 · Hoothoot",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000A3"
+]
+},
+{
+"id": "pokemon:163",
+"name": "Noctowl",
+"sub": "#164 · Noctowl",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000A4"
+]
+},
+{
+"id": "pokemon:164",
+"name": "Ledyba",
+"sub": "#165 · Ledyba",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000A5"
+]
+},
+{
+"id": "pokemon:165",
+"name": "Ledian",
+"sub": "#166 · Ledian",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000A6"
+]
+},
+{
+"id": "pokemon:166",
+"name": "Spinarak",
+"sub": "#167 · Spinarak",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000A7"
+]
+},
+{
+"id": "pokemon:167",
+"name": "Ariados",
+"sub": "#168 · Ariados",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000A8"
+]
+},
+{
+"id": "pokemon:168",
+"name": "Crobat",
+"sub": "#169 · Crobat",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000A9"
+]
+},
+{
+"id": "pokemon:169",
+"name": "Chinchou",
+"sub": "#170 · Chinchou",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000AA"
+]
+},
+{
+"id": "pokemon:170",
+"name": "Lanturn",
+"sub": "#171 · Lanturn",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000AB"
+]
+},
+{
+"id": "pokemon:171",
+"name": "Pichu",
+"sub": "#172 · Pichu",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000AC"
+]
+},
+{
+"id": "pokemon:172",
+"name": "Cleffa",
+"sub": "#173 · Cleffa",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000AD"
+]
+},
+{
+"id": "pokemon:173",
+"name": "Igglybuff",
+"sub": "#174 · Igglybuff",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000AE"
+]
+},
+{
+"id": "pokemon:174",
+"name": "Togepi",
+"sub": "#175 · Togepi",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000AF"
+]
+},
+{
+"id": "pokemon:175",
+"name": "Togetic",
+"sub": "#176 · Togetic",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000B0"
+]
+},
+{
+"id": "pokemon:176",
+"name": "Natu",
+"sub": "#177 · Natu",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000B1"
+]
+},
+{
+"id": "pokemon:177",
+"name": "Xatu",
+"sub": "#178 · Xatu",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000B2"
+]
+},
+{
+"id": "pokemon:178",
+"name": "Mareep",
+"sub": "#179 · Mareep",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000B3"
+]
+},
+{
+"id": "pokemon:179",
+"name": "Flaaffy",
+"sub": "#180 · Flaaffy",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000B4"
+]
+},
+{
+"id": "pokemon:180",
+"name": "Ampharos",
+"sub": "#181 · Ampharos",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000B5"
+]
+},
+{
+"id": "pokemon:181",
+"name": "Bellossom",
+"sub": "#182 · Bellossom",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000B6"
+]
+},
+{
+"id": "pokemon:182",
+"name": "Marill",
+"sub": "#183 · Marill",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000B7"
+]
+},
+{
+"id": "pokemon:183",
+"name": "Azumarill",
+"sub": "#184 · Azumarill",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000B8"
+]
+},
+{
+"id": "pokemon:184",
+"name": "Sudowoodo",
+"sub": "#185 · Sudowoodo",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000B9"
+]
+},
+{
+"id": "pokemon:185",
+"name": "Politoed",
+"sub": "#186 · Politoed",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000BA"
+]
+},
+{
+"id": "pokemon:186",
+"name": "Hoppip",
+"sub": "#187 · Hoppip",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000BB"
+]
+},
+{
+"id": "pokemon:187",
+"name": "Skiploom",
+"sub": "#188 · Skiploom",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000BC"
+]
+},
+{
+"id": "pokemon:188",
+"name": "Jumpluff",
+"sub": "#189 · Jumpluff",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000BD"
+]
+},
+{
+"id": "pokemon:189",
+"name": "Aipom",
+"sub": "#190 · Aipom",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000BE"
+]
+},
+{
+"id": "pokemon:190",
+"name": "Sunkern",
+"sub": "#191 · Sunkern",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000BF"
+]
+},
+{
+"id": "pokemon:191",
+"name": "Sunflora",
+"sub": "#192 · Sunflora",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000C0"
+]
+},
+{
+"id": "pokemon:192",
+"name": "Yanma",
+"sub": "#193 · Yanma",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000C1"
+]
+},
+{
+"id": "pokemon:193",
+"name": "Wooper",
+"sub": "#194 · Wooper",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000C2"
+]
+},
+{
+"id": "pokemon:194",
+"name": "Quagsire",
+"sub": "#195 · Quagsire",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000C3"
+]
+},
+{
+"id": "pokemon:195",
+"name": "Espeon",
+"sub": "#196 · Espeon",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000C4"
+]
+},
+{
+"id": "pokemon:196",
+"name": "Umbreon",
+"sub": "#197 · Umbreon",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000C5"
+]
+},
+{
+"id": "pokemon:197",
+"name": "Murkrow",
+"sub": "#198 · Murkrow",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000C6"
+]
+},
+{
+"id": "pokemon:198",
+"name": "Slowking",
+"sub": "#199 · Slowking",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000C7"
+]
+},
+{
+"id": "pokemon:199",
+"name": "Misdreavus",
+"sub": "#200 · Misdreavus",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000C8"
+]
+},
+{
+"id": "pokemon:200",
+"name": "Unown",
+"sub": "#201 · Unown",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000C9"
+]
+},
+{
+"id": "pokemon:201",
+"name": "Wobbuffet",
+"sub": "#202 · Wobbuffet",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000CA"
+]
+},
+{
+"id": "pokemon:202",
+"name": "Girafarig",
+"sub": "#203 · Girafarig",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000CB"
+]
+},
+{
+"id": "pokemon:203",
+"name": "Pineco",
+"sub": "#204 · Pineco",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000CC"
+]
+},
+{
+"id": "pokemon:204",
+"name": "Forretress",
+"sub": "#205 · Forretress",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000CD"
+]
+},
+{
+"id": "pokemon:205",
+"name": "Dunsparce",
+"sub": "#206 · Dunsparce",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000CE"
+]
+},
+{
+"id": "pokemon:206",
+"name": "Gligar",
+"sub": "#207 · Gligar",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000CF"
+]
+},
+{
+"id": "pokemon:207",
+"name": "Steelix",
+"sub": "#208 · Steelix",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000D0"
+]
+},
+{
+"id": "pokemon:208",
+"name": "Snubbull",
+"sub": "#209 · Snubbull",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000D1"
+]
+},
+{
+"id": "pokemon:209",
+"name": "Granbull",
+"sub": "#210 · Granbull",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000D2"
+]
+},
+{
+"id": "pokemon:210",
+"name": "Qwilfish",
+"sub": "#211 · Qwilfish",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000D3"
+]
+},
+{
+"id": "pokemon:211",
+"name": "Scizor",
+"sub": "#212 · Scizor",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000D4"
+]
+},
+{
+"id": "pokemon:212",
+"name": "Shuckle",
+"sub": "#213 · Shuckle",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000D5"
+]
+},
+{
+"id": "pokemon:213",
+"name": "Heracross",
+"sub": "#214 · Heracross",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000D6"
+]
+},
+{
+"id": "pokemon:214",
+"name": "Sneasel",
+"sub": "#215 · Sneasel",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000D7"
+]
+},
+{
+"id": "pokemon:215",
+"name": "Teddiursa",
+"sub": "#216 · Teddiursa",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000D8"
+]
+},
+{
+"id": "pokemon:216",
+"name": "Ursaring",
+"sub": "#217 · Ursaring",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000D9"
+]
+},
+{
+"id": "pokemon:217",
+"name": "Slugma",
+"sub": "#218 · Slugma",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000DA"
+]
+},
+{
+"id": "pokemon:218",
+"name": "Magcargo",
+"sub": "#219 · Magcargo",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000DB"
+]
+},
+{
+"id": "pokemon:219",
+"name": "Swinub",
+"sub": "#220 · Swinub",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000DC"
+]
+},
+{
+"id": "pokemon:220",
+"name": "Piloswine",
+"sub": "#221 · Piloswine",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000DD"
+]
+},
+{
+"id": "pokemon:221",
+"name": "Corsola",
+"sub": "#222 · Corsola",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000DE"
+]
+},
+{
+"id": "pokemon:222",
+"name": "Remoraid",
+"sub": "#223 · Remoraid",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000DF"
+]
+},
+{
+"id": "pokemon:223",
+"name": "Octillery",
+"sub": "#224 · Octillery",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000E0"
+]
+},
+{
+"id": "pokemon:224",
+"name": "Delibird",
+"sub": "#225 · Delibird",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000E1"
+]
+},
+{
+"id": "pokemon:225",
+"name": "Mantine",
+"sub": "#226 · Mantine",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000E2"
+]
+},
+{
+"id": "pokemon:226",
+"name": "Skarmory",
+"sub": "#227 · Skarmory",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000E3"
+]
+},
+{
+"id": "pokemon:227",
+"name": "Houndour",
+"sub": "#228 · Houndour",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000E4"
+]
+},
+{
+"id": "pokemon:228",
+"name": "Houndoom",
+"sub": "#229 · Houndoom",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000E5"
+]
+},
+{
+"id": "pokemon:229",
+"name": "Kingdra",
+"sub": "#230 · Kingdra",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000E6"
+]
+},
+{
+"id": "pokemon:230",
+"name": "Phanpy",
+"sub": "#231 · Phanpy",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000E7"
+]
+},
+{
+"id": "pokemon:231",
+"name": "Donphan",
+"sub": "#232 · Donphan",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000E8"
+]
+},
+{
+"id": "pokemon:232",
+"name": "Porygon",
+"sub": "#137 · Porygon",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000E9"
+]
+},
+{
+"id": "pokemon:233",
+"name": "Stantler",
+"sub": "#234 · Stantler",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000EA"
+]
+},
+{
+"id": "pokemon:234",
+"name": "Smeargle",
+"sub": "#235 · Smeargle",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000EB"
+]
+},
+{
+"id": "pokemon:235",
+"name": "Tyrogue",
+"sub": "#236 · Tyrogue",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000EC"
+]
+},
+{
+"id": "pokemon:236",
+"name": "Hitmontop",
+"sub": "#237 · Hitmontop",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000ED"
+]
+},
+{
+"id": "pokemon:237",
+"name": "Smoochum",
+"sub": "#238 · Smoochum",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000EE"
+]
+},
+{
+"id": "pokemon:238",
+"name": "Elekid",
+"sub": "#239 · Elekid",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000EF"
+]
+},
+{
+"id": "pokemon:239",
+"name": "Magby",
+"sub": "#240 · Magby",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000F0"
+]
+},
+{
+"id": "pokemon:240",
+"name": "Miltank",
+"sub": "#241 · Miltank",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000F1"
+]
+},
+{
+"id": "pokemon:241",
+"name": "Blissey",
+"sub": "#242 · Blissey",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000F2"
+]
+},
+{
+"id": "pokemon:242",
+"name": "Raikou",
+"sub": "#243 · Raikou",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000F3"
+]
+},
+{
+"id": "pokemon:243",
+"name": "Entei",
+"sub": "#244 · Entei",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000F4"
+]
+},
+{
+"id": "pokemon:244",
+"name": "Suicune",
+"sub": "#245 · Suicune",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000F5"
+]
+},
+{
+"id": "pokemon:245",
+"name": "Larvitar",
+"sub": "#246 · Larvitar",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000F6"
+]
+},
+{
+"id": "pokemon:246",
+"name": "Pupitar",
+"sub": "#247 · Pupitar",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000F7"
+]
+},
+{
+"id": "pokemon:247",
+"name": "Tyranitar",
+"sub": "#248 · Tyranitar",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000F8"
+]
+},
+{
+"id": "pokemon:248",
+"name": "Lugia",
+"sub": "#249 · Lugia",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000F9"
+]
+},
+{
+"id": "pokemon:249",
+"name": "Ho-Oh",
+"sub": "#250 · Ho-Oh",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000FA"
+]
+},
+{
+"id": "pokemon:250",
+"name": "Celebi",
+"sub": "#251 · Celebi",
+"kind": "PAR",
+"lines": [
+"02307CF6 000000FB"
+]
+},
+{
+"id": "pokemon:251",
+"name": "Treecko",
+"sub": "#252 · Treecko",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000115"
+]
+},
+{
+"id": "pokemon:252",
+"name": "Grovyle",
+"sub": "#253 · Grovyle",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000116"
+]
+},
+{
+"id": "pokemon:253",
+"name": "Sceptile",
+"sub": "#254 · Sceptile",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000117"
+]
+},
+{
+"id": "pokemon:254",
+"name": "Torchic",
+"sub": "#255 · Torchic",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000118"
+]
+},
+{
+"id": "pokemon:255",
+"name": "Combusken",
+"sub": "#256 · Combusken",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000119"
+]
+},
+{
+"id": "pokemon:256",
+"name": "Blaziken",
+"sub": "#257 · Blaziken",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000011A"
+]
+},
+{
+"id": "pokemon:257",
+"name": "Mudkip",
+"sub": "#258 · Mudkip",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000011B"
+]
+},
+{
+"id": "pokemon:258",
+"name": "Marshtomp",
+"sub": "#259 · Marshtomp",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000011C"
+]
+},
+{
+"id": "pokemon:259",
+"name": "Swampert",
+"sub": "#260 · Swampert",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000011D"
+]
+},
+{
+"id": "pokemon:260",
+"name": "Poochyena",
+"sub": "#261 · Poochyena",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000011E"
+]
+},
+{
+"id": "pokemon:261",
+"name": "Mightyena",
+"sub": "#262 · Mightyena",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000011F"
+]
+},
+{
+"id": "pokemon:262",
+"name": "Zigzagoon",
+"sub": "#263 · Zigzagoon",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000120"
+]
+},
+{
+"id": "pokemon:263",
+"name": "Linoone",
+"sub": "#264 · Linoone",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000121"
+]
+},
+{
+"id": "pokemon:264",
+"name": "Wurmple",
+"sub": "#265 · Wurmple",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000122"
+]
+},
+{
+"id": "pokemon:265",
+"name": "Silcoon",
+"sub": "#266 · Silcoon",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000123"
+]
+},
+{
+"id": "pokemon:266",
+"name": "Beautifly",
+"sub": "#267 · Beautifly",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000124"
+]
+},
+{
+"id": "pokemon:267",
+"name": "Cascoon",
+"sub": "#268 · Cascoon",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000125"
+]
+},
+{
+"id": "pokemon:268",
+"name": "Dustox",
+"sub": "#269 · Dustox",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000126"
+]
+},
+{
+"id": "pokemon:269",
+"name": "Lotad",
+"sub": "#270 · Lotad",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000127"
+]
+},
+{
+"id": "pokemon:270",
+"name": "Lombre",
+"sub": "#271 · Lombre",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000128"
+]
+},
+{
+"id": "pokemon:271",
+"name": "Ludicolo",
+"sub": "#272 · Ludicolo",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000129"
+]
+},
+{
+"id": "pokemon:272",
+"name": "Seedot",
+"sub": "#273 · Seedot",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000012A"
+]
+},
+{
+"id": "pokemon:273",
+"name": "Nuzleaf",
+"sub": "#274 · Nuzleaf",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000012B"
+]
+},
+{
+"id": "pokemon:274",
+"name": "Shiftry",
+"sub": "#275 · Shiftry",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000012C"
+]
+},
+{
+"id": "pokemon:275",
+"name": "Nincada",
+"sub": "#290 · Nincada",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000012D"
+]
+},
+{
+"id": "pokemon:276",
+"name": "Ninjask",
+"sub": "#291 · Ninjask",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000012E"
+]
+},
+{
+"id": "pokemon:277",
+"name": "Shedinja",
+"sub": "#292 · Shedinja",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000012F"
+]
+},
+{
+"id": "pokemon:278",
+"name": "Taillow",
+"sub": "#276 · Taillow",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000130"
+]
+},
+{
+"id": "pokemon:279",
+"name": "Swellow",
+"sub": "#277 · Swellow",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000131"
+]
+},
+{
+"id": "pokemon:280",
+"name": "Shroomish",
+"sub": "#285 · Shroomish",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000132"
+]
+},
+{
+"id": "pokemon:281",
+"name": "Breloom",
+"sub": "#286 · Breloom",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000133"
+]
+},
+{
+"id": "pokemon:282",
+"name": "Spinda",
+"sub": "#327 · Spinda",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000134"
+]
+},
+{
+"id": "pokemon:283",
+"name": "Wingull",
+"sub": "#278 · Wingull",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000135"
+]
+},
+{
+"id": "pokemon:284",
+"name": "Pelipper",
+"sub": "#279 · Pelipper",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000136"
+]
+},
+{
+"id": "pokemon:285",
+"name": "Surskit",
+"sub": "#283 · Surskit",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000137"
+]
+},
+{
+"id": "pokemon:286",
+"name": "Masquerain",
+"sub": "#284 · Masquerain",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000138"
+]
+},
+{
+"id": "pokemon:287",
+"name": "Wailmer",
+"sub": "#320 · Wailmer",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000139"
+]
+},
+{
+"id": "pokemon:288",
+"name": "Wailord",
+"sub": "#321 · Wailord",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000013A"
+]
+},
+{
+"id": "pokemon:289",
+"name": "Skitty",
+"sub": "#300 · Skitty",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000013B"
+]
+},
+{
+"id": "pokemon:290",
+"name": "Delcatty",
+"sub": "#301 · Delcatty",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000013C"
+]
+},
+{
+"id": "pokemon:291",
+"name": "Kecleon",
+"sub": "#352 · Kecleon",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000013D"
+]
+},
+{
+"id": "pokemon:292",
+"name": "Baltoy",
+"sub": "#343 · Baltoy",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000013E"
+]
+},
+{
+"id": "pokemon:293",
+"name": "Claydol",
+"sub": "#344 · Claydol",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000013F"
+]
+},
+{
+"id": "pokemon:294",
+"name": "Nosepass",
+"sub": "#299 · Nosepass",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000140"
+]
+},
+{
+"id": "pokemon:295",
+"name": "Torkoal",
+"sub": "#324 · Torkoal",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000141"
+]
+},
+{
+"id": "pokemon:296",
+"name": "Sableye",
+"sub": "#302 · Sableye",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000142"
+]
+},
+{
+"id": "pokemon:297",
+"name": "Barboach",
+"sub": "#339 · Barboach",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000143"
+]
+},
+{
+"id": "pokemon:298",
+"name": "Whiscash",
+"sub": "#340 · Whiscash",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000144"
+]
+},
+{
+"id": "pokemon:299",
+"name": "Luvdisc",
+"sub": "#370 · Luvdisc",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000145"
+]
+},
+{
+"id": "pokemon:300",
+"name": "Corphish",
+"sub": "#341 · Corphish",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000146"
+]
+},
+{
+"id": "pokemon:301",
+"name": "Crawdaunt",
+"sub": "#342 · Crawdaunt",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000147"
+]
+},
+{
+"id": "pokemon:302",
+"name": "Feebas",
+"sub": "#349 · Feebas",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000148"
+]
+},
+{
+"id": "pokemon:303",
+"name": "Milotic",
+"sub": "#350 · Milotic",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000149"
+]
+},
+{
+"id": "pokemon:304",
+"name": "Carvanha",
+"sub": "#318 · Carvanha",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000014A"
+]
+},
+{
+"id": "pokemon:305",
+"name": "Sharpedo",
+"sub": "#319 · Sharpedo",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000014B"
+]
+},
+{
+"id": "pokemon:306",
+"name": "Trapinch",
+"sub": "#328 · Trapinch",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000014C"
+]
+},
+{
+"id": "pokemon:307",
+"name": "Vibrava",
+"sub": "#329 · Vibrava",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000014D"
+]
+},
+{
+"id": "pokemon:308",
+"name": "Flygon",
+"sub": "#330 · Flygon",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000014E"
+]
+},
+{
+"id": "pokemon:309",
+"name": "Makuhita",
+"sub": "#296 · Makuhita",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000014F"
+]
+},
+{
+"id": "pokemon:310",
+"name": "Hariyama",
+"sub": "#297 · Hariyama",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000150"
+]
+},
+{
+"id": "pokemon:311",
+"name": "Electrike",
+"sub": "#309 · Electrike",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000151"
+]
+},
+{
+"id": "pokemon:312",
+"name": "Manectric",
+"sub": "#310 · Manectric",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000152"
+]
+},
+{
+"id": "pokemon:313",
+"name": "Numel",
+"sub": "#322 · Numel",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000153"
+]
+},
+{
+"id": "pokemon:314",
+"name": "Camerupt",
+"sub": "#323 · Camerupt",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000154"
+]
+},
+{
+"id": "pokemon:315",
+"name": "Spheal",
+"sub": "#363 · Spheal",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000155"
+]
+},
+{
+"id": "pokemon:316",
+"name": "Sealeo",
+"sub": "#364 · Sealeo",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000156"
+]
+},
+{
+"id": "pokemon:317",
+"name": "Walrein",
+"sub": "#365 · Walrein",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000157"
+]
+},
+{
+"id": "pokemon:318",
+"name": "Cacnea",
+"sub": "#331 · Cacnea",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000158"
+]
+},
+{
+"id": "pokemon:319",
+"name": "Cacturne",
+"sub": "#332 · Cacturne",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000159"
+]
+},
+{
+"id": "pokemon:320",
+"name": "Snorunt",
+"sub": "#361 · Snorunt",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000015A"
+]
+},
+{
+"id": "pokemon:321",
+"name": "Glalie",
+"sub": "#362 · Glalie",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000015B"
+]
+},
+{
+"id": "pokemon:322",
+"name": "Lunatone",
+"sub": "#337 · Lunatone",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000015C"
+]
+},
+{
+"id": "pokemon:323",
+"name": "Solrock",
+"sub": "#338 · Solrock",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000015D"
+]
+},
+{
+"id": "pokemon:324",
+"name": "Azurill",
+"sub": "#298 · Azurill",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000015E"
+]
+},
+{
+"id": "pokemon:325",
+"name": "Spoink",
+"sub": "#325 · Spoink",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000015F"
+]
+},
+{
+"id": "pokemon:326",
+"name": "Grumpig",
+"sub": "#326 · Grumpig",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000160"
+]
+},
+{
+"id": "pokemon:327",
+"name": "Plusle",
+"sub": "#311 · Plusle",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000161"
+]
+},
+{
+"id": "pokemon:328",
+"name": "Minun",
+"sub": "#312 · Minun",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000162"
+]
+},
+{
+"id": "pokemon:329",
+"name": "Mawile",
+"sub": "#303 · Mawile",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000163"
+]
+},
+{
+"id": "pokemon:330",
+"name": "Meditite",
+"sub": "#307 · Meditite",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000164"
+]
+},
+{
+"id": "pokemon:331",
+"name": "Medicham",
+"sub": "#308 · Medicham",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000165"
+]
+},
+{
+"id": "pokemon:332",
+"name": "Swablu",
+"sub": "#333 · Swablu",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000166"
+]
+},
+{
+"id": "pokemon:333",
+"name": "Altaria",
+"sub": "#334 · Altaria",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000167"
+]
+},
+{
+"id": "pokemon:334",
+"name": "Wynaut",
+"sub": "#360 · Wynaut",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000168"
+]
+},
+{
+"id": "pokemon:335",
+"name": "Duskull",
+"sub": "#355 · Duskull",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000169"
+]
+},
+{
+"id": "pokemon:336",
+"name": "Dusclops",
+"sub": "#356 · Dusclops",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000016A"
+]
+},
+{
+"id": "pokemon:337",
+"name": "Roselia",
+"sub": "#315 · Roselia",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000016B"
+]
+},
+{
+"id": "pokemon:338",
+"name": "Slakoth",
+"sub": "#287 · Slakoth",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000016C"
+]
+},
+{
+"id": "pokemon:339",
+"name": "Vigoroth",
+"sub": "#288 · Vigoroth",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000016D"
+]
+},
+{
+"id": "pokemon:340",
+"name": "Slaking",
+"sub": "#289 · Slaking",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000016E"
+]
+},
+{
+"id": "pokemon:341",
+"name": "Gulpin",
+"sub": "#316 · Gulpin",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000016F"
+]
+},
+{
+"id": "pokemon:342",
+"name": "Swalot",
+"sub": "#317 · Swalot",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000170"
+]
+},
+{
+"id": "pokemon:343",
+"name": "Tropius",
+"sub": "#357 · Tropius",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000171"
+]
+},
+{
+"id": "pokemon:344",
+"name": "Whismur",
+"sub": "#293 · Whismur",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000172"
+]
+},
+{
+"id": "pokemon:345",
+"name": "Loudred",
+"sub": "#294 · Loudred",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000173"
+]
+},
+{
+"id": "pokemon:346",
+"name": "Exploud",
+"sub": "#295 · Exploud",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000174"
+]
+},
+{
+"id": "pokemon:347",
+"name": "Clamperl",
+"sub": "#366 · Clamperl",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000175"
+]
+},
+{
+"id": "pokemon:348",
+"name": "Huntail",
+"sub": "#367 · Huntail",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000176"
+]
+},
+{
+"id": "pokemon:349",
+"name": "Gorebyss",
+"sub": "#368 · Gorebyss",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000177"
+]
+},
+{
+"id": "pokemon:350",
+"name": "Absol",
+"sub": "#359 · Absol",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000178"
+]
+},
+{
+"id": "pokemon:351",
+"name": "Shuppet",
+"sub": "#353 · Shuppet",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000179"
+]
+},
+{
+"id": "pokemon:352",
+"name": "Banette",
+"sub": "#354 · Banette",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000017A"
+]
+},
+{
+"id": "pokemon:353",
+"name": "Seviper",
+"sub": "#336 · Seviper",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000017B"
+]
+},
+{
+"id": "pokemon:354",
+"name": "Zangoose",
+"sub": "#335 · Zangoose",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000017C"
+]
+},
+{
+"id": "pokemon:355",
+"name": "Relicanth",
+"sub": "#369 · Relicanth",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000017D"
+]
+},
+{
+"id": "pokemon:356",
+"name": "Aron",
+"sub": "#304 · Aron",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000017E"
+]
+},
+{
+"id": "pokemon:357",
+"name": "Lairon",
+"sub": "#305 · Lairon",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000017F"
+]
+},
+{
+"id": "pokemon:358",
+"name": "Aggron",
+"sub": "#306 · Aggron",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000180"
+]
+},
+{
+"id": "pokemon:359",
+"name": "Castform",
+"sub": "#351 · Castform",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000181"
+]
+},
+{
+"id": "pokemon:360",
+"name": "Volbeat",
+"sub": "#313 · Volbeat",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000182"
+]
+},
+{
+"id": "pokemon:361",
+"name": "Illumise",
+"sub": "#314 · Illumise",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000183"
+]
+},
+{
+"id": "pokemon:362",
+"name": "Lileep",
+"sub": "#345 · Lileep",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000184"
+]
+},
+{
+"id": "pokemon:363",
+"name": "Cradily",
+"sub": "#346 · Cradily",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000185"
+]
+},
+{
+"id": "pokemon:364",
+"name": "Anorith",
+"sub": "#347 · Anorith",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000186"
+]
+},
+{
+"id": "pokemon:365",
+"name": "Armaldo",
+"sub": "#348 · Armaldo",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000187"
+]
+},
+{
+"id": "pokemon:366",
+"name": "Ralts",
+"sub": "#280 · Ralts",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000188"
+]
+},
+{
+"id": "pokemon:367",
+"name": "Kirlia",
+"sub": "#281 · Kirlia",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000189"
+]
+},
+{
+"id": "pokemon:368",
+"name": "Gardevoir",
+"sub": "#282 · Gardevoir",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000018A"
+]
+},
+{
+"id": "pokemon:369",
+"name": "Bagon",
+"sub": "#371 · Bagon",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000018B"
+]
+},
+{
+"id": "pokemon:370",
+"name": "Shelgon",
+"sub": "#372 · Shelgon",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000018C"
+]
+},
+{
+"id": "pokemon:371",
+"name": "Salamence",
+"sub": "#373 · Salamence",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000018D"
+]
+},
+{
+"id": "pokemon:372",
+"name": "Beldum",
+"sub": "#374 · Beldum",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000018E"
+]
+},
+{
+"id": "pokemon:373",
+"name": "Metang",
+"sub": "#375 · Metang",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000018F"
+]
+},
+{
+"id": "pokemon:374",
+"name": "Metagross",
+"sub": "#376 · Metagross",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000190"
+]
+},
+{
+"id": "pokemon:375",
+"name": "Regirock",
+"sub": "#377 · Regirock",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000191"
+]
+},
+{
+"id": "pokemon:376",
+"name": "Regice",
+"sub": "#378 · Regice",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000192"
+]
+},
+{
+"id": "pokemon:377",
+"name": "Registeel",
+"sub": "#379 · Registeel",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000193"
+]
+},
+{
+"id": "pokemon:378",
+"name": "Kyogre",
+"sub": "#382 · Kyogre",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000194"
+]
+},
+{
+"id": "pokemon:379",
+"name": "Groudon",
+"sub": "#383 · Groudon",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000195"
+]
+},
+{
+"id": "pokemon:380",
+"name": "Rayquaza",
+"sub": "#384 · Rayquaza",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000196"
+]
+},
+{
+"id": "pokemon:381",
+"name": "Latias",
+"sub": "#380 · Latias",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000197"
+]
+},
+{
+"id": "pokemon:382",
+"name": "Latios",
+"sub": "#381 · Latios",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000198"
+]
+},
+{
+"id": "pokemon:383",
+"name": "Jirachi",
+"sub": "#385 · Jirachi",
+"kind": "PAR",
+"lines": [
+"02307CF6 00000199"
+]
+},
+{
+"id": "pokemon:384",
+"name": "Deoxys",
+"sub": "#386 · Deoxys",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000019A"
+]
+},
+{
+"id": "pokemon:385",
+"name": "Chimecho",
+"sub": "#358 · Chimecho",
+"kind": "PAR",
+"lines": [
+"02307CF6 0000019B"
+]
+}
+]
+},
+{
+"id": "lugares",
+"title": "Teletransportes",
+"desc": "Activa un lugar y cambia de escenario (entra a un edificio) para aparecer allí. Desactívalo después.",
+"icon": "mapa",
+"swap": true,
+"search": true,
+"items": [
+{
+"id": "lugares:0",
+"name": "Élite Cuatro Sydney",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000010"
+]
+},
+{
+"id": "lugares:1",
+"name": "Casa del Colector de Casco (Ruta 124)",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000021"
+]
+},
+{
+"id": "lugares:2",
+"name": "Vieja Parada de Resto de Señora (Ruta 111)",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000112"
+]
+},
+{
+"id": "lugares:3",
+"name": "Alguna vez Grande Ciudad",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000800"
+]
+},
+{
+"id": "lugares:4",
+"name": "Isla del Sur",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000A1A"
+]
+},
+{
+"id": "lugares:5",
+"name": "Ciudad Petalia",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000000"
+]
+},
+{
+"id": "lugares:6",
+"name": "Ciudad Portual",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000100"
+]
+},
+{
+"id": "lugares:7",
+"name": "Ciudad Malvalona",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000200"
+]
+},
+{
+"id": "lugares:8",
+"name": "Ciudad Ferrica",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000300"
+]
+},
+{
+"id": "lugares:9",
+"name": "Ciudad Arborada",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000400"
+]
+},
+{
+"id": "lugares:10",
+"name": "Ciudad Calagua",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000500"
+]
+},
+{
+"id": "lugares:11",
+"name": "Ciudad Algaria",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000600"
+]
+},
+{
+"id": "lugares:12",
+"name": "Cuidad Arrecipolis",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000700"
+]
+},
+{
+"id": "lugares:13",
+"name": "Villa Raíz",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000900"
+]
+},
+{
+"id": "lugares:14",
+"name": "Ciudad Escaso",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000A00"
+]
+},
+{
+"id": "lugares:15",
+"name": "Pueblo Azuliza",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000B00"
+]
+},
+{
+"id": "lugares:16",
+"name": "Ciudad Lavacalda",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000C00"
+]
+},
+{
+"id": "lugares:17",
+"name": "Ciudad Pardal",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000D00"
+]
+},
+{
+"id": "lugares:18",
+"name": "Ciudad Verdegal",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000E00"
+]
+},
+{
+"id": "lugares:19",
+"name": "Ciudad Oromar",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000F00"
+]
+},
+{
+"id": "lugares:20",
+"name": "Azotea del Almacén de Ciudad Calagua",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 0000380A"
+]
+},
+{
+"id": "lugares:21",
+"name": "Casa de Pesca del Tipo en Ciudad Algaria",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 0000380B"
+]
+},
+{
+"id": "lugares:22",
+"name": "Casa en Arrecipolis",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 0000380C"
+]
+},
+{
+"id": "lugares:23",
+"name": "Phoebe",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 0000380D"
+]
+},
+{
+"id": "lugares:24",
+"name": "Cueva Caída de Meteoritos",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 0000380E"
+]
+},
+{
+"id": "lugares:25",
+"name": "Camino Ardiente",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 0000380F"
+]
+},
+{
+"id": "lugares:26",
+"name": "Sydney",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000010"
+]
+},
+{
+"id": "lugares:27",
+"name": "Phoebe",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000110"
+]
+},
+{
+"id": "lugares:28",
+"name": "Glacia",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000210"
+]
+},
+{
+"id": "lugares:29",
+"name": "Pato",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000310"
+]
+},
+{
+"id": "lugares:30",
+"name": "Wallace",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000410"
+]
+},
+{
+"id": "lugares:31",
+"name": "Centro Pokemon antes de la Elite 4",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000A10"
+]
+},
+{
+"id": "lugares:32",
+"name": "Pasillo de Fama",
+"sub": "Teletransporte",
+"kind": "PAR",
+"lines": [
+"022722E4 00000B10"
+]
+}
+]
+},
+{
+"id": "pc",
+"title": "Llenar el PC",
+"desc": "Llena el PC con 99 unidades de cada objeto. Saca antes todo lo que tengas guardado, actívalo, y desactívalo cuando ya estén los objetos.",
+"icon": "pc",
+"swap": false,
+"search": false,
+"items": [
+{
+"id": "pc:0",
+"name": "Objetos del PC",
+"sub": "49 objetos",
+"kind": "PAR",
+"lines": [
+"04225E98 0063000D",
+"04225E9C 0063000E",
+"04225EA0 0063000F",
+"04225EA4 00630010",
+"04225EA8 00630011",
+"04225EAC 00630012",
+"04225EB0 00630013",
+"04225EB4 00630014",
+"04225EB8 00630015",
+"04225EBC 00630016",
+"04225EC0 00630017",
+"04225EC4 00630018",
+"04225EC8 00630019",
+"04225ECC 0063001A",
+"04225ED0 0063001B",
+"04225ED4 0063001C",
+"04225ED8 0063001D",
+"04225EDC 0063001E",
+"04225EE0 0063001F",
+"04225EE4 00630020",
+"04225EE8 00630021",
+"04225EEC 00630022",
+"04225EF0 00630023",
+"04225EF4 00630024",
+"04225EF8 00630025",
+"04225EFC 00630026",
+"04225F00 00630027",
+"04225F04 00630028",
+"04225F08 00630029",
+"04225F0C 0063002A",
+"04225F10 0063002B",
+"04225F14 0063002C",
+"04225F18 0063002D",
+"04225F1C 0063002E",
+"04225F20 0063002F",
+"04225F24 00630030",
+"04225F28 00630031",
+"04225F2C 00630032",
+"04225F30 00630033",
+"04225F34 0063003F",
+"04225F38 00630040",
+"04225F3C 00630041",
+"04225F40 00630042",
+"04225F44 00630043",
+"04225F48 00630044",
+"04225F4C 00630045",
+"04225F50 00630046",
+"04225F54 00630047",
+"04225F58 00630049"
+]
+},
+{
+"id": "pc:1",
+"name": "Cartas",
+"sub": "38 cartas",
+"kind": "PAR",
+"lines": [
+"04225E98 0063004A",
+"04225E9C 0063004B",
+"04225EA0 0063004C",
+"04225EA4 0063004D",
+"04225EA8 0063004E",
+"04225EAC 0063004F",
+"04225EB0 00630050",
+"04225EB4 00630051",
+"04225EB8 00630053",
+"04225EBC 00630054",
+"04225EC0 00630055",
+"04225EC4 00630056",
+"04225EC8 0063005D",
+"04225ECC 0063005E",
+"04225ED0 0063005F",
+"04225ED4 00630060",
+"04225ED8 00630061",
+"04225EDC 00630062",
+"04225EE0 00630067",
+"04225EE4 00630068",
+"04225EE8 0063006A",
+"04225EEC 0063006B",
+"04225EF0 0063006C",
+"04225EF4 0063006D",
+"04225EF8 0063006E",
+"04225EFC 0063006F",
+"04225F00 00630079",
+"04225F04 0063007A",
+"04225F08 0063007B",
+"04225F0C 0063007C",
+"04225F10 0063007D",
+"04225F14 0063007E",
+"04225F18 0063007F",
+"04225F1C 00630080",
+"04225F20 00630081",
+"04225F24 00630082",
+"04225F28 00630083",
+"04225F2C 00630084"
+]
+},
+{
+"id": "pc:2",
+"name": "Bayas",
+"sub": "43 bayas",
+"kind": "PAR",
+"lines": [
+"04225E98 00630085",
+"04225E9C 00630086",
+"04225EA0 00630087",
+"04225EA4 00630088",
+"04225EA8 00630089",
+"04225EAC 0063008A",
+"04225EB0 0063008B",
+"04225EB4 0063008C",
+"04225EB8 0063008D",
+"04225EBC 0063008E",
+"04225EC0 0063008F",
+"04225EC4 00630090",
+"04225EC8 00630091",
+"04225ECC 00630092",
+"04225ED0 00630093",
+"04225ED4 00630094",
+"04225ED8 00630095",
+"04225EDC 00630096",
+"04225EE0 00630097",
+"04225EE4 00630098",
+"04225EE8 00630099",
+"04225EEC 0063009A",
+"04225EF0 0063009B",
+"04225EF4 0063009C",
+"04225EF8 0063009D",
+"04225EFC 0063009E",
+"04225F00 0063009F",
+"04225F04 006300A0",
+"04225F08 006300A1",
+"04225F0C 006300A2",
+"04225F10 006300A3",
+"04225F14 006300A4",
+"04225F18 006300A5",
+"04225F1C 006300A6",
+"04225F20 006300A7",
+"04225F24 006300A8",
+"04225F28 006300A9",
+"04225F2C 006300AA",
+"04225F30 006300AB",
+"04225F34 006300AC",
+"04225F38 006300AD",
+"04225F3C 006300AE",
+"04225F40 006300AF"
+]
+},
+{
+"id": "pc:3",
+"name": "Objetos equipables",
+"sub": "50 objetos",
+"kind": "PAR",
+"lines": [
+"04225E98 006300B3",
+"04225E9C 006300B4",
+"04225EA0 006300B5",
+"04225EA4 006300B6",
+"04225EA8 006300B7",
+"04225EAC 006300B8",
+"04225EB0 006300B9",
+"04225EB4 006300BA",
+"04225EB8 006300BB",
+"04225EBC 006300BC",
+"04225EC0 006300BD",
+"04225EC4 006300BE",
+"04225EC8 006300BF",
+"04225ECC 006300C0",
+"04225ED0 006300C1",
+"04225ED4 006300C2",
+"04225ED8 006300C3",
+"04225EDC 006300C4",
+"04225EE0 006300C5",
+"04225EE4 006300C6",
+"04225EE8 006300C7",
+"04225EEC 006300C8",
+"04225EF0 006300C9",
+"04225EF4 006300CA",
+"04225EF8 006300CB",
+"04225EFC 006300CC",
+"04225F00 006300CD",
+"04225F04 006300CE",
+"04225F08 006300CF",
+"04225F0C 006300D0",
+"04225F10 006300D1",
+"04225F14 006300D2",
+"04225F18 006300D3",
+"04225F1C 006300D4",
+"04225F20 006300D5",
+"04225F24 006300D6",
+"04225F28 006300D7",
+"04225F2C 006300D8",
+"04225F30 006300D9",
+"04225F34 006300DA",
+"04225F38 006300DB",
+"04225F3C 006300DC",
+"04225F40 006300DD",
+"04225F44 006300DE",
+"04225F48 006300DF",
+"04225F4C 006300E0",
+"04225F50 006300E1",
+"04225F54 006300FE",
+"04225F58 006300FF",
+"04225F5C 00630100"
+]
+},
+{
+"id": "pc:4",
+"name": "Objetos Rojo Fuego / Verde Hoja",
+"sub": "26 objetos",
+"kind": "PAR",
+"lines": [
+"04225E98 0001015D",
+"04225E9C 0001015E",
+"04225EA0 0001015F",
+"04225EA4 00010160",
+"04225EA8 00010161",
+"04225EAC 00010162",
+"04225EB0 00010163",
+"04225EB4 00010164",
+"04225EB8 00010165",
+"04225EBC 00010166",
+"04225EC0 00010167",
+"04225EC4 00010168",
+"04225EC8 00010169",
+"04225ECC 0001016A",
+"04225ED0 0001016B",
+"04225ED4 0001016C",
+"04225ED8 0001016D",
+"04225EDC 0001016E",
+"04225EE0 0001016F",
+"04225EE4 00010170",
+"04225EE8 00010171",
+"04225EEC 00010172",
+"04225EF0 00010173",
+"04225EF4 00010174",
+"04225EF8 00010175",
+"04225EFC 00010176"
+]
+},
+{
+"id": "pc:5",
+"name": "Objetos Rubí / Zafiro",
+"sub": "23 objetos",
+"kind": "PAR",
+"lines": [
+"04225E98 00010109",
+"04225E9C 0001010A",
+"04225EA0 0001010C",
+"04225EA4 0001010D",
+"04225EA8 0001010E",
+"04225EAC 0001010F",
+"04225EB0 00010110",
+"04225EB4 00010111",
+"04225EB8 00010112",
+"04225EBC 00010113",
+"04225EC0 00010114",
+"04225EC4 00010115",
+"04225EC8 00010116",
+"04225ECC 00010117",
+"04225ED0 00010118",
+"04225ED4 00010119",
+"04225ED8 0001011A",
+"04225EDC 0001011B",
+"04225EE0 0001011C",
+"04225EE4 0001011D",
+"04225EE8 0001011E",
+"04225EEC 0001011F",
+"04225EF0 00010120"
+]
+},
+{
+"id": "pc:6",
+"name": "MTs 1-50",
+"sub": "50 MTs",
+"kind": "PAR",
+"lines": [
+"04225E98 00630121",
+"04225E9C 00630122",
+"04225EA0 00630123",
+"04225EA4 00630124",
+"04225EA8 00630125",
+"04225EAC 00630126",
+"04225EB0 00630127",
+"04225EB4 00630128",
+"04225EB8 00630129",
+"04225EBC 0063012A",
+"04225EC0 0063012B",
+"04225EC4 0063012C",
+"04225EC8 0063012D",
+"04225ECC 0063012E",
+"04225ED0 0063012F",
+"04225ED4 00630130",
+"04225ED8 00630131",
+"04225EDC 00630132",
+"04225EE0 00630133",
+"04225EE4 00630134",
+"04225EE8 00630135",
+"04225EEC 00630136",
+"04225EF0 00630137",
+"04225EF4 00630138",
+"04225EF8 00630139",
+"04225EFC 0063013A",
+"04225F00 0063013B",
+"04225F04 0063013C",
+"04225F08 0063013D",
+"04225F0C 0063013E",
+"04225F10 0063013F",
+"04225F14 00630140",
+"04225F18 00630141",
+"04225F1C 00630142",
+"04225F20 00630143",
+"04225F24 00630144",
+"04225F28 00630145",
+"04225F2C 00630146",
+"04225F30 00630147",
+"04225F34 00630148",
+"04225F38 00630149",
+"04225F3C 0063014A",
+"04225F40 0063014B",
+"04225F44 0063014C",
+"04225F48 0063014D",
+"04225F4C 0063014E",
+"04225F50 0063014F",
+"04225F54 00630150",
+"04225F58 00630151",
+"04225F5C 00630152"
+]
+}
+]
+}
+]
