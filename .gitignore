@@ -14,14 +14,16 @@ data/art/*
 
 # Games and console files are NEVER committed
 roms/*
+!roms/.gitkeep
 !roms/nds/
 !roms/gba/
 !roms/bios/
+roms/nds/*
+roms/gba/*
+roms/bios/*
 !roms/nds/.gitkeep
 !roms/gba/.gitkeep
 !roms/bios/.gitkeep
-roms/**/*
-!roms/**/.gitkeep
 *.nds
 *.gba
 *.sav
