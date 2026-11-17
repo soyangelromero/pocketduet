@@ -20,7 +20,7 @@ const GBA_ROMS = [
 
 const ISOLATION_HEADERS = {
   "cross-origin-opener-policy": "same-origin",
-  "cross-origin-embedder-policy": "credentialless",
+  "cross-origin-embedder-policy": "require-corp",
   "cross-origin-resource-policy": "cross-origin",
 };
 
