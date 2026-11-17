@@ -1,10 +1,10 @@
-# Cloudflare Tunnel con nombre para Emerald Web (ver deploy/README.md, opción A).
+# Cloudflare Tunnel con nombre para PocketDuet (ver deploy/README.md, opción A).
 # Copiar a %USERPROFILE%\.cloudflared\config.yml y rellenar tunnel / credentials-file / hostname.
 tunnel: RELLENA_EL_UUID_DEL_TUNEL
 credentials-file: C:\Users\TU_USUARIO\.cloudflared\RELLENA_EL_UUID_DEL_TUNEL.json
 
 ingress:
-  - hostname: emerald.tudominio.com
+  - hostname: pocketduet.tudominio.com
     service: http://127.0.0.1:8080
     originRequest:
       # El hub y el motor WASM necesitan HTTP/1.1 normal; deja que Cloudflare negocie WebSocket para socket.io.

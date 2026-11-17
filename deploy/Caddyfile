@@ -1,6 +1,6 @@
-# Caddy para Emerald Web (deploy/README.md, opción C).
+# Caddy para PocketDuet (deploy/README.md, opción C).
 # Caddy obtiene el certificado solo y **no** toca las cabeceras COOP/COEP que manda server.mjs.
-emerald.tudominio.com {
+pocketduet.tudominio.com {
 	encode zstd gzip
 	reverse_proxy 127.0.0.1:8080 {
 		# WebSocket de socket.io (multijugador)

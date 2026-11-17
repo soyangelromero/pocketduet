@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="docs/assets/banner.svg" alt="Emerald Web — Nintendo DS y Game Boy Advance en el navegador" width="900">
+  <img src="docs/assets/banner.svg" alt="PocketDuet — Nintendo DS y Game Boy Advance en el navegador" width="900">
 </p>
 
-<h1 align="center">Emerald Web</h1>
+<h1 align="center">PocketDuet</h1>
 
 <p align="center">
   <b>Nintendo DS y Game Boy Advance, jugables directamente en tu navegador.</b><br>
@@ -32,11 +32,11 @@
 ## Capturas
 
 <p align="center">
-  <img src="docs/assets/screenshot-desktop.png" alt="Emerald Web en escritorio" width="78%">
+  <img src="docs/assets/screenshot-desktop.png" alt="PocketDuet en escritorio" width="78%">
 </p>
 <p align="center">
-  <img src="docs/assets/screenshot-mobile.png" alt="Emerald Web en móvil" width="22%">
-  <img src="docs/assets/screenshot-mobile-fullscreen.png" alt="Emerald Web a pantalla completa" width="22%">
+  <img src="docs/assets/screenshot-mobile.png" alt="PocketDuet en móvil" width="22%">
+  <img src="docs/assets/screenshot-mobile-fullscreen.png" alt="PocketDuet a pantalla completa" width="22%">
 </p>
 
 <p align="center">
@@ -46,16 +46,20 @@
 
 ## Qué incluye
 
-**Emerald Web** es la aplicación web completa que integra los dos emuladores y la biblioteca:
+**PocketDuet** es la aplicación web completa que integra los dos emuladores y la biblioteca:
 
 | Pieza | Detalle |
 |---|---|
-| 🎮 **Nintendo DS** | Port **melonDS DS v1.4.0** a WebAssembly, adaptado a la interfaz web (`?engine=wasm`). Runtime en `vendor/melonds/`; fuente en el submódulo `port-melonds/`. |
+| 🎮 **Nintendo DS** | Port **[melonDS-WASM](https://github.com/soyangelromero/melonds-wasm)** (melonDS DS v1.4.0 a WebAssembly) adaptado a la interfaz web (`?engine=wasm`). Runtime en `vendor/melonds/`; fuente en el submódulo `port-melonds/`. |
 | 🕹️ **Game Boy Advance** | Reproductor **mGBA-WASM** (`@thenick775/mgba-wasm` v2.6.0) con guardado, estados, trucos, controles táctiles y pantalla completa. |
 | 🗂️ **Biblioteca** | Hub que lista tus propias ROMs de `roms/`, portadas descargadas en caché y acceso a ambos reproductores. |
 | 👥 **Multijugador** | Señalización socket.io para el anfitrión WebRTC del port de DS. |
 | 📱 **Móvil** | Interfaz táctil, disposiciones vertical/horizontal, pantalla completa con controles, temas de pad y ajustes de pantalla. |
 | 🔐 **Acceso remoto** | `HOST`, `PORT` y `ACCESS_KEY` (página, APIs, estáticos y socket.io) listos para túnel o VPS. |
+
+> **El port es mío.** El motor de Nintendo DS que usa **PocketDuet** es **[melonDS-WASM](https://github.com/soyangelromero/melonds-wasm)**, un port a WebAssembly de melonDS DS v1.4.0 **hecho por mí**. El código fuente, los parches y las instrucciones de compilación están en ese repositorio; el runtime prebuilt se sincroniza aquí en `vendor/melonds/`.
+
+> **El port es mío.** El motor de Nintendo DS que usa **PocketDuet** es **[melonDS-WASM](https://github.com/soyangelromero/melonds-wasm)**, un port a WebAssembly de melonDS DS v1.4.0 **hecho por mí**. El código fuente, los parches y las instrucciones de compilación están en ese repositorio; el runtime prebuilt se sincroniza aquí en `vendor/melonds/`.
 
 > **NO incluye juegos.** Este repositorio no contiene ninguna ROM, BIOS, firmware, save ni carátula. Solo funciona con
 > copias que tú aportes; las carpetas `roms/` y `data/` están ignoradas por git. Tampoco se incluye ninguna cuenta,
@@ -66,8 +70,8 @@
 Requisitos: **Node.js 22+** y tus propias ROMs (opcionales para arrancar: la biblioteca sale vacía).
 
 ```bash
-git clone --recurse-submodules https://github.com/soyangelromero/emerald-web.git
-cd emerald-web
+git clone --recurse-submodules https://github.com/soyangelromero/pocketduet.git
+cd pocketduet
 
 npm install
 npm start

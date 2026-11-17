@@ -1,4 +1,4 @@
-# Desplegar Emerald Web para jugar desde cualquier sitio
+# Desplegar PocketDuet para jugar desde cualquier sitio
 
 El hub es **un solo proceso Node** (`server.mjs`) que sirve las páginas, las ROM de tu PC y el motor WASM.
 Necesita dos cosas para funcionar fuera de tu red:
@@ -26,23 +26,23 @@ Ventajas: HTTPS gratis, sin abrir puertos, la URL no cambia, funciona en el móv
 
 1. Instala `cloudflared` (ya lo tienes en `C:\Program Files (x86)\cloudflared`).
 2. `cloudflared tunnel login` (una vez; abre el navegador).
-3. `cloudflared tunnel create emerald-web` → anota el UUID que imprime.
+3. `cloudflared tunnel create pocketduet` → anota el UUID que imprime.
 4. Copia `deploy/cloudflared-config.yml` a `%USERPROFILE%\.cloudflared\config.yml` y rellena `tunnel:` con el UUID,
    `credentials-file:` con la ruta del `.json` que creó el paso 3 y `hostname:` con tu dominio.
-5. `cloudflared tunnel route dns emerald-web emerald.tudominio.com`
-6. `cloudflared service install` y arranca el servicio (o `cloudflared tunnel run emerald-web`).
+5. `cloudflared tunnel route dns pocketduet pocketduet.tudominio.com`
+6. `cloudflared service install` y arranca el servicio (o `cloudflared tunnel run pocketduet`).
 
 El hub debe estar corriendo **antes** que el túnel:
 
 ```bash
-cd emerald-web
+cd pocketduet
 ACCESS_KEY='...' node server.mjs          # terminal 1 (o como servicio)
-cloudflared tunnel run emerald-web        # terminal 2
+cloudflared tunnel run pocketduet        # terminal 2
 ```
 
-Abre `https://emerald.tudominio.com/?k=TU_CLAVE` una vez: la cookie se queda y ya no hace falta la clave.
+Abre `https://pocketduet.tudominio.com/?k=TU_CLAVE` una vez: la cookie se queda y ya no hace falta la clave.
 A partir de ahí, `/nds/api/public` ya no es necesario para invitar (la URL es fija): usa directamente
-`https://emerald.tudominio.com/nds/`.
+`https://pocketduet.tudominio.com/nds/`.
 
 ## Opción B — Tailscale (privada, sin dominio)
 
@@ -61,9 +61,9 @@ Nota: Chrome considera "seguro" `http://localhost`, pero **no** `http://100.x.y.
 
 ## Opción C — VPS con Caddy (control total)
 
-1. En el VPS: Node 26, tu biblioteca en `/srv/roms` y el proyecto en `/srv/emerald-web`.
+1. En el VPS: Node 26, tu biblioteca en `/srv/roms` y el proyecto en `/srv/pocketduet`.
 2. Copia tus ROMs a `roms/gba` y `roms/nds` (o define `GBA_ROMS`/`NDS_ROMS`); el servicio ya arranca desde el directorio del repo.
-3. Servicio: `deploy/emerald-web.service` (copia a `/etc/systemd/system/`, `systemctl enable --now emerald-web`).
+3. Servicio: `deploy/pocketduet.service` (copia a `/etc/systemd/system/`, `systemctl enable --now pocketduet`).
 4. Caddy: `deploy/Caddyfile` (copia a `/etc/caddy/Caddyfile` y `systemctl reload caddy`).
    Caddy saca el certificado solo y no toca las cabeceras COOP/COEP.
 5. Nginx también vale (`deploy/nginx.conf.example`), pero **no** añadas `proxy_hide_header` sobre COOP/COEP.
@@ -76,7 +76,7 @@ Antes de montar el túnel con nombre se puede comprobar todo el camino con un t�
 cuenta:
 
 ```powershell
-cd emerald-web
+cd pocketduet
 node tests/remote-tunnel-browser.mjs
 ```
 

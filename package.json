@@ -1,7 +1,7 @@
 {
-  "name": "emerald-web",
+  "name": "pocketduet",
   "version": "1.0.0",
-  "description": "Browser web app for Nintendo DS (melonDS-WASM) and Game Boy Advance (mGBA-WASM). Bring your own ROMs; no game files are included.",
+  "description": "PocketDuet — browser web app for Nintendo DS (melonDS-WASM) and Game Boy Advance (mGBA-WASM). Bring your own ROMs; no game files are included.",
   "type": "module",
   "private": false,
   "license": "GPL-3.0",
@@ -18,6 +18,7 @@
     "nintendo-ds",
     "game-boy-advance",
     "emulator",
+    "pocketduet",
     "wasm",
     "webassembly",
     "melonds",
@@ -26,7 +27,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/soyangelromero/emerald-web.git"
+    "url": "https://github.com/soyangelromero/pocketduet.git"
   },
   "dependencies": {
     "@thenick775/mgba-wasm": "^2.6.0",

@@ -1,4 +1,4 @@
-/* Emerald Web · utilidades compartidas de interfaz (sin dependencias).
+/* PocketDuet · utilidades compartidas de interfaz (sin dependencias).
    - Aplica tema y acento guardados antes de pintar (se carga en <head>, sin parpadeo).
    - Inyecta el sprite de iconos SVG: <svg class="i"><use href="#i-pause"/></svg>
    - UI.toast(), UI.icon(), UI.mountAppearance(el), UI.setTheme(), UI.setAccent()

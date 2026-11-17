@@ -1,14 +1,14 @@
-# Servicio systemd para Emerald Web en un VPS (deploy/README.md, opción C).
-# Copiar a /etc/systemd/system/emerald-web.service, ajustar rutas/usuario/clave y:
-#   sudo systemctl daemon-reload && sudo systemctl enable --now emerald-web
+# Servicio systemd para PocketDuet en un VPS (deploy/README.md, opción C).
+# Copiar a /etc/systemd/system/pocketduet.service, ajustar rutas/usuario/clave y:
+#   sudo systemctl daemon-reload && sudo systemctl enable --now pocketduet
 [Unit]
-Description=Emerald Web - hub de emulacion retro en el navegador
+Description=PocketDuet - hub de emulacion retro en el navegador
 After=network.target
 
 [Service]
 Type=simple
-User=emerald
-WorkingDirectory=/srv/emerald-web
+User=pocketduet
+WorkingDirectory=/srv/pocketduet
 Environment=HOST=127.0.0.1
 Environment=PORT=8080
 Environment=ACCESS_KEY=cambia-esta-clave-por-una-larga-y-aleatoria

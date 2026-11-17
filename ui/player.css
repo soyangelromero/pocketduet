@@ -1,4 +1,4 @@
-/* Emerald Web · reproductor compartido (NDS + GBA): pantalla, barra de acciones única, pad táctil, carga, menú como hoja
+/* PocketDuet · reproductor compartido (NDS + GBA): pantalla, barra de acciones única, pad táctil, carga, menú como hoja
    inferior y pantalla completa. Usa los tokens de ui.css. */
 :root { --pad-bg: rgba(118,128,148,.62); --pad-fg: #f1f5ff; --pad-active: rgba(210,220,240,.92); --pad-scale: 1; --frame-bg: #0b0a0d; }
 /* ---------- escenario ---------- */

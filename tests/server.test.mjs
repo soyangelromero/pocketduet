@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 test("fresh install serves the hub, both players, the vendored port and empty libraries", async () => {
-  const tmp = mkdtempSync(join(tmpdir(), "emerald-web-"));
+  const tmp = mkdtempSync(join(tmpdir(), "pocketduet-"));
   const child = spawn(process.execPath, ["server.mjs"], {
     cwd: root,
     stdio: ["ignore", "pipe", "pipe"],
