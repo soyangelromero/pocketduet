@@ -1,205 +1,170 @@
 <p align="center">
-  <img src="docs/assets/banner.svg" alt="PocketDuet — Nintendo DS y Game Boy Advance en el navegador" width="900">
+  <img src="docs/assets/banner.svg" alt="PocketDuet — Nintendo DS y Game Boy Advance en el navegador" width="960">
 </p>
 
 <h1 align="center">PocketDuet</h1>
 
 <p align="center">
-  <b>Nintendo DS y Game Boy Advance, jugables directamente en tu navegador.</b><br>
-  Un solo servidor Node, sin frameworks de front-end y sin subir tus ROMs a ningún sitio.
+  <b>Dos consolas. Una biblioteca. Sin instalar nada en el navegador.</b><br>
+  Nintendo DS y Game Boy Advance, corriendo <b>en tu navegador</b>.
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img alt="Licencia: GPL-3.0" src="https://img.shields.io/badge/license-GPL--3.0-3da639.svg"></a>
-  <img alt="Nintendo DS: melonDS-WASM" src="https://img.shields.io/badge/NDS-melonDS--WASM-6f42c1">
-  <img alt="Game Boy Advance: mGBA-WASM" src="https://img.shields.io/badge/GBA-mGBA--WASM-2ea043">
-  <img alt="Node 22+" src="https://img.shields.io/badge/Node-22%2B-339933">
+  <a href="LICENSE"><img alt="Licencia GPL-3.0" src="https://img.shields.io/badge/license-GPL--3.0-3da639.svg"></a>
+  <img alt="Nintendo DS + GBA" src="https://img.shields.io/badge/consolas-DS%20%2B%20GBA-ff5c7a">
+  <img alt="WebAssembly" src="https://img.shields.io/badge/motores-WebAssembly-654ff0">
   <img alt="Sin ROMs incluidas" src="https://img.shields.io/badge/ROMs-no%20incluidas-d73a49">
-  <img alt="Smoke test: 1/1" src="https://img.shields.io/badge/smoke%20test-1%2F1-3ddc97">
+  <img alt="Node 22+" src="https://img.shields.io/badge/Node-22%2B-339933">
 </p>
 
 <p align="center">
-  <a href="#inicio-rápido">Inicio rápido</a> ·
-  <a href="#qué-incluye">Qué incluye</a> ·
-  <a href="#roms-y-bios">ROMs y BIOS</a> ·
-  <a href="#integración-del-port">Integración del port</a> ·
-  <a href="#despliegue">Despliegue</a> ·
-  <a href="#licencias">Licencias</a>
+  <a href="#-dos-consolas-una-biblioteca">Consolas</a> ·
+  <a href="#-galería">Galería</a> ·
+  <a href="#-en-30-segundos">Empezar</a> ·
+  <a href="#-tus-roms-tus-reglas">ROMs</a> ·
+  <a href="#-el-port-es-mío">El port</a> ·
+  <a href="#-preguntas-frecuentes">FAQ</a>
 </p>
 
 ---
 
-## Capturas
-
 <p align="center">
-  <img src="docs/assets/screenshot-desktop.png" alt="PocketDuet en escritorio" width="78%">
-</p>
-<p align="center">
-  <img src="docs/assets/screenshot-mobile.png" alt="PocketDuet en móvil" width="22%">
-  <img src="docs/assets/screenshot-mobile-fullscreen.png" alt="PocketDuet a pantalla completa" width="22%">
+  <img src="docs/assets/screenshot-desktop.png" alt="PocketDuet jugando Nintendo DS en escritorio" width="82%">
 </p>
 
-<p align="center">
-  <sub>Capturas con el homebrew CC0 <a href="https://github.com/rmn20/normalmappingds"><i>nmap</i></a>.
-  Este repositorio no contiene ninguna ROM, BIOS, firmware, partida ni carátula comercial.</sub>
-</p>
+PocketDuet es una **web app completa** para jugar tus propios juegos de handheld: elige la consola, elige el juego y dale a jugar. Sin cuentas, sin nube y sin subir tus ROMs a ningún servidor.
 
-## Qué incluye
+> **Bring your own games.** No incluye juegos, BIOS ni firmware. Solo funciona con copias que tú aportes.
 
-**PocketDuet** es la aplicación web completa que integra los dos emuladores y la biblioteca:
+## 🎮 Dos consolas, una biblioteca
 
-| Pieza | Detalle |
+| **Nintendo DS** | **Game Boy Advance** |
 |---|---|
-| 🎮 **Nintendo DS** | Port **[melonDS-WASM](https://github.com/soyangelromero/melonds-wasm)** (melonDS DS v1.4.0 a WebAssembly) adaptado a la interfaz web (`?engine=wasm`). Runtime en `vendor/melonds/`; fuente en el submódulo `port-melonds/`. |
-| 🕹️ **Game Boy Advance** | Reproductor **mGBA-WASM** (`@thenick775/mgba-wasm` v2.6.0) con guardado, estados, trucos, controles táctiles y pantalla completa. |
-| 🗂️ **Biblioteca** | Hub que lista tus propias ROMs de `roms/`, portadas descargadas en caché y acceso a ambos reproductores. |
-| 👥 **Multijugador** | Señalización socket.io para el anfitrión WebRTC del port de DS. |
-| 📱 **Móvil** | Interfaz táctil, disposiciones vertical/horizontal, pantalla completa con controles, temas de pad y ajustes de pantalla. |
-| 🔐 **Acceso remoto** | `HOST`, `PORT` y `ACCESS_KEY` (página, APIs, estáticos y socket.io) listos para túnel o VPS. |
+| Un port propio de **melonDS DS v1.4.0** a WebAssembly, con pantalla doble, layouts, filtros, guardado, estados y trucos. | El clásico **mGBA** compilado a WASM, con guardado, estados, trucos, fast-forward y controles táctiles. |
+| Pantalla doble, modos híbridos y mandos táctiles. | Guardado por servidor, estados y trucos. |
 
-> **El port es mío.** El motor de Nintendo DS que usa **PocketDuet** es **[melonDS-WASM](https://github.com/soyangelromero/melonds-wasm)**, un port a WebAssembly de melonDS DS v1.4.0 **hecho por mí**. El código fuente, los parches y las instrucciones de compilación están en ese repositorio; el runtime prebuilt se sincroniza aquí en `vendor/melonds/`.
+Una sola interfaz, dos motores. La biblioteca detecta tus ROM, descarga la carátula cuando puede y te lleva directo al reproductor.
 
-> **El port es mío.** El motor de Nintendo DS que usa **PocketDuet** es **[melonDS-WASM](https://github.com/soyangelromero/melonds-wasm)**, un port a WebAssembly de melonDS DS v1.4.0 **hecho por mí**. El código fuente, los parches y las instrucciones de compilación están en ese repositorio; el runtime prebuilt se sincroniza aquí en `vendor/melonds/`.
+## 🖼️ Galería
 
-> **NO incluye juegos.** Este repositorio no contiene ninguna ROM, BIOS, firmware, save ni carátula. Solo funciona con
-> copias que tú aportes; las carpetas `roms/` y `data/` están ignoradas por git. Tampoco se incluye ninguna cuenta,
-> telemetría ni subida de archivos.
+<p align="center">
+  <img src="docs/assets/screenshot-hub.png" alt="Biblioteca de PocketDuet" width="49%">
+  <img src="docs/assets/screenshot-gba.png" alt="Game Boy Advance en PocketDuet" width="49%">
+  <br>
+  <sub><b>La biblioteca</b> · <b>Game Boy Advance</b> con guardado y trucos.</sub>
+</p>
 
-## Inicio rápido
+<p align="center">
+  <img src="docs/assets/screenshot-aspect.png" alt="Ajustes de aspecto y controles" width="84%">
+  <br>
+  <sub><b>A tu manera.</b> Tema del pad, transparencia, tamaño, layouts y FPS.</sub>
+</p>
 
-Requisitos: **Node.js 22+** y tus propias ROMs (opcionales para arrancar: la biblioteca sale vacía).
+<p align="center">
+  <img src="docs/assets/screenshot-mobile.png" alt="PocketDuet en móvil" width="20%">
+  <img src="docs/assets/screenshot-mobile-fullscreen.png" alt="Nintendo DS a pantalla completa" width="20%">
+  <img src="docs/assets/screenshot-loading.png" alt="Pantalla de carga" width="20%">
+  <img src="docs/assets/screenshot-gba-mobile.png" alt="Game Boy Advance en móvil" width="20%">
+  <br>
+  <sub><b>Vertical</b> · <b>Pantalla completa</b> · <b>Carga</b> · <b>GBA en el bolsillo.</b></sub>
+</p>
+
+<sub>Capturas con el homebrew CC0 <a href="https://github.com/rmn20/normalmappingds">nmap</a> y las test ROMs MIT de <a href="https://github.com/jsmolka/gba-tests">jsmolka/gba-tests</a>. El repositorio no contiene ninguna ROM ni carátula comercial; las imágenes son solo de la interfaz.</sub>
+
+## ⚡ En 30 segundos
 
 ```bash
 git clone --recurse-submodules https://github.com/soyangelromero/pocketduet.git
 cd pocketduet
-
 npm install
 npm start
-# abre http://127.0.0.1:8080
 ```
 
-El runtime prebuilt de melonDS-WASM ya está en `vendor/melonds/`, así que **no hace falta compilar el port** para
-jugar. El submódulo `port-melonds/` es el código fuente GPL correspondiente y sirve para actualizarlo.
+Abre **http://127.0.0.1:8080**, entra en la biblioteca y elige un juego. El runtime de melonDS-WASM ya viene prebuilt: **no necesitas compilar el port** para jugar.
 
-También puedes usar variables de entorno si tus ROMs están en otra carpeta:
+¿Prefieres Docker? También hay servicio systemd, Caddy/Nginx y Cloudflare Tunnel en [`deploy/README.md`](deploy/README.md).
 
-```bash
-NDS_ROMS="D:/ROMS/NDS" GBA_ROMS="D:/ROMS/GBA" NDS_BIOS="D:/ROMS/BIOS" npm start
-```
-
-## ROMs y BIOS
-
-Coloca tus propios archivos en estas carpetas (están en `.gitignore`):
+## 📁 Tus ROMs, tus reglas
 
 ```
 roms/
-  nds/    *.nds          # Nintendo DS (las partidas .sav se guardan junto a la ROM)
+  nds/    *.nds          # Nintendo DS
   gba/    *.gba          # Game Boy Advance
-  bios/   biosnds7.rom   # opcional: BIOS y firmware reales de DS
+  bios/   biosnds7.rom   # opcional: BIOS/firmware reales de DS
           biosnds9.rom
           firmware.bin
 ```
 
-También puedes cambiar las rutas con `NDS_ROMS`, `GBA_ROMS`, `NDS_BIOS`, `GBA_SAVES`, `DATA_DIR` o
-`MELONDS_ROOT`. La página de NDS también permite **cargar una ROM suelta** con el selector o arrastrándola, sin
-tocarla en el servidor.
+- Las carpetas `roms/` y `data/` están **ignoradas por git**.
+- Puedes cambiar las rutas con `NDS_ROMS`, `GBA_ROMS`, `NDS_BIOS` o `DATA_DIR`.
+- La página de DS también acepta una ROM suelta con el selector o arrastrándola, sin pasar por la biblioteca.
+- NDS arranca sin BIOS (FreeBIOS + firmware generado); si aportas tus dumps, los usa.
 
-- **NDS:** el port arranca sin BIOS ni firmware reales (FreeBIOS + firmware generado); si aportas los dumps, se usan.
-- **GBA:** mGBA detecta el tipo de guardado; las partidas se guardan en `data/gba-saves/`.
-- **Sin ROMs:** el hub y los dos reproductores arrancan con la biblioteca vacía; las APIs devuelven `[]`.
+## 🧩 El port es mío
 
-## Integración del port
+El motor de Nintendo DS de esta web app no es un emulador genérico: es **[melonDS-WASM](https://github.com/soyangelromero/melonds-wasm)**, un port a WebAssembly de melonDS DS v1.4.0 **hecho por mí**, con su propio host C++, adaptador para la web, worker y API. El código fuente, los parches y el build están en ese repositorio; aquí se consume el runtime prebuilt en `vendor/melonds/` y el submódulo `port-melonds/` mantiene la fuente GPL correspondiente.
 
-Dos niveles, para que el repo funcione recién clonado y siga siendo GPL:
+El lado de Game Boy Advance usa **mGBA-WASM** (`@thenick775/mgba-wasm`, MPL-2.0).
 
-1. **Runtime prebuilt en `vendor/melonds/`** (`dist/melonds.js`, `dist/melonds.wasm`, `js/`, `adapters/`, `demo/`).
-   El servidor lo publica en `/nds/wasm/` y la página de NDS lo carga con `?engine=wasm`.
-2. **Fuente en `port-melonds/`** (submódulo del repo
-   [`melonds-wasm`](https://github.com/soyangelromero/melonds-wasm), GPL-3.0), con sus parches, scripts de build y
-   documentación.
+Si quieres integrar el port en **tu propia** web app, el adaptador y la demo están en `vendor/melonds/adapters/` y `vendor/melonds/demo/`.
 
-Actualizar el port:
+## 🙋 Preguntas frecuentes
 
-```bash
-git submodule update --remote port-melonds
-cd port-melonds && ./scripts/build.sh && cd ..
-npm run sync:port
-```
+<details>
+<summary><b>¿Necesito BIOS o firmware?</b></summary>
+No para jugar. NDS usa FreeBIOS y genera el firmware en el navegador; GBA no necesita BIOS. Si tienes dumps legales, puedes colocarlos en <code>roms/bios/</code>.
+</details>
 
-`sync:port` copia los artefactos generados desde el submódulo a `vendor/melonds/`. Si prefieres no usar submódulos,
-descarga el release del port y copia el runtime a `vendor/melonds/`; la licencia y la fuente siguen siendo las
-del proyecto melonDS/melonDS DS.
+<details>
+<summary><b>¿Sube mis ROMs a algún sitio?</b></summary>
+No. La web app las lee de tu equipo; el servidor Node solo las sirve a tu propio navegador. Si lo publicas en Internet, protégete con <code>ACCESS_KEY</code>.
+</details>
 
-La interfaz de NDS es independiente del emulador: sigue siendo la misma página, y el adaptador traduce sus llamadas
-al motor WASM. Puedes reutilizar ese patrón para integrar el port en **tu propia** web app; la demo y el adaptador
-están en `vendor/melonds/demo/` y `vendor/melonds/adapters/`.
+<details>
+<summary><b>¿Funciona en el móvil?</b></summary>
+Sí: controles táctiles, SELECT/START laterales, pantalla completa, orientación vertical/horizontal y ajustes de tamaño/transparencia del pad.
+</details>
 
-## Despliegue
+<details>
+<summary><b>¿Puedo usarlo sin la biblioteca?</b></summary>
+Sí. Abre <code>/nds/</code> y elige una ROM con el selector, o usa <code>/gba/?id=0</code> si ya está en <code>roms/gba/</code>.
+</details>
 
-El servidor manda las cabeceras necesarias para `SharedArrayBuffer`:
+<details>
+<summary><b>¿Es legal?</b></summary>
+Es un proyecto no oficial, sin relación con Nintendo, y no distribuye juegos ni BIOS. Úsalo solo con copias que poseas legalmente.
+</details>
+
+## 🚀 Despliegue
+
+El servidor ya manda las cabeceras necesarias para `SharedArrayBuffer`:
 
 ```
 Cross-Origin-Opener-Policy: same-origin
 Cross-Origin-Embedder-Policy: require-corp
 ```
 
-Si vas a exponerlo fuera de tu red, usa una clave:
+Para exponerlo fuera de tu red:
 
 ```bash
 ACCESS_KEY="una-clave-larga-y-aleatoria" HOST=0.0.0.0 PORT=8080 npm start
 ```
 
-Sin clave, cualquiera que alcance el puerto ve tus ROMs. Con `ACCESS_KEY`, todas las rutas (incluido el handshake de
-socket.io) exigen `?k=CLAVE` o la cookie que se crea al abrirla una vez.
+Con `ACCESS_KEY`, la página, las APIs, los estáticos y socket.io quedan protegidos. Instrucciones para Cloudflare Tunnel, Tailscale y VPS en [`deploy/README.md`](deploy/README.md).
 
-Opciones completas (Cloudflare Tunnel con nombre, Tailscale o VPS con Caddy/Nginx y systemd) en
-[`deploy/README.md`](deploy/README.md). Para hostings estáticos sin cabeceras, el port incluye `coi-sw.js` y
-`?coi=1` como aislamiento de respaldo.
+## 📜 Licencias y créditos
 
-## Estructura
-
-```
-server.mjs           hub Node: estáticos, APIs, guardados y señalización socket.io
-home/                biblioteca inicial
-nds/                 reproductor Nintendo DS (interfaz y adaptador)
-site/                reproductor Game Boy Advance (mGBA-WASM + trucos)
-ui/                  CSS/JS compartido de la interfaz
-vendor/melonds/      runtime prebuilt de melonDS-WASM
-port-melonds/        submódulo: fuente y build del port (GPL-3.0)
-roms/                tus ROMs (ignorado por git)
-data/                partidas GBA y caché de carátulas (ignorado por git)
-deploy/              configuraciones de túnel, Caddy/Nginx y systemd
-docs/                arquitectura y documentación
-tests/               smoke test del servidor
-```
-
-## Tests
-
-```bash
-npm test
-```
-
-Incluye un test de humo que arranca el servidor con bibliotecas vacías y comprueba que `/`, `/nds/`, `/gba/`,
-`/ui/`, `/coi-sw.js`, el runtime del port en `/nds/wasm/` y las APIs responden, que la lista de ROMs está vacía y que
-la lista blanca del port no expone `third_party/`. No necesita ROMs ni navegador.
-
-## Licencias y créditos
-
-- **Código de esta web app:** GPL-3.0 — ver [`LICENSE`](LICENSE).
-- **melonDS DS / melonDS:** GPL-3.0; fuente en el submódulo
-  [`port-melonds`](https://github.com/soyangelromero/melonds-wasm) y en
-  <https://github.com/JesseTG/melonDS-ds> / <https://melonds.kuribo64.net/>.
-- **mGBA:** MPL-2.0; binario en `site/mgba.wasm`, generado con
-  [`@thenick775/mgba-wasm`](https://github.com/thenick775/mgba-wasm) v2.6.0. Fuente: <https://github.com/mgba-emu/mgba>.
+- **PocketDuet:** GPL-3.0 — ver [`LICENSE`](LICENSE).
+- **melonDS-WASM / melonDS DS / melonDS:** GPL-3.0, port hecho por mí, basado en
+  [melonDS DS](https://github.com/JesseTG/melonDS-ds) y [melonDS](https://melonds.kuribo64.net/).
+- **mGBA:** MPL-2.0, vía [`@thenick775/mgba-wasm`](https://github.com/thenick775/mgba-wasm).
 - **socket.io:** MIT.
 - Detalle completo en [`THIRD_PARTY.md`](THIRD_PARTY.md).
 
-**Aviso legal:** proyecto no oficial, sin relación con Nintendo. No se distribuye ninguna ROM, BIOS, firmware ni
-save. Úsalo solo con copias que poseas legalmente. El port se desarrolló con ayuda de IA (Claude y DeepSeek) bajo la
-dirección y pruebas del autor; pruébalo con tus propios juegos.
+<sub>Proyecto no oficial. Nintendo DS y Game Boy Advance son marcas de Nintendo; este proyecto no está afiliado ni patrocinado por Nintendo. Desarrollado con ayuda de IA (Claude y DeepSeek) bajo dirección y pruebas humanas.</sub>
 
 ---
 
 <p align="center">
-  <b>Si te resulta útil, dale una ⭐ al repositorio y prueba a integrar el port en tu propia web app.</b>
+  <b>¿Te gusta la idea? Dale una ⭐ y compártela con alguien que todavía guarde sus cartuchos.</b>
 </p>

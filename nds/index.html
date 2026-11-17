@@ -34,7 +34,7 @@
 <header class="topbar">
   <div class="brand">
     <div class="logo"><svg class="i lg" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-gamepad"/></svg></div>
-    <div><h1>Nintendo DS</h1><small>melonDS en tu navegador</small></div>
+    <div><h1>Nintendo DS</h1><small>PocketDuet · Nintendo DS</small></div>
   </div>
   <div class="grow"></div>
   <button class="btn" id="changeGame" hidden><i data-i="back" data-size="sm"></i>Biblioteca</button>
@@ -106,7 +106,7 @@
             <div class="boot-info">
               <span class="boot-chip">Nintendo DS</span>
               <h2 id="bootText">Cargando…</h2>
-              <div id="bootDev">melonDS · WASM</div>
+              <div id="bootDev">PocketDuet · WebAssembly</div>
               <small id="bootSub"></small>
               <div class="boot-bar"><i id="bootBar"></i></div>
             </div>
@@ -308,7 +308,7 @@ const showBoot = (text, sub = "", error = false, cover = null) => {
     noArt.hidden = false;
     bg.style.backgroundImage = "";
   }
-  $("bootDev").textContent = IS_WASM ? "melonDS · WebAssembly" : "melonDS · EmulatorJS";
+  $("bootDev").textContent = IS_WASM ? "PocketDuet · WebAssembly" : "PocketDuet · EmulatorJS";
 };
 const bootSub = (text) => { if (!bootEl.hidden) $("bootSub").textContent = text; };
 const hideBoot = () => { bootEl.hidden = true; };
