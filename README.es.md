@@ -10,7 +10,7 @@
 
 PocketDuet es una aplicación web para jugar **Nintendo DS** y **Game Boy Advance** en el navegador. Incluye una biblioteca, dos reproductores y un servidor Node que sirve tus propias ROMs. No contiene juegos, BIOS ni firmware.
 
-La demo pública funciona en Cloudflare Workers: **[Probar PocketDuet](https://pocketduet-demo.soyangelromero.workers.dev)**. Incluye homebrew y ROM de prueba de código abierto; no aloja juegos comerciales.
+La demo pública funciona en Cloudflare Workers: **[Probar PocketDuet](https://pocketduet-demo.soyangelromero.workers.dev)**. No incluye ninguna ROM; carga la tuya desde el reproductor.
 
 <p align="center">
   <a href="LICENSE"><img alt="Licencia GPL-3.0" src="https://img.shields.io/badge/license-GPL--3.0-3da639.svg"></a>
