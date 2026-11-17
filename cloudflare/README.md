@@ -11,7 +11,7 @@ The demo contains **no ROMs, BIOS, firmware or saves**. The library APIs return 
 - Nintendo DS: open `/nds/` and choose a `.nds` file.
 - Game Boy Advance: open `/gba/`, open the *Partida* panel and use *Cargar otra ROM*.
 
-The landing page at `/` explains this. Screenshots and documentation in the main repo may show homebrew/test content, but the deployed demo does not serve it.
+The landing page at `/` explains this and includes a **Cargar ROM** button. The library header in the main app also has a **Cargar ROM** button. Both store the selected file in IndexedDB and open the correct player; the file never leaves the browser.
 
 ## Build
 

@@ -45,7 +45,8 @@
   <p class="lead">Nintendo DS y Game Boy Advance en el navegador. Esta demo <strong>no incluye ROMs</strong>: trae tu propia copia legal y cárgala desde el reproductor.</p>
 
   <div class="actions">
-    <a class="btn primary" href="/nds/">Abrir Nintendo DS</a>
+    <label class="btn primary">Cargar ROM<input id="romPick" type="file" accept=".nds,.gba" hidden></label>
+    <a class="btn" href="/nds/">Abrir Nintendo DS</a>
     <a class="btn" href="/gba/?id=0">Abrir Game Boy Advance</a>
   </div>
 
@@ -67,5 +68,21 @@
   <p class="note">Proyecto no oficial, sin relación con Nintendo. No se distribuyen juegos ni BIOS. Usa solo copias que poseas legalmente.</p>
   <footer>PocketDuet · <a href="https://github.com/soyangelromero/pocketduet">código fuente</a> · <a href="https://github.com/soyangelromero/melonds-wasm">port de melonDS</a></footer>
 </main>
+<script src="/ui/ui.js"></script>
+<script>
+  const pick = document.getElementById("romPick");
+  pick.onchange = async () => {
+    const file = pick.files[0];
+    if (!file) return;
+    const ext = file.name.split(".").pop().toLowerCase();
+    if (ext !== "nds" && ext !== "gba") { alert("Elige un archivo .nds o .gba"); pick.value = ""; return; }
+    try {
+      await UI.pendingRom.put(file);
+      location.href = ext === "gba" ? "/gba/?id=0&local=1" : "/nds/?local=1";
+    } catch {
+      alert("No se pudo preparar la ROM. Prueba desde el reproductor.");
+    }
+  };
+</script>
 </body>
 </html>

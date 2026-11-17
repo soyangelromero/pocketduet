@@ -52,6 +52,7 @@
     <div><h1>Biblioteca retro</h1><small>Juega tus ROM en el navegador</small></div>
   </div>
   <div class="grow"></div>
+  <label class="btn" id="romBtn" title="Cargar una ROM .nds o .gba">Cargar ROM<input id="romPick" type="file" accept=".nds,.gba" hidden></label>
   <button class="iconbtn" id="btnSettings" aria-label="Apariencia y motor" title="Apariencia y motor"><i data-i="settings"></i></button>
 </header>
 
@@ -185,6 +186,16 @@ $("btnSettings").onclick = () => openSheet(!sheet.classList.contains("open"));
 $("sheetClose").onclick = scrim.onclick = () => openSheet(false);
 addEventListener("keydown", (e) => { if (e.key === "Escape") openSheet(false); });
 addEventListener("hashchange", () => { tab = location.hash === "#nds" ? "nds" : "gba"; render(); });
+$("romPick").onchange = async (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  const ext = f.name.split(".").pop().toLowerCase();
+  if (ext !== "nds" && ext !== "gba") { UI.toast("Elige un archivo .nds o .gba"); e.target.value = ""; return; }
+  try {
+    await UI.pendingRom.put(f);
+    location.href = ext === "gba" ? "/gba/?id=0&local=1" : "/nds/?local=1";
+  } catch { UI.toast("No se pudo preparar la ROM"); }
+};
+
 load();
 </script>
 </body>

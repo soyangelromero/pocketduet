@@ -101,7 +101,44 @@
     toggle(k) { const s = favs.all(); s.has(k) ? s.delete(k) : s.add(k); LS.set("ui.favs.v1", JSON.stringify([...s])); return s.has(k); },
   };
 
-  window.UI = { icon, hydrate, toast, mountAppearance, setTheme, setAccent, recent, favs, ls: LS, get theme() { return theme; }, get accent() { return accent; } };
+  /* pending ROM: the library/landing stores a File, then opens the matching player. */
+  function openRomDb() {
+    return new Promise((resolve, reject) => {
+      if (!window.indexedDB) return reject(new Error("IndexedDB no disponible"));
+      const req = indexedDB.open("pocketduet-roms", 1);
+      req.onupgradeneeded = () => { const db = req.result; if (!db.objectStoreNames.contains("pending")) db.createObjectStore("pending"); };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+  const pendingRom = {
+    async put(file) {
+      const db = await openRomDb();
+      await new Promise((resolve, reject) => {
+        const tx = db.transaction("pending", "readwrite");
+        tx.objectStore("pending").put(file, "rom");
+        tx.oncomplete = resolve;
+        tx.onerror = () => reject(tx.error);
+      });
+      db.close();
+    },
+    async take() {
+      const db = await openRomDb();
+      return await new Promise((resolve, reject) => {
+        const tx = db.transaction("pending", "readwrite");
+        const store = tx.objectStore("pending");
+        const get = store.get("rom");
+        get.onsuccess = () => {
+          const file = get.result || null;
+          store.delete("rom");
+          tx.oncomplete = () => { db.close(); resolve(file); };
+        };
+        get.onerror = () => { db.close(); reject(get.error); };
+      });
+    },
+  };
+
+  window.UI = { icon, hydrate, toast, mountAppearance, setTheme, setAccent, recent, favs, ls: LS, pendingRom, get theme() { return theme; }, get accent() { return accent; } };
   const ready = () => { mountSprite(); hydrate(); };
   if (document.body) ready(); else document.addEventListener("DOMContentLoaded", ready);
 })();

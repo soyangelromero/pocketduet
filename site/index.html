@@ -211,7 +211,8 @@
 import mGBA from "./mgba.js";
 const $ = id => document.getElementById(id);
 const GAME_ID = new URLSearchParams(location.search).get("id");
-if (GAME_ID === null) location.replace("/#gba");
+const LOCAL_ROM = new URLSearchParams(location.search).has("local");
+if (GAME_ID === null && !LOCAL_ROM) location.replace("/#gba");
 const ROM_NAME = "game" + GAME_ID + ".gba";
 let META = { name: "Game Boy Advance", code: "", base: "partida" };
 try { const all = await (await fetch("/gba/api/roms")).json(); META = all.find(g => String(g.id) === GAME_ID) || META; } catch {}
@@ -453,11 +454,21 @@ async function startGame(romBytes, savBytes){
   }
 }
 try {
-  boot("Cargando " + META.name, "ROM y partida desde el servidor");
-  const get = async n => { const r = await fetch("/gba/api/" + n + "/" + GAME_ID); if (!r.ok) { if (n === "sav") return null; throw new Error(n + " " + r.status); } return new Uint8Array(await r.arrayBuffer()); };
-  const [rom, sav] = await Promise.all([get("rom"), get("sav")]);
-  lastSave = sav ? sav.join() : "";
-  await startGame(rom, sav);
+  if (LOCAL_ROM) {
+    const pending = await UI.pendingRom.take();
+    if (!pending) throw new Error("No se encontró la ROM seleccionada");
+    META.name = pending.name.replace(/\.\w+$/, "");
+    $("gameTitle").textContent = META.name;
+    $("gameSub").textContent = "Game Boy Advance · ROM local";
+    boot("Cargando " + META.name, "ROM desde tu equipo");
+    await startGame(new Uint8Array(await pending.arrayBuffer()), null);
+  } else {
+    boot("Cargando " + META.name, "ROM y partida desde el servidor");
+    const get = async n => { const r = await fetch("/gba/api/" + n + "/" + GAME_ID); if (!r.ok) { if (n === "sav") return null; throw new Error(n + " " + r.status); } return new Uint8Array(await r.arrayBuffer()); };
+    const [rom, sav] = await Promise.all([get("rom"), get("sav")]);
+    lastSave = sav ? sav.join() : "";
+    await startGame(rom, sav);
+  }
   bootDone(); status("Jugando", "ok");
   $("canvas").focus();
 } catch (err) {
